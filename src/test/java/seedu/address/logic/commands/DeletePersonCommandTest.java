@@ -43,6 +43,12 @@ public class DeletePersonCommandTest {
     }
 
     @Test
+    public void deleteFromGlobal_nullModel_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () ->
+                new DeletePersonCommand(Index.fromZeroBased(0)).deleteFromGlobal(null));
+    }
+
+    @Test
     public void deleteFromGlobal_validIndexUnfilteredList_success() {
         Person personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         DeletePersonCommand deletePersonCommand = new DeletePersonCommand(INDEX_FIRST_PERSON);
@@ -92,6 +98,12 @@ public class DeletePersonCommandTest {
         DeletePersonCommand deletePersonCommand = new DeletePersonCommand(outOfBoundIndex);
 
         assertCommandFailure(deletePersonCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+    }
+
+    @Test
+    public void deleteFromEvent_nullModel_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () ->
+                new DeletePersonCommand(Index.fromZeroBased(0)).deleteFromEvent(null));
     }
 
     @Test
