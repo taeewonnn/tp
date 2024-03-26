@@ -81,8 +81,7 @@ public class EventTest {
     @Test
     public void toStringMethod() {
         Event event = new EventBuilder().build();
-        String expected = Event.class.getCanonicalName() + "{eventName=" + event.getEventName()
-                + ", persons=" + event.getPersonList().toString() + "}";
+        String expected = event.getEventName().toString();
 
         assertEquals(expected, event.toString());
     }
