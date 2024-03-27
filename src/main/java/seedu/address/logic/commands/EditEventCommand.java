@@ -15,6 +15,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.event.Event;
 import seedu.address.model.event.EventName;
+import seedu.address.model.person.Name;
 
 /**
  * Edits the name of an existing event in the address book.
@@ -99,6 +100,15 @@ public class EditEventCommand extends Command {
                 && editEventDescriptor.equals(otherEditCommand.editEventDescriptor);
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .add("index", index)
+                .add("editEventDescriptor", editEventDescriptor)
+                .toString();
+    }
+
+
     /**
      * Stores the details to edit the event with. Each non-empty field value will replace the
      * corresponding field value of the event.
@@ -129,6 +139,10 @@ public class EditEventCommand extends Command {
 
         public Optional<EventName> getName() {
             return Optional.ofNullable(name);
+        }
+
+        public void setName(EventName name) {
+            this.name = name;
         }
 
         @Override

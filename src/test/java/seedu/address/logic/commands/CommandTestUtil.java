@@ -20,6 +20,7 @@ import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
+import seedu.address.testutil.EditEventDescriptorBuilder;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 
 /**
@@ -61,8 +62,13 @@ public class CommandTestUtil {
     public static final EditPersonCommand.EditPersonDescriptor DESC_AMY;
     public static final EditPersonCommand.EditPersonDescriptor DESC_BOB;
 
+    public static final String VALID_EVENT_NAME_HIKING = "hiking";
     public static final String VALID_EVENT_NAME_BINGO = "bingo";
     public static final String EVENT_NAME_DESC_BINGO = " " + PREFIX_EVENT_NAME + VALID_EVENT_NAME_BINGO;
+
+    public static final EditEventCommand.EditEventDescriptor EVENT_DESC_BINGO;
+    public static final EditEventCommand.EditEventDescriptor EVENT_DESC_HIKING;
+
 
     static {
         DESC_AMY = new EditPersonDescriptorBuilder().withName(VALID_NAME_AMY)
@@ -71,6 +77,8 @@ public class CommandTestUtil {
         DESC_BOB = new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB)
                 .withPhone(VALID_PHONE_BOB).withEmail(VALID_EMAIL_BOB).withAddress(VALID_ADDRESS_BOB)
                 .withTags(VALID_TAG_HUSBAND, VALID_TAG_FRIEND).build();
+        EVENT_DESC_BINGO = new EditEventDescriptorBuilder().withName(VALID_EVENT_NAME_BINGO).build();
+        EVENT_DESC_HIKING = new EditEventDescriptorBuilder().withName(VALID_EVENT_NAME_HIKING).build();
     }
 
     /**

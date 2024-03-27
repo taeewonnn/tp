@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.EditEventCommand;
 import seedu.address.model.event.EventName;
+import seedu.address.testutil.EditEventDescriptorBuilder;
 
 public class EditEventCommandParserTest {
 
@@ -53,8 +54,8 @@ public class EditEventCommandParserTest {
         Index targetIndex = INDEX_SECOND_EVENT;
         String userInput = targetIndex.getOneBased() + EVENT_NAME_DESC_BINGO;
 
-        EditEventCommand.EditEventDescriptor descriptor = new EditEventCommand.EditEventDescriptor();
-        descriptor.withName(new EventName(VALID_EVENT_NAME_BINGO));
+        EditEventCommand.EditEventDescriptor descriptor = new EditEventDescriptorBuilder()
+                .withName(VALID_EVENT_NAME_BINGO).build();
 
         EditEventCommand expectedCommand = new EditEventCommand(targetIndex, descriptor);
 
