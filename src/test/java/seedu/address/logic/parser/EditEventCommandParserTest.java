@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.EditEventCommand;
-import seedu.address.model.event.EventName;
 import seedu.address.testutil.EditEventDescriptorBuilder;
 
 public class EditEventCommandParserTest {

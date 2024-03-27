@@ -20,7 +20,6 @@ import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.event.Event;
-import seedu.address.model.event.EventName;
 import seedu.address.testutil.EditEventDescriptorBuilder;
 import seedu.address.testutil.EventBuilder;
 
@@ -45,7 +44,7 @@ public class EditEventCommandTest {
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
     }
 
-        @Test
+    @Test
     public void equals() {
         final EditEventCommand standardCommand = new EditEventCommand(INDEX_FIRST_PERSON, EVENT_DESC_BINGO);
 
