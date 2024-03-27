@@ -131,7 +131,7 @@ public class EventBook implements ReadOnlyEventBook {
     public void selectEvent(Event event) {
         selectedEvent = event;
         selectedEventObservable.set(event);
-      
+
         updatePersonListOfSelectedEvent();
     }
 
@@ -141,7 +141,7 @@ public class EventBook implements ReadOnlyEventBook {
     public void deselectEvent() {
         selectedEvent = null;
         selectedEventObservable.set(null);
-      
+
         updatePersonListOfSelectedEvent();
     }
 
