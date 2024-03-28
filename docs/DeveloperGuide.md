@@ -156,17 +156,22 @@ Classes used by multiple components are in the `seedu.addressbook.commons` packa
 
 ## **Implementation**
 
-This section describes some noteworthy details on how certain features are implemented.
+The `DeleteEventCommand` allows users to delete an event from the event book,
+depending on whether an event is selected.
 
-### Delete event feature
+### Delete Event 
 
-#### Implementation
+#### Implementation Details
 
-The delete event mechanism is facilitated by `EventBook`. 
+The `DeleteEventCommand` is implemented by extending the base `Command` class.
+It uses a `targetIndex` to identify the event to be deleted in the filtered event list. 
+It implements the following operations:
 
-This operation is exposed in the `Model` interface as `Model#deleteEvent()`.
+* `execute(Model)`— Checks the current address book state by calling `isSameEventSelected()`, and call `deleteEvent`
+* `deleteEvent(Model)` — Deletes the event in the filtered event list. This operation is exposed in the `Model` interface as `Model#deleteEvent(Event)`.
 
-Given below is an example usage scenario and how the delete event mechanism behaves at each step
+Given below is an example usage scenario and how the delete event mechanism behaves
+when the user tries to delete an event from the event list.
 
 Step 1. The user launches the application for the first time. The `EventBook` will be
 initialized with the initial event book state.
@@ -183,7 +188,7 @@ the event book.
 
 </box>
 
-The following sequence diagram shows how a delete event operation goes through the `Logic` component:
+#### Sequence Diagram 
 
 <puml src="diagrams/DeleteEventSequenceDiagram.puml" />
 
@@ -191,15 +196,10 @@ The following sequence diagram shows how a delete event operation goes through t
 
 **Aspect: How delete event executes:**
 
-* **Alternative 1 (current choice):** Saves the entire event book.
+* **Alternative 1 (current choice):** Compares event and selected event with equals.
     * Pros: Easy to implement.
-    * Cons: May have performance issues in terms of memory usage.
-
-* **Alternative 2:** Individual command knows how to delete event by
-  itself.
-    * Pros: Will use less memory 
-    * Cons: We must ensure that the implementation of each individual command are correct.
-
+    * Cons: May not be very specific.
+    
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Documentation, logging, testing, configuration, dev-ops**
