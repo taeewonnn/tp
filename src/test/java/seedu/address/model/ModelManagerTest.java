@@ -79,6 +79,13 @@ public class ModelManagerTest {
     }
 
     @Test
+    public void setEventBookFilePath_validPath_setsEventBookFilePath() {
+        Path path = Paths.get("event/book/file/path");
+        modelManager.setEventBookFilePath(path);
+        assertEquals(path, modelManager.getEventBookFilePath());
+    }
+
+    @Test
     public void hasPerson_nullPerson_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> modelManager.hasPerson(null));
     }
@@ -99,6 +106,10 @@ public class ModelManagerTest {
         assertThrows(UnsupportedOperationException.class, () -> modelManager.getFilteredPersonList().remove(0));
     }
 
+    @Test
+    public void getFilteredEventList_modifyList_throwsUnsupportedOperationException() {
+        assertThrows(UnsupportedOperationException.class, () -> modelManager.getFilteredEventList().remove(0));
+    }
     @Test
     public void hasEvent_nullEvent_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> modelManager.hasEvent(null));
@@ -180,11 +191,6 @@ public class ModelManagerTest {
     @Test
     public void isEqualSelectedEvent_nullEvent_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> modelManager.isSameSelectedEvent(null));
-    }
-
-    @Test
-    public void getFilteredEventList_modifyList_throwsUnsupportedOperationException() {
-        assertThrows(UnsupportedOperationException.class, () -> modelManager.getFilteredEventList().remove(0));
     }
 
     @Test
