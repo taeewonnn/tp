@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Objects;
 
 import javafx.collections.ObservableList;
-import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.UniquePersonList;
 
@@ -136,9 +135,6 @@ public class Event {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .add("eventName", eventName)
-                .add("persons", persons.toString())
-                .toString();
+        return eventName.toString();
     }
 }
