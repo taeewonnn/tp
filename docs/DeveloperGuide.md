@@ -4,7 +4,7 @@
   pageNav: 3
 ---
 
-# AB-3 Developer Guide
+# Eventy Developer Guide
 
 <!-- * Table of Contents -->
 <page-nav-print />
@@ -139,14 +139,17 @@ The `Model` component,
 
 ### Storage component
 
-**API** : [`Storage.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/storage/Storage.java)
+**API** : [`Storage.java`](https://github.com/AY2324S2-CS2103T-T10-3/tp/blob/master/src/main/java/seedu/address/storage/Storage.java)
 
 <puml src="diagrams/StorageClassDiagram.puml" width="550" />
 
 The `Storage` component,
-* can save both address book data and user preference data in JSON format, and read them back into corresponding objects.
-* inherits from both `AddressBookStorage` and `UserPrefStorage`, which means it can be treated as either one (if only the functionality of only one is needed).
+* can save both global participant list data in JSON format, and read it back into corresponding objects.
+* can save event list data in JSON format, and read it back into corresponding event objects.
+* can also save participant list data of all added events in JSON format, and read them back into corresponding objects. 
+* inherits from`AddressBookStorage` `EventBook Storage` and `UserPrefStorage`, which means it can be treated as either one (if only the functionality of only one is needed).
 * depends on some classes in the `Model` component (because the `Storage` component's job is to save/retrieve objects that belong to the `Model`)
+
 
 ### Common classes
 
@@ -157,6 +160,115 @@ Classes used by multiple components are in the `seedu.addressbook.commons` packa
 ## **Implementation**
 
 This section describes some noteworthy details on how certain features are implemented.
+
+### Invite Person to Event
+
+The `InvitePersonCommand` allows users to invite a person to the selected event from the global address book.
+
+#### Implementation Details
+
+The `InvitePersonCommand` is implemented by extending the base `Command` class. It uses a `targetIndex`, specifying the desired person's global list index, to identify the person to be added to the selected event. It implements the following operations:
+
+* `execute(Model)` — Checks the current address book state by calling `isAnEventSelected()`, and throws a `CommandException` if no event is selected. 
+It also calls `isPersonInSelectedEvent` to ensure the invitee is not already added to the event by throwing a `CommandException` if he is already on the invitee list.
+* `addPersonToSelectedEvent(Person)` — Adds the participant to the selected event. in the filtered global participant list. This operation is exposed in the `Model` interface as `Model#addPersonToSelectedEvent(Person)`.
+
+The invite command is initiated by firstly retrieving the filtered person list and locating the `personToInvite` object in it, after which `Model#addPersonToSelectedEvent(Person)(Person)` is called to complete the actual invitation.
+
+Given below is an example usage scenario of how the deletion mechanism behaves when the user tries to delete a participant from the global participant list.
+
+Step 1. The user launches the application, with some events and participants added to the address book already. The `AddressBook` will be initialized with the previously saved address book state, and the `selectedEvent` in the `EventBook` will initially be `null`.
+
+Step 2. The user executes `sel 1` command to select the first event to be modified
+
+Step 3. The user executes `inv 3` command to invite the 5th person in the global list to the selected event. The `InviteCommand` will then call `excecute()`, which checks that an event is selected and the user doesn't already exist in the selected event invitee list before calling `addPersonToSelectedEvent(Person)`.
+
+<box type="info" seamless>
+
+**Note:** If the `targetIndex` provided is invalid, a `CommandException` will be thrown.
+
+</box>
+
+#### Sequence Diagram
+
+![Sequence diagram](images/InviteSequenceDiagram.png)
+
+#### Design Considerations:
+
+**Aspect 1: How to specify the event the person should be added to:**
+
+* **Alternative 1 (current choice):** Select an event first, then use the `index` in the filtered list
+    * Pros: Easier to implement.  Immediate visual reference.
+    * Cons: Extra select command is needed before participant can be added
+  
+* **Alternative 2:** Specify event and person indices in one command
+    * Pros: Action can be performed in one command
+    * Cons: Requires more complex input parsing, makes the user input longer, and may be confusing for the user
+
+**Rationale:**
+The primary rationale for selecting an event first is it lets the user have a clear sense that a certain event is currently being modified.  
+This will prevent future errors where the user confuses `invite` and `add` commands.
+
+
+### Delete Participant
+
+The `DeletePersonCommand` allows users to delete a person either from the global address book or from a specific event, depending on whether an event is selected.
+
+#### Implementation Details
+
+The `DeletePersonCommand` is implemented by extending the base `Command` class. It uses a `targetIndex` to identify the person to be deleted in the filtered person list. It implements the following operations:
+
+* `execute(Model)` — Checks the current address book state by calling `isAnEventSelected()`, and call `deleteFromGlobal` or `deleteFromEvent` accordingly.
+* `deleteFromGlobal(Model)` — Deletes the participant in the filtered global participant list. This operation is exposed in the `Model` interface as `Model#deletePerson(Person)`.
+* `deleteFromEvent(Model)` — Deletes the participant in the filtered selected event participant list. This operation is exposed in the `Model` interface as `deletePersonFromSelectedEvent(Person)`.
+
+The deletion is initiated by firstly retrieving the filtered person list and locating the `personToDelete` object in it, after which `Model#deletePerson(Person)` /  `Model#deletePersonFromSelectedEvent(Person)` is called to complete the actual deletion. 
+
+Given below is an example usage scenario of how the deletion mechanism behaves when the user tries to delete a participant from the global participant list.
+
+Step 1. The user launches the application, with some events and participants added to the address book already. The `AddressBook` will be initialized with the previously saved address book state, and the `selectedEvent` in the `EventBook` will initially be `null`.
+
+Step 2. The user executes `delp 5` command to delete the 5th person in the address book. The `deletePersonCommand` will then call `excecute()`, which checks that no event is being selected before calling `deleteFromGlobal()`.
+
+<box type="info" seamless>
+
+**Note:** If the `targetIndex` provided is invalid, a `CommandException` will be thrown.
+
+</box>
+
+Step 3. The `deleteFromGlobal()` function calls `Model#deletePerson()` to complete the deletion, and the state of the filtered person list is thereby changed.
+
+#### Sequence Diagram
+
+![Sequence diagram](images/DeleteParticipantSequenceDiagram.png)
+
+#### Design Considerations:
+
+**Aspect 1: How to structure the 2 Delete Participant Commands:**
+
+* **Alternative 1 (current choice):** Same command for global and event-specific deletion
+    * Pros: Shorter code. The unified `DeletePersonCommand` is easier to learn.  
+    * Cons: Slightly harder to implement.
+
+* **Alternative 2:** Separate commands for global and event-specific deletion
+    * Pros: Simplifies the implementation of each command. 
+    * Cons: Increases the number of commands users need to learn, potentially making the application more cumbersome to use.
+
+**Rationale:**
+The choice to unify the deletion process under a single `DeletePersonCommand` stems from a desire to streamline the user experience and reduce the learning curve associated with the application. By minimizing the number of commands a user needs to learn, the application becomes more intuitive, especially for new or infrequent users. The unified command approach emphasizes simplicity from the user's perspective, even if it introduces additional complexity behind the scenes.
+
+**Aspect 2: How to specify the person to be deleted:**
+
+* **Alternative 1 (current choice):** Use the `index` in the filtered list
+    * Pros: Easier to implement.  Immediate visual reference.
+    * Cons: Limited by Viewport. When the participant list is long and paginated or requires scrolling, users might find it cumbersome to scroll through and find the index of the person they wish to delete.
+
+* **Alternative 2:** Use the `name` of the participant
+    * Pros: Direct and intuitive, and can avoid indexing issues.
+    * Cons: Requires more complex input parsing, and makes the user input longer.
+
+**Rationale:**
+The primary rationale for using an `index` as the specifier is its simplicity and direct mapping to the user interface. Users can easily locate and specify a contact for deletion based on their position in a list, making the command straightforward to implement and understand. This approach is particularly effective in scenarios where users work with relatively short lists where the viewport limitations are minimal. In the scenario where the participant list gets longer, the user can always use the `find` command to filter out the contact they want to delete before making the actual deletion.
 
 ### \[Proposed\] Undo/redo feature
 
@@ -255,6 +367,54 @@ _{more aspects and alternatives to be added}_
 
 _{Explain here how the data archiving feature will be implemented}_
 
+### Select Event Feature
+
+The Select Event mechanism is a pivotal part of Eventy's functionality. It's importance can be summarised in 2 main
+purposes:
+1. Selecting an event (or an event not being selected) affects the functionality of several commands. For example, the 
+`Delete a Person` command if an event is not selected, it will delete the person from Eventy as a whole, else if an 
+event is selected, it will delete the person only from that selected event
+2. The UI will display the person list of the selected event when an event is selected, if no event is selected, 
+it will display a message to `Select an event`
+
+The Select Event mechanism is facilitated by `EventBook`. It implements `ReadOnlyEventBook`, and can be thought of 
+the counterpart to `AddressBook`, in that while `AddressBook` handles People-related functionality, `EventBook` handles
+Event-related functionality. 
+
+To implement the Select Event mechanism, `EventBook` stores internally:
+* `selectedEvent` &thinsp;—&thinsp; The event that is currently selected. If no event is selected, it is `null`
+* `selectedEventObservable` &thinsp;—&thinsp; A wrapper for `selectedEvent` to allow the UI to update with respect
+to the 2nd main purpose, as explained above
+* `personsOfSelectedEvent` &thinsp;—&thinsp; Unique person list of the selected event. If no event is selected, it is an 
+empty list
+
+Additionally, it implements the following operations:
+* `EventBook#isAnEventSelected()` &thinsp;—&thinsp; Returns `true` if an event is selected, else `false`
+* `EventBook#selectEvent(Event event)` &thinsp;—&thinsp; Selects the given event 
+* `EventBook#deselectEvent()` &thinsp;—&thinsp; Deselect the currently selected event, if any, so that no event is 
+selected
+* `EventBook#isPersonInSelectedEvent(Person person)` &thinsp;—&thinsp; Returns `true` if the given person is in the 
+selected event, else `false`
+* `EventBook#getSelectedEvent()` &thinsp;—&thinsp; Returns `selectedEventObservable` as an 
+
+`EventBook` also implements other operations that are specific to certain commands that will not be covered here, as 
+they are not directly pertinent to the implementation of the Select Event mechanism. An example of such an operation is
+one that adds the given person to the selected event.
+
+These operations are exposed to other components through `ModelManager` with the same names.
+
+In order to select an event and deselect an event, we have the Select command and deselect command respectively.
+Both commands function similarly.
+
+The following sequence diagram shows how the Select command works through the `Logic` component:
+
+<puml src="diagrams/SelectEventSequenceDiagram -- Model.puml" width="250" />
+
+Similarly, how the Select command goes through the Model component is shown below:
+
+<puml src="diagrams/SelectEventSequenceDiagram -- Logic.puml" width="250" />
+
+The deselect Command generally does the inverse. For `setPersons` however, it will set it to null instead.
 
 --------------------------------------------------------------------------------------------------------------------
 
