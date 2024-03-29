@@ -47,9 +47,7 @@ public class SampleDataUtil {
         }
         UniquePersonList a = new UniquePersonList();
         a.setPersons(sampleAb.getPersonList());
-        return new Event[] {
-                new Event(new EventName("Orientation"), a)
-        };
+        return new Event[] { new Event(new EventName("Orientation"), a) };
     }
 
     public static ReadOnlyAddressBook getSampleAddressBook() {
