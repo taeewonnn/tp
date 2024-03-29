@@ -2,7 +2,6 @@ package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.testutil.TypicalEvents.getBingoEvent;
@@ -35,13 +34,6 @@ public class DeleteEventCommandTest {
 
         assertCommandFailure(deleteEventCommand, model, Messages.MESSAGE_INVALID_EVENT_DISPLAYED_INDEX);
     }
-
-    /** @Test
-    public void execute_selectModel_throwsCommandException() {
-        SelectCommand selectCommand = new SelectCommand(Index.fromZeroBased(1));
-
-        assertThrows(CommandException.class, () -> new DeleteEventCommand(Index.fromZeroBased(1)).execute(model));
-    } */
 
     @Test
     public void execute_deleteEvent_success() throws CommandException {
