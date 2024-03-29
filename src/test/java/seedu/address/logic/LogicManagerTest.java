@@ -55,7 +55,6 @@ public class LogicManagerTest {
         StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage, eventBookStorage);
         logic = new LogicManager(model, storage);
     }
-    
     @Test
     public void execute_invalidCommandFormat_throwsParseException() {
         String invalidCommand = "uicfhmowqewca";
