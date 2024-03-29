@@ -5,7 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.EVENT_DESC_BINGO;
 import static seedu.address.logic.commands.CommandTestUtil.EVENT_DESC_HIKING;
+import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
+import static seedu.address.testutil.TypicalEvents.getBingoEvent;
 import static seedu.address.testutil.TypicalEvents.getTypicalEventBook;
+import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_EVENT;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
@@ -16,16 +19,20 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.event.Event;
+import seedu.address.testutil.EditEventDescriptorBuilder;
+import seedu.address.testutil.EventBuilder;
 
 public class EditEventCommandTest {
 
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs(), getTypicalEventBook());
 
-    /*@Test
+    @Test
     public void execute_allFieldsSpecifiedUnfilteredList_success() {
         model.addEvent(getBingoEvent());
         Event editedEvent = new EventBuilder().withEventName("New Event Name").build();
-        EditEventDescriptor descriptor = new EditEventDescriptorBuilder().withName("New Event Name").build();
+        EditEventCommand.EditEventDescriptor descriptor = new EditEventDescriptorBuilder()
+                .withName("New Event Name").build();
 
         EditEventCommand editCommand = new EditEventCommand(INDEX_FIRST_EVENT, descriptor);
 
@@ -35,7 +42,7 @@ public class EditEventCommandTest {
         expectedModel.addEvent(editedEvent);
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
-    }*/
+    }
 
     @Test
     public void equals() {
