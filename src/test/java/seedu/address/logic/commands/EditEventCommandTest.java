@@ -5,10 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.EVENT_DESC_BINGO;
 import static seedu.address.logic.commands.CommandTestUtil.EVENT_DESC_HIKING;
-import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.address.testutil.TypicalEvents.getBingoEvent;
 import static seedu.address.testutil.TypicalEvents.getTypicalEventBook;
-import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_EVENT;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
@@ -16,14 +13,9 @@ import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
-import seedu.address.logic.commands.EditEventCommand.EditEventDescriptor;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
-import seedu.address.model.event.Event;
-import seedu.address.testutil.EditEventDescriptorBuilder;
-import seedu.address.testutil.EventBuilder;
-
 
 public class EditEventCommandTest {
 
