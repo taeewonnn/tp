@@ -42,17 +42,35 @@ public interface Model {
     Path getAddressBookFilePath();
 
     /**
+     * Returns the user prefs' event book file path.
+     */
+    Path getEventBookFilePath();
+
+    /**
      * Sets the user prefs' address book file path.
      */
     void setAddressBookFilePath(Path addressBookFilePath);
+
+    /**
+     * Sets the user prefs' event book file path.
+     */
+    void setEventBookFilePath(Path eventBookFilePath);
 
     /**
      * Replaces address book data with the data in {@code addressBook}.
      */
     void setAddressBook(ReadOnlyAddressBook addressBook);
 
+    /**
+     * Replaces event book data with the data in {@code eventBook}.
+     */
+    void setEventBook(ReadOnlyEventBook eventBook);
+
     /** Returns the AddressBook */
     ReadOnlyAddressBook getAddressBook();
+
+    /** Returns the EventBook */
+    ReadOnlyEventBook getEventBook();
 
     /**
      * Returns true if a person with the same identity as {@code person} exists in the address book.
@@ -86,10 +104,6 @@ public interface Model {
      * @throws NullPointerException if {@code predicate} is null.
      */
     void updateFilteredPersonList(Predicate<Person> predicate);
-
-    void setEventBook(ReadOnlyEventBook eventBook);
-
-    ReadOnlyEventBook getEventBook();
 
     boolean hasEvent(Event event);
 

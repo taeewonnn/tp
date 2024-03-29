@@ -29,6 +29,13 @@ public class Event {
         persons = new UniquePersonList();
     }
 
+    public Event(EventName eventName, UniquePersonList persons) {
+        requireAllNonNull(eventName);
+        this.eventName = eventName;
+        this.persons = new UniquePersonList();
+        this.persons.setPersons(persons);
+    }
+
     public EventName getEventName() {
         return eventName;
     }
