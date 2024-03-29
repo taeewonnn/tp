@@ -7,7 +7,6 @@ import static seedu.address.logic.commands.CommandTestUtil.EVENT_DESC_BINGO;
 import static seedu.address.logic.commands.CommandTestUtil.EVENT_DESC_HIKING;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalEvents.getBingoEvent;
-import static seedu.address.testutil.TypicalEvents.getTypicalEventBook;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_EVENT;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
@@ -16,6 +15,7 @@ import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
+import seedu.address.model.EventBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
@@ -25,7 +25,7 @@ import seedu.address.testutil.EventBuilder;
 
 public class EditEventCommandTest {
 
-    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs(), getTypicalEventBook());
+    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs(), new EventBook());
 
     @Test
     public void execute_allFieldsSpecifiedUnfilteredList_success() {
@@ -38,7 +38,7 @@ public class EditEventCommandTest {
 
         String expectedMessage = String.format(EditEventCommand.MESSAGE_EDIT_EVENT_SUCCESS, editedEvent.getEventName());
 
-        Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs(), getTypicalEventBook());
+        Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs(), new EventBook());
         expectedModel.addEvent(editedEvent);
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
