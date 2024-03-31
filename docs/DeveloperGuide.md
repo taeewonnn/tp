@@ -202,11 +202,11 @@ Step 3. The user executes `inv 3` command to invite the 5th person in the global
     * Cons: Requires more complex input parsing, makes the user input longer, and may be confusing for the user
 
 **Rationale:**
-The primary rationale for selecting an event first is it lets the user have a clear sense that a certain event is currently being modified.  
+The primary rationale for selecting an event first is it lets the user have a clear sense that a certain event is currently being modified.
 This will prevent future errors where the user confuses `invite` and `add` commands.
 
 
-### Delete Participant 
+### Delete Participant
 
 The `DeletePersonCommand` allows users to delete a person either from the global address book or from a specific event, depending on whether an event is selected.
 
@@ -251,29 +251,117 @@ Step 3. The `deleteFromGlobal()` function calls `Model#deletePerson()` to comple
     * Cons: Increases the number of commands users need to learn, potentially making the application more cumbersome to use.
 
 **Rationale:**
-The choice to unify the deletion process under a single `DeletePersonCommand` stems from a desire to streamline the user
-experience and reduce the learning curve associated with the application. By minimizing the number of commands a user 
-needs to learn, the application becomes more intuitive, especially for new or infrequent users. The unified command 
-approach emphasizes simplicity from the user's perspective, even if it introduces additional complexity behind the scenes.
+The choice to unify the deletion process under a single `DeletePersonCommand` stems from a desire to streamline the user experience and reduce the learning curve associated with the application. By minimizing the number of commands a user needs to learn, the application becomes more intuitive, especially for new or infrequent users. The unified command approach emphasizes simplicity from the user's perspective, even if it introduces additional complexity behind the scenes.
 
 **Aspect 2: How to specify the person to be deleted:**
 
 * **Alternative 1 (current choice):** Use the `index` in the filtered list
     * Pros: Easier to implement.  Immediate visual reference.
-    * Cons: Limited by Viewport. When the participant list is long and paginated or requires scrolling, users might find
-      it cumbersome to scroll through and find the index of the person they wish to delete.
+    * Cons: Limited by Viewport. When the participant list is long and paginated or requires scrolling, users might find it cumbersome to scroll through and find the index of the person they wish to delete.
 
 * **Alternative 2:** Use the `name` of the participant
     * Pros: Direct and intuitive, and can avoid indexing issues.
     * Cons: Requires more complex input parsing, and makes the user input longer.
 
 **Rationale:**
-The primary rationale for using an `index` as the specifier is its simplicity and direct mapping to the user interface. 
-Users can easily locate and specify a contact for deletion based on their position in a list, making the command 
-straightforward to implement and understand. This approach is particularly effective in scenarios where users work with 
-relatively short lists where the viewport limitations are minimal. In the scenario where the participant list gets 
-longer, the user can always use the `find` command to filter out the contact they want to delete before making the 
-actual deletion.
+The primary rationale for using an `index` as the specifier is its simplicity and direct mapping to the user interface. Users can easily locate and specify a contact for deletion based on their position in a list, making the command straightforward to implement and understand. This approach is particularly effective in scenarios where users work with relatively short lists where the viewport limitations are minimal. In the scenario where the participant list gets longer, the user can always use the `find` command to filter out the contact they want to delete before making the actual deletion.
+
+### \[Proposed\] Undo/redo feature
+
+#### Proposed Implementation
+
+The proposed undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`. Additionally, it implements the following operations:
+
+* `VersionedAddressBook#commit()` — Saves the current address book state in its history.
+* `VersionedAddressBook#undo()` — Restores the previous address book state from its history.
+* `VersionedAddressBook#redo()` — Restores a previously undone address book state from its history.
+
+These operations are exposed in the `Model` interface as `Model#commitAddressBook()`, `Model#undoAddressBook()` and `Model#redoAddressBook()` respectively.
+
+Given below is an example usage scenario and how the undo/redo mechanism behaves at each step.
+
+Step 1. The user launches the application for the first time. The `VersionedAddressBook` will be initialized with the initial address book state, and the `currentStatePointer` pointing to that single address book state.
+
+<puml src="diagrams/UndoRedoState0.puml" alt="UndoRedoState0" />
+
+Step 2. The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
+
+<puml src="diagrams/UndoRedoState1.puml" alt="UndoRedoState1" />
+
+Step 3. The user executes `add n/David …​` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
+
+<puml src="diagrams/UndoRedoState2.puml" alt="UndoRedoState2" />
+
+<box type="info" seamless>
+
+**Note:** If a command fails its execution, it will not call `Model#commitAddressBook()`, so the address book state will not be saved into the `addressBookStateList`.
+
+</box>
+
+Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
+
+<puml src="diagrams/UndoRedoState3.puml" alt="UndoRedoState3" />
+
+
+<box type="info" seamless>
+
+**Note:** If the `currentStatePointer` is at index 0, pointing to the initial AddressBook state, then there are no previous AddressBook states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather
+than attempting to perform the undo.
+
+</box>
+
+The following sequence diagram shows how an undo operation goes through the `Logic` component:
+
+<puml src="diagrams/UndoSequenceDiagram-Logic.puml" alt="UndoSequenceDiagram-Logic" />
+
+<box type="info" seamless>
+
+**Note:** The lifeline for `UndoCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
+
+</box>
+
+Similarly, how an undo operation goes through the `Model` component is shown below:
+
+<puml src="diagrams/UndoSequenceDiagram-Model.puml" alt="UndoSequenceDiagram-Model" />
+
+The `redo` command does the opposite — it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores the address book to that state.
+
+<box type="info" seamless>
+
+**Note:** If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest address book state, then there are no undone AddressBook states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
+
+</box>
+
+Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book, such as `list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
+
+<puml src="diagrams/UndoRedoState4.puml" alt="UndoRedoState4" />
+
+Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n/David …​` command. This is the behavior that most modern desktop applications follow.
+
+<puml src="diagrams/UndoRedoState5.puml" alt="UndoRedoState5" />
+
+The following activity diagram summarizes what happens when a user executes a new command:
+
+<puml src="diagrams/CommitActivityDiagram.puml" width="250" />
+
+#### Design considerations:
+
+**Aspect: How undo & redo executes:**
+
+* **Alternative 1 (current choice):** Saves the entire address book.
+* Pros: Easy to implement.
+* Cons: May have performance issues in terms of memory usage.
+
+* **Alternative 2:** Individual command knows how to undo/redo by
+  itself.
+* Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
+* Cons: We must ensure that the implementation of each individual command are correct.
+
+_{more aspects and alternatives to be added}_
+
+### \[Proposed\] Data archiving
+
+_{Explain here how the data archiving feature will be implemented}_
 
 ### Select Event Feature
 
@@ -288,8 +376,6 @@ purposes:
 The Select Event mechanism is facilitated by `EventBook`. It implements `ReadOnlyEventBook`, and can be thought of
 the counterpart to `AddressBook`, in that while `AddressBook` handles People-related functionality, `EventBook` handles
 Event-related functionality.
-
-#### Implementation Details
 
 To implement the Select Event mechanism, `EventBook` stores internally:
 * `selectedEvent` &thinsp;—&thinsp; The event that is currently selected. If no event is selected, it is `null`
@@ -334,7 +420,7 @@ depending on whether an event is selected.
 #### Implementation Details
 
 The `DeleteEventCommand` is implemented by extending the base `Command` class.
-It uses a `targetIndex` to identify the event to be deleted in the filtered event list. 
+It uses a `targetIndex` to identify the event to be deleted in the filtered event list.
 It implements the following operations:
 
 * `execute(Model)`— Checks the current address book state by calling `isSameEventSelected()`, and call `deleteEvent`
@@ -347,18 +433,18 @@ Step 1. The user launches the application for the first time. The `EventBook` wi
 initialized with the initial event book state.
 
 Step 2. The user executes `delev 1` command to delete the 1st event in the event book.
-The `delev` command calls `Model#deleteEvent()`, causing the modified state of the event book after the 
+The `delev` command calls `Model#deleteEvent()`, causing the modified state of the event book after the
 `delev 1` command executes to be saved in the event book.
 
 <box type="info" seamless>
 
-**Note:** If the event to be deleted is currently selected, 
+**Note:** If the event to be deleted is currently selected,
 it will not call `Model#deleteEvent()`, so there will be no state change in
 the event book.
 
 </box>
 
-#### Sequence Diagram 
+#### Sequence Diagram
 
 <puml src="diagrams/DeleteEventSequenceDiagram.puml" />
 
@@ -369,7 +455,7 @@ the event book.
 * **Alternative 1 (current choice):** Compares event and selected event with equals.
     * Pros: Easy to implement.
     * Cons: May not be very specific.
-    
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Documentation, logging, testing, configuration, dev-ops**
