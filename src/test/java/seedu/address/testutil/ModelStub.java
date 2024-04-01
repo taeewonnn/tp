@@ -43,8 +43,18 @@ public class ModelStub implements Model {
     }
 
     @Override
+    public Path getEventBookFilePath() {
+        throw new AssertionError("This method should not be called");
+    }
+
+    @Override
     public void setAddressBookFilePath(Path addressBookFilePath) {
         throw new AssertionError("This method should not be called.");
+    }
+
+    @Override
+    public void setEventBookFilePath(Path eventBookFilePath) {
+        throw new AssertionError("This method should not be called");
     }
 
     @Override
