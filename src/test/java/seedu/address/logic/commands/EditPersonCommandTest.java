@@ -20,6 +20,7 @@ import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
+import seedu.address.export.PersonDataExporter;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.EditPersonCommand.EditPersonDescriptor;
 import seedu.address.model.AddressBook;
@@ -37,7 +38,8 @@ import seedu.address.testutil.PersonBuilder;
  */
 public class EditPersonCommandTest {
 
-    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs(), getTypicalEventBook());
+    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs(),
+            getTypicalEventBook(), new PersonDataExporter());
 
     @Test
     public void execute_allFieldsSpecifiedUnfilteredList_success() {
@@ -49,7 +51,7 @@ public class EditPersonCommandTest {
                 Messages.format(editedPerson));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()),
-                new UserPrefs(), new EventBook(model.getEventBook()));
+                new UserPrefs(), new EventBook(model.getEventBook()), new PersonDataExporter());
         expectedModel.setPerson(model.getFilteredPersonList().get(0), editedPerson);
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
@@ -72,7 +74,7 @@ public class EditPersonCommandTest {
                 Messages.format(editedPerson));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()),
-                new UserPrefs(), new EventBook(model.getEventBook()));
+                new UserPrefs(), new EventBook(model.getEventBook()), new PersonDataExporter());
         expectedModel.setPerson(lastPerson, editedPerson);
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
@@ -87,7 +89,7 @@ public class EditPersonCommandTest {
                 Messages.format(editedPerson));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()),
-                new UserPrefs(), new EventBook(model.getEventBook()));
+                new UserPrefs(), new EventBook(model.getEventBook()), new PersonDataExporter());
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
     }
@@ -105,7 +107,7 @@ public class EditPersonCommandTest {
                 Messages.format(editedPerson));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()),
-                new UserPrefs(), new EventBook(model.getEventBook()));
+                new UserPrefs(), new EventBook(model.getEventBook()), new PersonDataExporter());
         expectedModel.setPerson(model.getFilteredPersonList().get(0), editedPerson);
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
@@ -121,7 +123,7 @@ public class EditPersonCommandTest {
                 .withTags(VALID_TAG_HUSBAND).build();
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()),
-                new UserPrefs(), new EventBook());
+                new UserPrefs(), new EventBook(), new PersonDataExporter());
         Event bingo = getBingoEvent();
         expectedModel.addEvent(bingo);
         expectedModel.selectEvent(bingo);
