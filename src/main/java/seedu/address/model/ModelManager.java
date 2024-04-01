@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
@@ -116,6 +117,7 @@ public class ModelManager implements Model {
         requireAllNonNull(target, editedPerson);
 
         addressBook.setPerson(target, editedPerson);
+        eventBook.setPerson(target, editedPerson);
     }
 
     //=========== Filtered Person List Accessors =============================================================
@@ -149,7 +151,8 @@ public class ModelManager implements Model {
         ModelManager otherModelManager = (ModelManager) other;
         return addressBook.equals(otherModelManager.addressBook)
                 && userPrefs.equals(otherModelManager.userPrefs)
-                && filteredPersons.equals(otherModelManager.filteredPersons);
+                && filteredPersons.equals(otherModelManager.filteredPersons)
+                && filteredEvents.equals(otherModelManager.filteredEvents);
     }
 
     //=========== EventBook ================================================================================
@@ -226,6 +229,12 @@ public class ModelManager implements Model {
     }
 
     //=========== Filtered Event List and Person List of Selected Event Accessors ====================================
+
+    @Override
+    public ObservableValue<Event> getSelectedEvent() {
+        return eventBook.getSelectedEvent();
+    }
+
     @Override
     public ObservableList<Event> getFilteredEventList() {
         return filteredEvents;

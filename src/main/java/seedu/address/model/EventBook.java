@@ -3,8 +3,11 @@ package seedu.address.model;
 import static java.util.Objects.requireNonNull;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.event.Event;
@@ -21,12 +24,14 @@ public class EventBook implements ReadOnlyEventBook {
 
     private final UniqueEventList events;
     private final UniquePersonList personsOfSelectedEvent;
+    private final SimpleObjectProperty<Event> selectedEventObservable;
     private Event selectedEvent;
 
     // Non-static initialization block
     {
         events = new UniqueEventList();
         personsOfSelectedEvent = new UniquePersonList();
+        selectedEventObservable = new SimpleObjectProperty<>(selectedEvent);
     }
 
     /**
@@ -125,7 +130,9 @@ public class EventBook implements ReadOnlyEventBook {
      */
     public void selectEvent(Event event) {
         selectedEvent = event;
-        personsOfSelectedEvent.setPersons(event.getPersonList());
+        selectedEventObservable.set(event);
+
+        updatePersonListOfSelectedEvent();
     }
 
     /**
@@ -133,7 +140,9 @@ public class EventBook implements ReadOnlyEventBook {
      */
     public void deselectEvent() {
         selectedEvent = null;
-        personsOfSelectedEvent.setPersons(new ArrayList<>());
+        selectedEventObservable.set(null);
+
+        updatePersonListOfSelectedEvent();
     }
 
     /**
@@ -158,7 +167,7 @@ public class EventBook implements ReadOnlyEventBook {
     public void addPersonToSelectedEvent(Person person) {
         if (isAnEventSelected()) {
             selectedEvent.addPerson(person);
-            personsOfSelectedEvent.add(person);
+            updatePersonListOfSelectedEvent();
         }
     }
 
@@ -171,7 +180,32 @@ public class EventBook implements ReadOnlyEventBook {
     public void deletePersonFromSelectedEvent(Person person) {
         if (isAnEventSelected()) {
             selectedEvent.deletePerson(person);
-            personsOfSelectedEvent.remove(person);
+            updatePersonListOfSelectedEvent();
+        }
+    }
+
+    /**
+     * Replaces an existing person in all events.
+     * If a person matching 'target' is found in an event, they are replaced with 'editedPerson'.
+     *
+     * @param target The person to be replaced.
+     * @param editedPerson The replacement person.
+     */
+    public void setPerson(Person target, Person editedPerson) {
+        for (Iterator<Event> it = events.iterator(); it.hasNext(); ) {
+            Event event = it.next();
+            if (event.hasPerson(target)) {
+                event.setPerson(target, editedPerson);
+            }
+        }
+        updatePersonListOfSelectedEvent();
+    }
+
+    private void updatePersonListOfSelectedEvent() {
+        if (selectedEvent != null) {
+            personsOfSelectedEvent.setPersons(selectedEvent.getPersonList());
+        } else {
+            personsOfSelectedEvent.setPersons(new ArrayList<>());
         }
     }
 
@@ -182,6 +216,11 @@ public class EventBook implements ReadOnlyEventBook {
         return new ToStringBuilder(this)
                 .add("events", events)
                 .toString();
+    }
+
+    @Override
+    public ObservableValue<Event> getSelectedEvent() {
+        return selectedEventObservable;
     }
 
     @Override
