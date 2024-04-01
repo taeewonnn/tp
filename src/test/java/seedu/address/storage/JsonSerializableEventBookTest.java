@@ -18,7 +18,7 @@ import seedu.address.testutil.TypicalPersons;
 public class JsonSerializableEventBookTest {
 
     @Test
-    public void toModelType_validEventDetails_returnsEventBook() throws IllegalValueException {
+    public void toModelType_validEventDetails_success() throws IllegalValueException {
         // Setup
         UniquePersonList a = new UniquePersonList();
         a.setPersons(TypicalPersons.getTypicalPersons());

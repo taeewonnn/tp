@@ -79,7 +79,7 @@ public class ModelManagerTest {
     }
 
     @Test
-    public void setEventBookFilePath_validPath_setsEventBookFilePath() {
+    public void setEventBookFilePath_validPath_success() {
         Path path = Paths.get("event/book/file/path");
         modelManager.setEventBookFilePath(path);
         assertEquals(path, modelManager.getEventBookFilePath());

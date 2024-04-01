@@ -82,19 +82,19 @@ public class MainApp extends Application {
 
         Optional<ReadOnlyAddressBook> addressBookOptional;
         Optional<ReadOnlyEventBook> eventBookOptional;
-        ReadOnlyAddressBook initialData;
-        ReadOnlyEventBook initialData2;
+        ReadOnlyAddressBook initialAddressBookData;
+        ReadOnlyEventBook initialEventBookData;
         try {
             addressBookOptional = storage.readAddressBook();
             if (!addressBookOptional.isPresent()) {
                 logger.info("Creating a new data file " + storage.getAddressBookFilePath()
                         + " populated with a sample AddressBook.");
             }
-            initialData = addressBookOptional.orElseGet(SampleDataUtil::getSampleAddressBook);
+            initialAddressBookData = addressBookOptional.orElseGet(SampleDataUtil::getSampleAddressBook);
         } catch (DataLoadingException e) {
             logger.warning("Data file at " + storage.getAddressBookFilePath() + " could not be loaded."
                     + " Will be starting with an empty AddressBook.");
-            initialData = new AddressBook();
+            initialAddressBookData = new AddressBook();
         }
 
         try {
@@ -103,14 +103,14 @@ public class MainApp extends Application {
                 logger.info("Creating a new data file " + storage.getEventBookFilePath()
                         + " populated with a sample EventBook.");
             }
-            initialData2 = eventBookOptional.orElseGet(SampleDataUtil::getSampleEventBook);
+            initialEventBookData = eventBookOptional.orElseGet(SampleDataUtil::getSampleEventBook);
         } catch (DataLoadingException e) {
             logger.warning("Data file at " + storage.getEventBookFilePath() + " could not be loaded."
                     + " Will be starting with an empty EventBook.");
-            initialData2 = new EventBook();
+            initialEventBookData = new EventBook();
         }
 
-        return new ModelManager(initialData, userPrefs, initialData2);
+        return new ModelManager(initialAddressBookData, userPrefs, initialEventBookData);
     }
 
     private void initLogging(Config config) {
