@@ -13,6 +13,8 @@ import seedu.address.commons.core.Version;
 import seedu.address.commons.exceptions.DataLoadingException;
 import seedu.address.commons.util.ConfigUtil;
 import seedu.address.commons.util.StringUtil;
+import seedu.address.export.PersonDataExporter;
+import seedu.address.export.PersonExporter;
 import seedu.address.logic.Logic;
 import seedu.address.logic.LogicManager;
 import seedu.address.model.AddressBook;
@@ -48,6 +50,7 @@ public class MainApp extends Application {
     protected Logic logic;
     protected Storage storage;
     protected Model model;
+    protected PersonExporter personExporter;
     protected Config config;
 
     @Override
@@ -65,7 +68,10 @@ public class MainApp extends Application {
         EventBookStorage eventBookStorage = new JsonEventBookStorage(userPrefs.getEventBookFilePath());
         storage = new StorageManager(addressBookStorage, userPrefsStorage, eventBookStorage);
 
-        model = initModelManager(storage, userPrefs);
+        personExporter = new PersonDataExporter();
+        personExporter.setFilePath(config.getPersonExportFilePath());
+
+        model = initModelManager(storage, userPrefs, personExporter);
 
         logic = new LogicManager(model, storage);
 
@@ -77,7 +83,7 @@ public class MainApp extends Application {
      * The data from the sample address book will be used instead if {@code storage}'s address book is not found,
      * or an empty address book will be used instead if errors occur when reading {@code storage}'s address book.
      */
-    private Model initModelManager(Storage storage, ReadOnlyUserPrefs userPrefs) {
+    private Model initModelManager(Storage storage, ReadOnlyUserPrefs userPrefs, PersonExporter personExporter) {
         logger.info("Using data file : " + storage.getAddressBookFilePath() + storage.getEventBookFilePath());
 
         Optional<ReadOnlyAddressBook> addressBookOptional;
@@ -110,7 +116,7 @@ public class MainApp extends Application {
             initialEventBookData = new EventBook();
         }
 
-        return new ModelManager(initialAddressBookData, userPrefs, initialEventBookData);
+        return new ModelManager(initialAddressBookData, userPrefs, initialEventBookData, personExporter);
     }
 
     private void initLogging(Config config) {

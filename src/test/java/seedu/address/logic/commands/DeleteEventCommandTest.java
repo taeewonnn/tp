@@ -13,6 +13,7 @@ import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
+import seedu.address.export.PersonDataExporter;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
@@ -25,7 +26,8 @@ import seedu.address.model.UserPrefs;
  */
 public class DeleteEventCommandTest {
 
-    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs(), getTypicalEventBook());
+    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs(),
+            getTypicalEventBook(), new PersonDataExporter());
 
     @Test
     public void execute_invalidIndexUnfilteredList_throwsCommandException() {
