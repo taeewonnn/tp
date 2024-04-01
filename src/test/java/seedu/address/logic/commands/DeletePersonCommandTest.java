@@ -127,7 +127,7 @@ public class DeletePersonCommandTest {
 
     @Test
     public void deleteFromEvent_validIndexFilteredList_success() throws Exception {
-        ModelManager model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        ModelManager model = new ModelManager(getTypicalAddressBook(), new UserPrefs(), getTypicalEventBook());
         model.setEventBook(getTypicalEventBook());
 
         Event event = model.getEventBook().getEventList().get(0);
