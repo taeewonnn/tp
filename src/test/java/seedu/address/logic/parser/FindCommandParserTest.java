@@ -6,15 +6,12 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_DESC;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.FindCommand;
-import seedu.address.model.person.NameContainsKeywordsPredicate;
-import seedu.address.model.person.TagContainsKeywordsPredicate;
+import seedu.address.model.person.NameAndTagCombinedPredicate;
 import seedu.address.model.tag.Tag;
 
 public class FindCommandParserTest {
@@ -24,19 +21,18 @@ public class FindCommandParserTest {
     @Test
     public void parse_validArgs_returnsFindCommandBasedOnName() {
         // Test for finding by name
-        FindCommand expectedFindCommandByName =
-                new FindCommand(new NameContainsKeywordsPredicate(Arrays.asList("Alice", "Bob")));
+        NameAndTagCombinedPredicate predicate = new NameAndTagCombinedPredicate(
+                Collections.singletonList("Alice"), null);
+        FindCommand expectedFindCommandByName = new FindCommand(predicate);
         assertParseSuccess(parser, VALID_NAME_DESC, expectedFindCommandByName);
     }
 
     @Test
     public void parse_validArgs_returnsFindCommandBasedOnTag() {
         // Test for finding by tag
-        Set<Tag> tagSet = new HashSet<>();
-        tagSet.add(new Tag("friend"));
-
-        FindCommand expectedFindCommandByTag =
-                new FindCommand(new TagContainsKeywordsPredicate(tagSet));
+        NameAndTagCombinedPredicate predicate = new NameAndTagCombinedPredicate(
+                null, Collections.singleton(new Tag("friend")));
+        FindCommand expectedFindCommandByTag = new FindCommand(predicate);
         assertParseSuccess(parser, VALID_TAG_DESC, expectedFindCommandByTag);
     }
 

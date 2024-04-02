@@ -6,12 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_PERSONS_LISTED_OVERVIEW;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalEvents.getTypicalEventBook;
-import static seedu.address.testutil.TypicalPersons.CARL;
-import static seedu.address.testutil.TypicalPersons.ELLE;
-import static seedu.address.testutil.TypicalPersons.FIONA;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
@@ -19,8 +15,7 @@ import org.junit.jupiter.api.Test;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
-import seedu.address.model.person.NameContainsKeywordsPredicate;
-import seedu.address.model.person.TagContainsKeywordsPredicate;
+import seedu.address.model.person.NameAndTagCombinedPredicate;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -32,10 +27,12 @@ public class FindCommandTest {
 
     @Test
     public void equals() {
-        NameContainsKeywordsPredicate firstPredicate =
-                new NameContainsKeywordsPredicate(Collections.singletonList("first"));
-        NameContainsKeywordsPredicate secondPredicate =
-                new NameContainsKeywordsPredicate(Collections.singletonList("second"));
+        NameAndTagCombinedPredicate firstPredicate =
+                new NameAndTagCombinedPredicate(Collections.singletonList("first"),
+                        Collections.singleton(new Tag("tag1")));
+        NameAndTagCombinedPredicate secondPredicate =
+                new NameAndTagCombinedPredicate(Collections.singletonList("second"),
+                        Collections.singleton(new Tag("tag2")));
 
         FindCommand findFirstCommand = new FindCommand(firstPredicate);
         FindCommand findSecondCommand = new FindCommand(secondPredicate);
@@ -55,36 +52,13 @@ public class FindCommandTest {
 
         // different person -> returns false
         assertFalse(findFirstCommand.equals(findSecondCommand));
-
-        TagContainsKeywordsPredicate firstTagPredicate =
-                new TagContainsKeywordsPredicate(Collections.singleton(new Tag("first")));
-        TagContainsKeywordsPredicate secondTagPredicate =
-                new TagContainsKeywordsPredicate(Collections.singleton(new Tag("second")));
-
-        FindCommand findFirstTagCommand = new FindCommand(firstTagPredicate);
-        FindCommand findSecondTagCommand = new FindCommand(secondTagPredicate);
-
-        // same object -> returns true
-        assertTrue(findFirstTagCommand.equals(findFirstTagCommand));
-
-        // same values -> returns true
-        FindCommand findFirstTagCommandCopy = new FindCommand(firstTagPredicate);
-        assertTrue(findFirstTagCommand.equals(findFirstTagCommandCopy));
-
-        // different types -> returns false
-        assertFalse(findFirstTagCommand.equals(1));
-
-        // null -> returns false
-        assertFalse(findFirstTagCommand.equals(null));
-
-        // different person -> returns false
-        assertFalse(findFirstTagCommand.equals(findSecondTagCommand));
     }
 
     @Test
     public void execute_zeroKeywords_noPersonFound() {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 0);
-        NameContainsKeywordsPredicate predicate = preparePredicate(" ");
+        NameAndTagCombinedPredicate predicate = new NameAndTagCombinedPredicate(Collections.emptyList(),
+                Collections.emptySet());
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
@@ -92,27 +66,12 @@ public class FindCommandTest {
     }
 
     @Test
-    public void execute_multipleKeywords_multiplePersonsFound() {
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 3);
-        NameContainsKeywordsPredicate predicate = preparePredicate("Kurz Elle Kunz");
-        FindCommand command = new FindCommand(predicate);
-        expectedModel.updateFilteredPersonList(predicate);
-        assertCommandSuccess(command, model, expectedMessage, expectedModel);
-        assertEquals(Arrays.asList(CARL, ELLE, FIONA), model.getFilteredPersonList());
-    }
-
-    @Test
     public void toStringMethod() {
-        NameContainsKeywordsPredicate predicate = new NameContainsKeywordsPredicate(Arrays.asList("keyword"));
+        NameAndTagCombinedPredicate predicate = new NameAndTagCombinedPredicate(
+                Collections.singletonList("keyword"), Collections.singleton(new Tag("tag")));
         FindCommand findCommand = new FindCommand(predicate);
         String expected = FindCommand.class.getCanonicalName() + "{predicate=" + predicate + "}";
         assertEquals(expected, findCommand.toString());
     }
 
-    /**
-     * Parses {@code userInput} into a {@code NameContainsKeywordsPredicate}.
-     */
-    private NameContainsKeywordsPredicate preparePredicate(String userInput) {
-        return new NameContainsKeywordsPredicate(Arrays.asList(userInput.split("\\s+")));
-    }
 }

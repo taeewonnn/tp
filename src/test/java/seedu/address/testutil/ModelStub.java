@@ -178,4 +178,8 @@ public class ModelStub implements Model {
         throw new AssertionError("This method should not be called.");
     }
 
+    @Override
+    public void updateFilteredPersonListOfSelectedEvent(Predicate<Person> predicate) {
+        throw new AssertionError("This method should not be called.");
+    }
 }
