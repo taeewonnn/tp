@@ -150,4 +150,10 @@ public interface Model {
      */
     ObservableList<Person> getFilteredPersonListOfSelectedEvent();
 
+    /**
+     * Updates the filter of the filtered person list of selected event to filter by the given {@code predicate}.
+     * @throws NullPointerException if {@code predicate} is null.
+     */
+    void updateFilteredPersonListOfSelectedEvent (Predicate<Person> predicate);
+
 }
