@@ -37,7 +37,7 @@ public class ModelManager implements Model {
      */
     public ModelManager(ReadOnlyAddressBook addressBook, ReadOnlyUserPrefs userPrefs,
                         ReadOnlyEventBook eventBook, PersonExporter personExporter) {
-        requireAllNonNull(addressBook, userPrefs, eventBook);
+        requireAllNonNull(addressBook, userPrefs, eventBook, personExporter);
 
         logger.fine("Initializing with address book: " + addressBook
                 + " and user prefs " + userPrefs + " and event book ");
@@ -171,7 +171,8 @@ public class ModelManager implements Model {
         return addressBook.equals(otherModelManager.addressBook)
                 && userPrefs.equals(otherModelManager.userPrefs)
                 && filteredPersons.equals(otherModelManager.filteredPersons)
-                && filteredEvents.equals(otherModelManager.filteredEvents);
+                && filteredEvents.equals(otherModelManager.filteredEvents)
+                && personExporter.equals(otherModelManager.personExporter);
     }
 
     //=========== EventBook ================================================================================
