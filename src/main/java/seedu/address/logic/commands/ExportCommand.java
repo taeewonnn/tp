@@ -1,5 +1,7 @@
 package seedu.address.logic.commands;
 
+import static java.util.Objects.requireNonNull;
+
 import java.io.IOException;
 
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -18,25 +20,34 @@ public class ExportCommand extends Command {
     public static final String MESSAGE_EXPORT_SUCCESS = "Exported the specified participant data.";
     public static final String MESSAGE_FAILURE = "Failed to export to CSV file.";
 
-    private final boolean exportName;
-    private final boolean exportPhone;
-    private final boolean exportEmail;
-    private final boolean exportAddress;
+    private final boolean shouldExportName;
+    private final boolean shouldExportPhone;
+    private final boolean shouldExportEmail;
+    private final boolean shouldExportAddress;
 
     /**
      * Creates an ExportCommand to export the specified details of the filtered participants.
      */
-    public ExportCommand(boolean exportName, boolean exportPhone, boolean exportEmail, boolean exportAddress) {
-        this.exportName = exportName;
-        this.exportPhone = exportPhone;
-        this.exportEmail = exportEmail;
-        this.exportAddress = exportAddress;
+    public ExportCommand(boolean shouldExportName, boolean shouldExportPhone,
+                         boolean shouldExportEmail, boolean shouldExportAddress) {
+        this.shouldExportName = shouldExportName;
+        this.shouldExportPhone = shouldExportPhone;
+        this.shouldExportEmail = shouldExportEmail;
+        this.shouldExportAddress = shouldExportAddress;
     }
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
+        requireNonNull(model);
         try {
-            model.exportPersonData(exportName, exportPhone, exportEmail, exportAddress);
+            if (model.isAnEventSelected()) {
+                model.exportEventPersonData(shouldExportName, shouldExportPhone,
+                        shouldExportEmail, shouldExportAddress);
+            } else {
+                model.exportGlobalPersonData(shouldExportName, shouldExportPhone,
+                        shouldExportEmail, shouldExportAddress);
+            }
+
             return new CommandResult(String.format(MESSAGE_EXPORT_SUCCESS));
         } catch (IOException e) {
             throw new CommandException(MESSAGE_FAILURE);
@@ -54,9 +65,9 @@ public class ExportCommand extends Command {
 
         ExportCommand e = (ExportCommand) other;
 
-        return exportName == e.exportName
-                && exportPhone == e.exportPhone
-                && exportEmail == e.exportEmail
-                && exportAddress == e.exportAddress;
+        return shouldExportName == e.shouldExportName
+                && shouldExportPhone == e.shouldExportPhone
+                && shouldExportEmail == e.shouldExportEmail
+                && shouldExportAddress == e.shouldExportAddress;
     }
 }

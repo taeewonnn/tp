@@ -1,12 +1,14 @@
 package seedu.address.export;
 
+import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import javafx.collections.transformation.FilteredList;
+import javafx.collections.ObservableList;
 import seedu.address.model.person.Person;
 
 /**
@@ -23,21 +25,22 @@ public class PersonDataExporter implements PersonExporter {
     }
 
     @Override
-    public void exportToCsv(FilteredList<Person> persons,
-                            boolean exportName, boolean exportPhone,
-                            boolean exportEmail, boolean exportAddress) throws IOException {
+    public void exportToCsv(ObservableList<Person> persons,
+                            boolean shouldExportName, boolean shouldExportPhone,
+                            boolean shouldExportEmail, boolean shouldExportAddress) throws IOException {
+        requireAllNonNull(persons, shouldExportName, shouldExportPhone, shouldExportEmail, shouldExportAddress);
         try (PrintWriter writer = new PrintWriter(new FileWriter(filePath.toFile(), false))) {
             StringBuilder header = new StringBuilder();
-            if (exportName) {
+            if (shouldExportName) {
                 header.append("Name,");
             }
-            if (exportPhone) {
+            if (shouldExportPhone) {
                 header.append("Phone,");
             }
-            if (exportEmail) {
+            if (shouldExportEmail) {
                 header.append("Email,");
             }
-            if (exportAddress) {
+            if (shouldExportAddress) {
                 header.append("Address,");
             }
             if (header.length() > 0) {
@@ -48,25 +51,39 @@ public class PersonDataExporter implements PersonExporter {
             for (Person person : persons) {
                 StringBuilder line = new StringBuilder();
 
-                if (exportName) {
+                if (shouldExportName) {
                     line.append(person.getName()).append(",");
                 }
-                if (exportPhone) {
+                if (shouldExportPhone) {
                     line.append(person.getPhone()).append(",");
                 }
-                if (exportEmail) {
+                if (shouldExportEmail) {
                     line.append(person.getEmail()).append(",");
                 }
-                if (exportAddress) {
+                if (shouldExportAddress) {
                     String addressWithReplacedCommas =
                             person.getAddress().toString().replace(",", ";");
                     line.append(addressWithReplacedCommas).append(",");
                 }
                 if (line.length() > 0) {
-                    line.setLength(line.length() - 1); // Remove trailing comma
+                    line.setLength(line.length() - 1);
                 }
                 writer.println(line);
             }
         }
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+        if (!(other instanceof PersonDataExporter)) {
+            return false;
+        }
+
+        PersonDataExporter e = (PersonDataExporter) other;
+
+        return filePath.equals(e.filePath);
     }
 }
