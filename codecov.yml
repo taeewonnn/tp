@@ -9,6 +9,9 @@
 coverage:
   status:
     patch: false
+    project:
+      default:
+        threshold: 0.5%
 
   range: 70..90     # First number represents red, and second represents green
                     # (default is 70..100)
