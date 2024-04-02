@@ -8,10 +8,24 @@
 # ----------------------
 coverage:
   status:
-    patch: false
+    patch:
+      default:
+        # basic
+        target: auto
+        threshold: -2%
+        base: auto
+        # advanced
+        branches:
+          - master
+        if_ci_failed: error #success, failure, error, ignore
+        only_pulls: false
+        flags:
+          - "unit"
+        paths:
+          - "src"
 
   range: 70..90     # First number represents red, and second represents green
-                    # (default is 70..100)
+  # (default is 70..100)
   round: down       # up, down, or nearest
   precision: 2      # Number of decimal places, between 0 and 5
 
