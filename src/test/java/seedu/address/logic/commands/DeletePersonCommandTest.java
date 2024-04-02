@@ -29,7 +29,7 @@ import seedu.address.model.person.Person;
  */
 public class DeletePersonCommandTest {
 
-    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs(), getTypicalEventBook());
 
     @Test
     public void constructor_nullIndex_throwsNullPointerException() {
@@ -43,6 +43,12 @@ public class DeletePersonCommandTest {
     }
 
     @Test
+    public void deleteFromGlobal_nullModel_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () ->
+                new DeletePersonCommand(Index.fromZeroBased(0)).deleteFromGlobal(null));
+    }
+
+    @Test
     public void deleteFromGlobal_validIndexUnfilteredList_success() {
         Person personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         DeletePersonCommand deletePersonCommand = new DeletePersonCommand(INDEX_FIRST_PERSON);
@@ -50,7 +56,7 @@ public class DeletePersonCommandTest {
         String expectedMessage = String.format(DeletePersonCommand.MESSAGE_DELETE_PERSON_GLOBAL_SUCCESS,
                 Messages.format(personToDelete));
 
-        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs(), model.getEventBook());
         expectedModel.deletePerson(personToDelete);
 
         assertCommandSuccess(deletePersonCommand, model, expectedMessage, expectedModel);
@@ -74,7 +80,7 @@ public class DeletePersonCommandTest {
         String expectedMessage = String.format(DeletePersonCommand.MESSAGE_DELETE_PERSON_GLOBAL_SUCCESS,
                 Messages.format(personToDelete));
 
-        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs(), model.getEventBook());
         expectedModel.deletePerson(personToDelete);
         showNoPerson(expectedModel);
 
@@ -95,8 +101,14 @@ public class DeletePersonCommandTest {
     }
 
     @Test
+    public void deleteFromEvent_nullModel_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () ->
+                new DeletePersonCommand(Index.fromZeroBased(0)).deleteFromEvent(null));
+    }
+
+    @Test
     public void deleteFromEvent_validIndex_success() throws Exception {
-        ModelManager model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        ModelManager model = new ModelManager(getTypicalAddressBook(), new UserPrefs(), getTypicalEventBook());
         model.setEventBook(getTypicalEventBook());
         DeletePersonCommand deletePersonCommand = new DeletePersonCommand(Index.fromZeroBased(0));
 
@@ -114,8 +126,27 @@ public class DeletePersonCommandTest {
     }
 
     @Test
+    public void deleteFromEvent_validIndexFilteredList_success() throws Exception {
+        ModelManager model = new ModelManager(getTypicalAddressBook(), new UserPrefs(), getTypicalEventBook());
+        model.setEventBook(getTypicalEventBook());
+
+        Event event = model.getEventBook().getEventList().get(0);
+        Person personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        DeletePersonCommand deletePersonCommand = new DeletePersonCommand(INDEX_FIRST_PERSON);
+        // Select an event first
+        model.selectEvent(event);
+        // Add person
+        event.addPerson(personToDelete);
+        model.selectEvent(event);
+
+        deletePersonCommand.execute(model);
+
+        assertFalse(model.isPersonInSelectedEvent(personToDelete));
+    }
+
+    @Test
     public void deleteFromEvent_invalidIndex_throwsCommandException() {
-        ModelManager model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        ModelManager model = new ModelManager(getTypicalAddressBook(), new UserPrefs(), getTypicalEventBook());
         model.setEventBook(getTypicalEventBook());
         Event event = model.getEventBook().getEventList().get(0);
         model.selectEvent(event);
@@ -126,7 +157,7 @@ public class DeletePersonCommandTest {
 
     @Test
     public void deleteFromEvent_noEventSelected_throwsCommandException() {
-        ModelManager model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        ModelManager model = new ModelManager(getTypicalAddressBook(), new UserPrefs(), getTypicalEventBook());
         model.setEventBook(getTypicalEventBook());
 
         assertThrows(CommandException.class, () ->

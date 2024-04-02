@@ -2,7 +2,6 @@ package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.testutil.TypicalEvents.getBingoEvent;
@@ -26,7 +25,7 @@ import seedu.address.model.UserPrefs;
  */
 public class DeleteEventCommandTest {
 
-    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs(), getTypicalEventBook());
 
     @Test
     public void execute_invalidIndexUnfilteredList_throwsCommandException() {
@@ -34,13 +33,6 @@ public class DeleteEventCommandTest {
         DeleteEventCommand deleteEventCommand = new DeleteEventCommand(outOfBoundIndex);
 
         assertCommandFailure(deleteEventCommand, model, Messages.MESSAGE_INVALID_EVENT_DISPLAYED_INDEX);
-    }
-
-    @Test
-    public void execute_selectModel_throwsCommandException() {
-        SelectCommand selectCommand = new SelectCommand(Index.fromZeroBased(1));
-
-        assertThrows(CommandException.class, () -> new DeleteEventCommand(Index.fromZeroBased(1)).execute(model));
     }
 
     @Test

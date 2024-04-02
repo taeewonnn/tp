@@ -15,7 +15,7 @@ import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
-import seedu.address.logic.commands.EditEventCommand.EditEventDescriptor;
+import seedu.address.model.EventBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
@@ -23,22 +23,22 @@ import seedu.address.model.event.Event;
 import seedu.address.testutil.EditEventDescriptorBuilder;
 import seedu.address.testutil.EventBuilder;
 
-
 public class EditEventCommandTest {
 
-    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs(), new EventBook());
 
     @Test
     public void execute_allFieldsSpecifiedUnfilteredList_success() {
         model.addEvent(getBingoEvent());
         Event editedEvent = new EventBuilder().withEventName("New Event Name").build();
-        EditEventDescriptor descriptor = new EditEventDescriptorBuilder().withName("New Event Name").build();
+        EditEventCommand.EditEventDescriptor descriptor = new EditEventDescriptorBuilder()
+                .withName("New Event Name").build();
 
         EditEventCommand editCommand = new EditEventCommand(INDEX_FIRST_EVENT, descriptor);
 
         String expectedMessage = String.format(EditEventCommand.MESSAGE_EDIT_EVENT_SUCCESS, editedEvent.getEventName());
 
-        Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs(), new EventBook());
         expectedModel.addEvent(editedEvent);
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);

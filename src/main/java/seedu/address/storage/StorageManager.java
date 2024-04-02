@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.exceptions.DataLoadingException;
 import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.ReadOnlyEventBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.UserPrefs;
 
@@ -20,12 +21,17 @@ public class StorageManager implements Storage {
     private AddressBookStorage addressBookStorage;
     private UserPrefsStorage userPrefsStorage;
 
+    private EventBookStorage eventBookStorage;
+
     /**
-     * Creates a {@code StorageManager} with the given {@code AddressBookStorage} and {@code UserPrefStorage}.
+     * Creates a {@code StorageManager} with the given {@code AddressBookStorage}
+     * and {@code UserPrefStorage} and {@code EventBookStorage}.
      */
-    public StorageManager(AddressBookStorage addressBookStorage, UserPrefsStorage userPrefsStorage) {
+    public StorageManager(AddressBookStorage addressBookStorage, UserPrefsStorage userPrefsStorage,
+                          EventBookStorage eventBookStorage) {
         this.addressBookStorage = addressBookStorage;
         this.userPrefsStorage = userPrefsStorage;
+        this.eventBookStorage = eventBookStorage;
     }
 
     // ================ UserPrefs methods ==============================
@@ -75,4 +81,31 @@ public class StorageManager implements Storage {
         addressBookStorage.saveAddressBook(addressBook, filePath);
     }
 
+    // ================ EventBook methods ==================================
+    @Override
+    public Path getEventBookFilePath() {
+        return eventBookStorage.getEventBookFilePath();
+    }
+
+    @Override
+    public Optional<ReadOnlyEventBook> readEventBook() throws DataLoadingException {
+        return readEventBook(eventBookStorage.getEventBookFilePath());
+    }
+
+    @Override
+    public Optional<ReadOnlyEventBook> readEventBook(Path filePath) throws DataLoadingException {
+        logger.fine("Attempting to read data from file: " + filePath);
+        return eventBookStorage.readEventBook(filePath);
+    }
+
+    @Override
+    public void saveEventBook(ReadOnlyEventBook eventBook) throws IOException {
+        saveEventBook(eventBook, eventBookStorage.getEventBookFilePath());
+    }
+
+    @Override
+    public void saveEventBook(ReadOnlyEventBook eventBook, Path filePath) throws IOException {
+        logger.fine("Attempting to write to data file: " + filePath);
+        eventBookStorage.saveEventBook(eventBook, filePath);
+    }
 }
