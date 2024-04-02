@@ -1,6 +1,7 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EVENT_NAME;
 
 import seedu.address.commons.util.ToStringBuilder;
@@ -18,7 +19,8 @@ public class AddEventCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Creates and adds an event to the address book. "
             + "Parameters: "
-            + PREFIX_EVENT_NAME + "EVENT_NAME";
+            + PREFIX_EVENT_NAME + "EVENT_NAME"
+            + PREFIX_DATE + "EVENT_DATE";
 
 
     public static final String MESSAGE_SUCCESS = "New event created: %1$s";

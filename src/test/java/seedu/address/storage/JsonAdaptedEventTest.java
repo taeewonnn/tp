@@ -18,6 +18,7 @@ import seedu.address.model.event.EventName;
 
 public class JsonAdaptedEventTest {
     private static final String INVALID_EVENTNAME = "R@chel";
+    private static final String VALID_EVENTDATE = "2024/04/05";
 
     private static final String VALID_EVENTNAME = getBingoEvent().getEventName().toString();
 
@@ -36,14 +37,14 @@ public class JsonAdaptedEventTest {
     @Test
     public void toModelType_invalidEventName_throwsIllegalValueException() {
         JsonAdaptedEvent event =
-                new JsonAdaptedEvent(INVALID_EVENTNAME, VALID_PERSONS);
+                new JsonAdaptedEvent(INVALID_EVENTNAME, VALID_EVENTDATE, VALID_PERSONS);
         String expectedMessage = EventName.MESSAGE_CONSTRAINTS;
         assertThrows(IllegalValueException.class, expectedMessage, event::toModelType);
     }
 
     @Test
     public void toModelType_nullEventName_throwsIllegalValueException() {
-        JsonAdaptedEvent event = new JsonAdaptedEvent(null, VALID_PERSONS);
+        JsonAdaptedEvent event = new JsonAdaptedEvent(null, VALID_EVENTDATE, VALID_PERSONS);
         String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, EventName.class.getSimpleName());
         assertThrows(IllegalValueException.class, expectedMessage, event::toModelType);
     }

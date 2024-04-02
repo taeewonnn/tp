@@ -1,6 +1,7 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EVENT_NAME;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.event.Event;
+import seedu.address.model.event.EventDate;
 import seedu.address.model.event.EventName;
 
 /**
@@ -29,7 +31,8 @@ public class EditEventCommand extends Command {
             + "Parameters: INDEX (must be a positive integer) "
             + "[" + PREFIX_EVENT_NAME + "EVENT NAME]\n"
             + "Example: " + COMMAND_WORD + " 1 "
-            + PREFIX_EVENT_NAME + "New Event Name";
+            + PREFIX_EVENT_NAME + "New Event Name"
+            + PREFIX_DATE + "New Event Date";
 
     public static final String MESSAGE_EDIT_EVENT_SUCCESS = "Edited Event: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
@@ -67,7 +70,7 @@ public class EditEventCommand extends Command {
         }
 
         model.setEvent(eventToEdit, editedEvent);
-        return new CommandResult(String.format(MESSAGE_EDIT_EVENT_SUCCESS, editedEvent));
+        return new CommandResult(String.format(MESSAGE_EDIT_EVENT_SUCCESS, Messages.format(editedEvent)));
     }
 
     /**
@@ -78,8 +81,9 @@ public class EditEventCommand extends Command {
         assert eventToEdit != null;
 
         EventName updatedName = editEventDescriptor.getName().orElse(eventToEdit.getEventName());
+        EventDate updatedDate = editEventDescriptor.getDate().orElse(eventToEdit.getEventDate());
 
-        Event editedEvent = new Event(updatedName);
+        Event editedEvent = new Event(updatedName, updatedDate);
         editedEvent.setPersons(eventToEdit.getPersonList());
         return editedEvent;
     }
@@ -115,6 +119,8 @@ public class EditEventCommand extends Command {
     public static class EditEventDescriptor {
         private EventName name;
 
+        private EventDate date;
+
         public EditEventDescriptor() {}
 
         /**
@@ -123,17 +129,21 @@ public class EditEventCommand extends Command {
          */
         public EditEventDescriptor(EditEventDescriptor toCopy) {
             withName(toCopy.name);
+            withDate(toCopy.date);
         }
 
         /**
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name);
+            return CollectionUtil.isAnyNonNull(name, date);
         }
 
         public void withName(EventName name) {
             this.name = name;
+        }
+        public void withDate(EventDate date) {
+            this.date = date;
         }
 
         public Optional<EventName> getName() {
@@ -142,6 +152,14 @@ public class EditEventCommand extends Command {
 
         public void setName(EventName name) {
             this.name = name;
+        }
+
+        public Optional<EventDate> getDate() {
+            return Optional.ofNullable(date);
+        }
+
+        public void setDate(EventDate date) {
+            this.date = date;
         }
 
         @Override
@@ -156,13 +174,15 @@ public class EditEventCommand extends Command {
             }
 
             EditEventDescriptor otherEditEventDescriptor = (EditEventDescriptor) other;
-            return Objects.equals(name, otherEditEventDescriptor.name);
+            return Objects.equals(name, otherEditEventDescriptor.name)
+                    && Objects.equals(date, otherEditEventDescriptor.date);
         }
 
         @Override
         public String toString() {
             return new ToStringBuilder(this)
                     .add("name", name)
+                    .add("date", date)
                     .toString();
         }
     }

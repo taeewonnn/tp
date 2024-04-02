@@ -9,6 +9,7 @@ import static seedu.address.testutil.TypicalPersons.BENSON;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
 import seedu.address.testutil.EventBuilder;
@@ -81,7 +82,10 @@ public class EventTest {
     @Test
     public void toStringMethod() {
         Event event = new EventBuilder().build();
-        String expected = event.getEventName().toString();
+        String expected = new ToStringBuilder(event)
+                .add("", event.getEventName())
+                .add("Date:", event.getEventDate())
+                .toString();
 
         assertEquals(expected, event.toString());
     }

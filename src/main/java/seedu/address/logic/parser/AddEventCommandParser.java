@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EVENT_NAME;
 
 import java.util.stream.Stream;
@@ -8,6 +9,7 @@ import java.util.stream.Stream;
 import seedu.address.logic.commands.AddEventCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.event.Event;
+import seedu.address.model.event.EventDate;
 import seedu.address.model.event.EventName;
 
 /**
@@ -22,15 +24,16 @@ public class AddEventCommandParser implements Parser<AddEventCommand> {
      */
     public AddEventCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap =
-             ArgumentTokenizer.tokenize(args, PREFIX_EVENT_NAME);
+             ArgumentTokenizer.tokenize(args, PREFIX_EVENT_NAME, PREFIX_DATE);
 
-        if (!arePrefixesPresent(argMultimap, PREFIX_EVENT_NAME)
+        if (!arePrefixesPresent(argMultimap, PREFIX_EVENT_NAME, PREFIX_DATE)
             || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddEventCommand.MESSAGE_USAGE));
         }
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_EVENT_NAME);
         EventName eventName = ParserUtil.parseEventName(argMultimap.getValue(PREFIX_EVENT_NAME).get());
-        Event event = new Event(eventName);
+        EventDate eventDate = ParserUtil.parseEventDate(argMultimap.getValue(PREFIX_DATE).get());
+        Event event = new Event(eventName, eventDate);
 
         return new AddEventCommand(event);
     }

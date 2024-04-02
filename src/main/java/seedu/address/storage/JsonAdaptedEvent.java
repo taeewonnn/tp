@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.event.Event;
+import seedu.address.model.event.EventDate;
 import seedu.address.model.event.EventName;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.UniquePersonList;
@@ -23,6 +24,8 @@ class JsonAdaptedEvent {
 
     private final String eventName;
 
+    private final String eventDateTime;
+
     private final List<JsonAdaptedPerson> persons = new ArrayList<>();
 
     /**
@@ -30,8 +33,10 @@ class JsonAdaptedEvent {
      */
     @JsonCreator
     public JsonAdaptedEvent(@JsonProperty("eventName") String eventName,
+                            @JsonProperty("eventDateTime") String eventDateTime,
                              @JsonProperty("persons") List<JsonAdaptedPerson> persons) {
         this.eventName = eventName;
+        this.eventDateTime = eventDateTime;
         if (persons != null) {
             this.persons.addAll(persons);
         }
@@ -42,6 +47,7 @@ class JsonAdaptedEvent {
      */
     public JsonAdaptedEvent(Event source) {
         eventName = source.getEventName().toString();
+        eventDateTime = source.getEventDate().toString();
         persons.addAll(source.getPersonList().stream()
                 .map(JsonAdaptedPerson::new)
                 .collect(Collectors.toList()));
@@ -63,12 +69,18 @@ class JsonAdaptedEvent {
                     EventName.class.getSimpleName()));
         }
 
+        if (eventDateTime == null) {
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
+                    EventDate.class.getSimpleName()));
+        }
+
         if (!Name.isValidName(eventName)) {
             throw new IllegalValueException(Name.MESSAGE_CONSTRAINTS);
         }
         final EventName modelEventName = new EventName(eventName);
+        final EventDate modelEventDate = new EventDate(eventDateTime);
 
-        return new Event(modelEventName, eventPersons);
+        return new Event(modelEventName, modelEventDate, eventPersons);
     }
 
 }
