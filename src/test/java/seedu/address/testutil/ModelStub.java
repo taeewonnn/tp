@@ -177,4 +177,15 @@ public class ModelStub implements Model {
     public ObservableList<Person> getFilteredPersonListOfSelectedEvent() {
         throw new AssertionError("This method should not be called.");
     }
+
+    @Override
+    public void exportEventPersonData(boolean shouldExportName, boolean shouldExportPhone,
+                                      boolean shouldExportEmail, boolean shouldExportAddress) {
+        throw new AssertionError("This method should not be called.");
+    };
+
+    public void exportGlobalPersonData(boolean shouldExportName, boolean shouldExportPhone,
+                                       boolean shouldExportEmail, boolean shouldExportAddress) {
+        throw new AssertionError("This method should not be called.");
+    };
 }

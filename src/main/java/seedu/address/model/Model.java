@@ -1,5 +1,6 @@
 package seedu.address.model;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.function.Predicate;
 
@@ -150,4 +151,9 @@ public interface Model {
      */
     ObservableList<Person> getFilteredPersonListOfSelectedEvent();
 
+    void exportEventPersonData(boolean shouldExportName, boolean shouldExportPhone,
+                               boolean shouldExportEmail, boolean shouldExportAddress) throws IOException;
+
+    void exportGlobalPersonData(boolean shouldExportName, boolean shouldExportPhone,
+                                boolean shouldExportEmail, boolean shouldExportAddress) throws IOException;
 }
