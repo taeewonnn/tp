@@ -177,4 +177,5 @@ public class ModelStub implements Model {
     public ObservableList<Person> getFilteredPersonListOfSelectedEvent() {
         throw new AssertionError("This method should not be called.");
     }
+
 }

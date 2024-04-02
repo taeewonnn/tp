@@ -1,14 +1,11 @@
 package seedu.address.model.person;
 
-import seedu.address.model.person.Person;
-
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import seedu.address.commons.util.StringUtil;
-import seedu.address.model.tag.Tag;
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.model.tag.Tag;
 
 /**
  * Predicate that combines checks for a {@code Person}'s name and tags.
@@ -17,6 +14,10 @@ public class NameAndTagCombinedPredicate implements Predicate<Person> {
     private final List<String> nameKeywords;
     private final Set<Tag> tagKeywords;
 
+    /**
+     * Tests that a {@code Person}'s {@code Name} fulfills both NameContainsKeywordsPredicate and
+     * TagContainsKeywordsPredicate predicates.
+     */
     public NameAndTagCombinedPredicate(List<String> nameKeywords, Set<Tag> tagKeywords) {
         this.nameKeywords = nameKeywords;
         this.tagKeywords = tagKeywords;
@@ -24,9 +25,8 @@ public class NameAndTagCombinedPredicate implements Predicate<Person> {
 
     @Override
     public boolean test(Person person) {
-        boolean nameMatch = nameKeywords == null || nameKeywords.stream()
-                .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(person.getName().fullName, keyword));
-        boolean tagMatch = tagKeywords == null || person.getTags().containsAll(tagKeywords);
+        boolean nameMatch = nameKeywords == null || new NameContainsKeywordsPredicate(nameKeywords).test(person);
+        boolean tagMatch = tagKeywords == null || new TagContainsKeywordsPredicate(tagKeywords).test(person);
         return nameMatch && tagMatch;
     }
 
