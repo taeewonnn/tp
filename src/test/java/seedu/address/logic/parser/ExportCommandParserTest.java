@@ -1,6 +1,6 @@
 package seedu.address.logic.parser;
 
-import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_EXPORT_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
@@ -34,7 +34,7 @@ public class ExportCommandParserTest {
 
     @Test
     public void parse_noFieldsProvided_failure() {
-        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, ExportCommand.MESSAGE_USAGE);
+        String expectedMessage = String.format(MESSAGE_INVALID_EXPORT_FORMAT, ExportCommand.MESSAGE_USAGE);
 
         assertParseFailure(new ExportCommandParser(), "", expectedMessage);
 

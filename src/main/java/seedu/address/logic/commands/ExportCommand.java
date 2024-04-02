@@ -13,10 +13,11 @@ import seedu.address.model.Model;
 public class ExportCommand extends Command {
 
     public static final String COMMAND_WORD = "export";
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Exports the details of all persons identified "
-            + "by the command flags. "
-            + "Flags: n/ (name), p/ (phone), e/ (email), a/ (address)\n"
-            + "Example: " + COMMAND_WORD + " n/ p/";
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Exports the details of all filtered participants "
+            + "identified by the command flags, only the fields specified by the flags will be exported.\n"
+            + "Flags include: [n/] for Name, [p/] for Phone, [e/] for Email, [a/] for Address\n"
+            + "Example: " + COMMAND_WORD + " n/"
+            + "Example: " + COMMAND_WORD + " n/ p/ e/ a/";
     public static final String MESSAGE_EXPORT_SUCCESS = "Exported the specified participant data.";
     public static final String MESSAGE_FAILURE = "Failed to export to CSV file.";
 
