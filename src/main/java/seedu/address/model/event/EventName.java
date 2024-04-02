@@ -7,6 +7,10 @@ import static java.util.Objects.requireNonNull;
  * Guarantees: immutable
  */
 public class EventName {
+
+    public static final String MESSAGE_CONSTRAINTS =
+            "Names should only contain alphanumeric characters and spaces, and it should not be blank";
+
     public final String eventName;
 
     /**

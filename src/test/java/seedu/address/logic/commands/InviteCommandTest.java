@@ -33,7 +33,7 @@ public class InviteCommandTest {
 
     @Test
     public void eventIndex_outOfRange_throwsCommandException() {
-        ModelManager model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        ModelManager model = new ModelManager(getTypicalAddressBook(), new UserPrefs(), getTypicalEventBook());
         model.setEventBook(getTypicalEventBook());
         assertThrows(CommandException.class, () ->
                 new InviteCommand(Index.fromZeroBased(100)).execute(model));
@@ -41,7 +41,7 @@ public class InviteCommandTest {
 
     @Test
     public void execute_duplicatePerson_throwsCommandException() {
-        ModelManager model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        ModelManager model = new ModelManager(getTypicalAddressBook(), new UserPrefs(), getTypicalEventBook());
         model.setEventBook(getTypicalEventBook());
         InviteCommand inviteCommand = new InviteCommand(Index.fromZeroBased(0));
 
@@ -59,7 +59,7 @@ public class InviteCommandTest {
 
     @Test
     public void execute_eventNotSelected_throwsCommandException() throws CommandException {
-        ModelManager model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        ModelManager model = new ModelManager(getTypicalAddressBook(), new UserPrefs(), getTypicalEventBook());
         model.setEventBook(getTypicalEventBook());
         InviteCommand inviteCommand = new InviteCommand(Index.fromZeroBased(0));
 
@@ -68,7 +68,7 @@ public class InviteCommandTest {
 
     @Test
     public void execute_selectEventAndInvitePerson_successful() throws CommandException {
-        ModelManager model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        ModelManager model = new ModelManager(getTypicalAddressBook(), new UserPrefs(), getTypicalEventBook());
         model.setEventBook(getTypicalEventBook());
         InviteCommand inviteCommand = new InviteCommand(Index.fromZeroBased(0));
 

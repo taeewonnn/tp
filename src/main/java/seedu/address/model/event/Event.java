@@ -28,6 +28,18 @@ public class Event {
         persons = new UniquePersonList();
     }
 
+    /**
+     * Every field must be present and not null.
+     * @param eventName
+     * @param persons
+     */
+    public Event(EventName eventName, UniquePersonList persons) {
+        requireAllNonNull(eventName, persons);
+        this.eventName = eventName;
+        this.persons = new UniquePersonList();
+        this.persons.setPersons(persons);
+    }
+
     public EventName getEventName() {
         return eventName;
     }
