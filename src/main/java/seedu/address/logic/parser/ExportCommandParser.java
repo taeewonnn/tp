@@ -1,7 +1,7 @@
 package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_EXPORT_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
@@ -23,6 +23,7 @@ public class ExportCommandParser implements Parser<ExportCommand> {
         requireNonNull(args);
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS);
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS);
 
         boolean shouldExportName = argMultimap.getValue(PREFIX_NAME).isPresent();
         boolean shouldExportPhone = argMultimap.getValue(PREFIX_PHONE).isPresent();
@@ -31,7 +32,7 @@ public class ExportCommandParser implements Parser<ExportCommand> {
 
         if (!(shouldExportName || shouldExportPhone || shouldExportEmail || shouldExportAddress)) {
             throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, ExportCommand.MESSAGE_USAGE));
+                    String.format(MESSAGE_INVALID_EXPORT_FORMAT, ExportCommand.MESSAGE_USAGE));
         }
 
         return new ExportCommand(shouldExportName, shouldExportPhone, shouldExportEmail, shouldExportAddress);
