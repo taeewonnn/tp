@@ -151,6 +151,9 @@ public interface Model {
      */
     ObservableList<Person> getFilteredPersonListOfSelectedEvent();
 
-    void exportPersonData(boolean exportName, boolean exportPhone,
-                          boolean exportEmail, boolean exportAddress) throws IOException;
+    void exportEventPersonData(boolean shouldExportName, boolean shouldExportPhone,
+                               boolean shouldExportEmail, boolean shouldExportAddress) throws IOException;
+
+    void exportGlobalPersonData(boolean shouldExportName, boolean shouldExportPhone,
+                                boolean shouldExportEmail, boolean shouldExportAddress) throws IOException;
 }

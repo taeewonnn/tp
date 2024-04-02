@@ -3,7 +3,7 @@ package seedu.address.export;
 import java.io.IOException;
 import java.nio.file.Path;
 
-import javafx.collections.transformation.FilteredList;
+import javafx.collections.ObservableList;
 import seedu.address.model.person.Person;
 
 /**
@@ -15,13 +15,15 @@ public interface PersonExporter {
      * Exports a list of persons to a file.
      *
      * @param persons the list of persons to export.
-     * @param exportName indicates whether names should be exported.
-     * @param exportPhone indicates whether phone numbers should be exported.
-     * @param exportEmail indicates whether email addresses should be exported.
-     * @param exportAddress indicates whether addresses should be exported.
+     * @param shouldExportName indicates whether names should be exported.
+     * @param shouldExportPhone indicates whether phone numbers should be exported.
+     * @param shouldExportEmail indicates whether email addresses should be exported.
+     * @param shouldExportAddress indicates whether addresses should be exported.
      * @throws IOException if an I/O error occurs.
      */
-    void exportToCsv(FilteredList<Person> persons,
-                     boolean exportName, boolean exportPhone,
-                     boolean exportEmail, boolean exportAddress) throws IOException;
+    void exportToCsv(ObservableList<Person> persons,
+                     boolean shouldExportName, boolean shouldExportPhone,
+                     boolean shouldExportEmail, boolean shouldExportAddress) throws IOException;
+
+    boolean equals(Object other);
 }

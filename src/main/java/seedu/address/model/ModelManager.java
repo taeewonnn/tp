@@ -268,15 +268,16 @@ public class ModelManager implements Model {
     //=========== Exports ============================================================================================
 
     @Override
-    public void exportPersonData(boolean exportName, boolean exportPhone,
-                                 boolean exportEmail, boolean exportAddress) throws IOException {
-        if (isAnEventSelected()) {
-            personExporter.exportToCsv(filteredPersonsOfSelectedEvent,
-                    exportName, exportPhone, exportEmail, exportAddress);
-        } else {
-            personExporter.exportToCsv(filteredPersons,
-                    exportName, exportPhone, exportEmail, exportAddress);
-        }
+    public void exportEventPersonData(boolean shouldExportName, boolean shouldExportPhone,
+                                      boolean shouldExportEmail, boolean shouldExportAddress) throws IOException {
+        personExporter.exportToCsv(filteredPersonsOfSelectedEvent,
+                shouldExportName, shouldExportPhone, shouldExportEmail, shouldExportAddress);
     }
 
+    @Override
+    public void exportGlobalPersonData(boolean shouldExportName, boolean shouldExportPhone,
+                                       boolean shouldExportEmail, boolean shouldExportAddress) throws IOException {
+        personExporter.exportToCsv(filteredPersons,
+                shouldExportName, shouldExportPhone, shouldExportEmail, shouldExportAddress);
+    }
 }

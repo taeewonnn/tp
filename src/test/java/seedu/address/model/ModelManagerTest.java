@@ -3,12 +3,14 @@ package seedu.address.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalEvents.getBingoEvent;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.BENSON;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -16,6 +18,7 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.GuiSettings;
+import seedu.address.export.MockPersonDataExporter;
 import seedu.address.export.PersonDataExporter;
 import seedu.address.export.PersonExporter;
 import seedu.address.model.event.Event;
@@ -196,6 +199,82 @@ public class ModelManagerTest {
     }
 
     @Test
+    public void exportEventPersonData_success() {
+        MockPersonDataExporter mockExporter = new MockPersonDataExporter();
+        ModelManager modelManager = new ModelManager(
+                new AddressBook(), new UserPrefs(), new EventBook(), mockExporter);
+
+        Event event = getBingoEvent();
+        modelManager.addEvent(event);
+        modelManager.selectEvent(event);
+
+        modelManager.addPersonToSelectedEvent(ALICE);
+        modelManager.addPersonToSelectedEvent(BENSON);
+
+        // Execute export
+        try {
+            modelManager.exportEventPersonData(
+                    true, true, true, true);
+        } catch (IOException e) {
+            fail("Should not have thrown IOException.");
+        }
+
+        // Verify that the export was attempted with the correct parameters
+        assertTrue(mockExporter.hasExported(modelManager.getFilteredPersonListOfSelectedEvent(),
+                true, true, true, true));
+    }
+
+    @Test
+    public void exportGlobalPersonData_success() {
+        MockPersonDataExporter mockExporter = new MockPersonDataExporter();
+        ModelManager modelManager = new ModelManager(
+                new AddressBook(), new UserPrefs(), new EventBook(), mockExporter);
+
+        modelManager.addPerson(ALICE);
+        modelManager.addPerson(BENSON);
+
+        try {
+            modelManager.exportGlobalPersonData(
+                    true, true, true, true);
+        } catch (IOException e) {
+            fail("Should not have thrown IOException.");
+        }
+
+        assertTrue(mockExporter.hasExported(modelManager.getFilteredPersonList(),
+                true, true, true, true));
+    }
+
+    @Test
+    public void exportEventPersonData_failure_throwsIoException() {
+        MockPersonDataExporter mockExporter = new MockPersonDataExporter();
+        mockExporter.setThrowIoException(true);
+        ModelManager modelManager = new ModelManager(
+                new AddressBook(), new UserPrefs(), new EventBook(), mockExporter);
+
+        Event event = getBingoEvent();
+        modelManager.addEvent(event);
+        modelManager.selectEvent(event);
+        modelManager.addPersonToSelectedEvent(ALICE);
+
+        assertThrows(IOException.class, () -> modelManager.exportEventPersonData(
+                true, false, false, false));
+    }
+
+    @Test
+    public void exportGlobalPersonData_failure_throwsIoException() {
+        MockPersonDataExporter mockExporter = new MockPersonDataExporter();
+        mockExporter.setThrowIoException(true);
+        ModelManager modelManager = new ModelManager(
+                new AddressBook(), new UserPrefs(), new EventBook(), mockExporter);
+
+        modelManager.addPerson(ALICE);
+
+        assertThrows(IOException.class, () -> modelManager.exportGlobalPersonData(
+                false, true, false, false));
+    }
+
+
+    @Test
     public void equals() {
         AddressBook addressBook = new AddressBookBuilder().withPerson(ALICE).withPerson(BENSON).build();
         EventBook eventBook = new EventBookBuilder().withEvent(getBingoEvent()).build();
@@ -203,6 +282,8 @@ public class ModelManagerTest {
         EventBook differentEventBook = new EventBook();
         UserPrefs userPrefs = new UserPrefs();
         PersonExporter personExporter = new PersonDataExporter();
+        PersonExporter differentPersonExporter = new PersonDataExporter();
+        differentPersonExporter.setFilePath(Path.of("otherFilePath"));
 
         // same values -> returns true
         modelManager = new ModelManager(addressBook, userPrefs, eventBook, personExporter);
@@ -220,6 +301,10 @@ public class ModelManagerTest {
 
         // different addressBook -> returns false
         assertFalse(modelManager.equals(new ModelManager(differentAddressBook, userPrefs, eventBook, personExporter)));
+
+        // different personExporter -> returns false
+        assertFalse(modelManager.equals(
+                new ModelManager(differentAddressBook, userPrefs, eventBook, differentPersonExporter)));
 
         // different filteredList -> returns false
         String[] keywords = ALICE.getName().fullName.split("\\s+");

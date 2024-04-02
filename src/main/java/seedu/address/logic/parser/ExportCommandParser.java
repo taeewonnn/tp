@@ -24,16 +24,16 @@ public class ExportCommandParser implements Parser<ExportCommand> {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS);
 
-        boolean exportName = argMultimap.getValue(PREFIX_NAME).isPresent();
-        boolean exportPhone = argMultimap.getValue(PREFIX_PHONE).isPresent();
-        boolean exportEmail = argMultimap.getValue(PREFIX_EMAIL).isPresent();
-        boolean exportAddress = argMultimap.getValue(PREFIX_ADDRESS).isPresent();
+        boolean shouldExportName = argMultimap.getValue(PREFIX_NAME).isPresent();
+        boolean shouldExportPhone = argMultimap.getValue(PREFIX_PHONE).isPresent();
+        boolean shouldExportEmail = argMultimap.getValue(PREFIX_EMAIL).isPresent();
+        boolean shouldExportAddress = argMultimap.getValue(PREFIX_ADDRESS).isPresent();
 
-        if (!(exportName || exportPhone || exportEmail || exportAddress)) {
+        if (!(shouldExportName || shouldExportPhone || shouldExportEmail || shouldExportAddress)) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, ExportCommand.MESSAGE_USAGE));
         }
 
-        return new ExportCommand(exportName, exportPhone, exportEmail, exportAddress);
+        return new ExportCommand(shouldExportName, shouldExportPhone, shouldExportEmail, shouldExportAddress);
     }
 }
