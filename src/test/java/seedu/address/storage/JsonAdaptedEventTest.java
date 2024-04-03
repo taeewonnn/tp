@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.exceptions.IllegalValueException;
+import seedu.address.model.event.EventDate;
 import seedu.address.model.event.EventName;
 
 
@@ -46,6 +47,13 @@ public class JsonAdaptedEventTest {
     public void toModelType_nullEventName_throwsIllegalValueException() {
         JsonAdaptedEvent event = new JsonAdaptedEvent(null, VALID_EVENTDATE, VALID_PERSONS);
         String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, EventName.class.getSimpleName());
+        assertThrows(IllegalValueException.class, expectedMessage, event::toModelType);
+    }
+
+    @Test
+    public void toModelType_nullEventDate_throwsIllegalValueException() {
+        JsonAdaptedEvent event = new JsonAdaptedEvent(VALID_EVENTNAME, null, VALID_PERSONS);
+        String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, EventDate.class.getSimpleName());
         assertThrows(IllegalValueException.class, expectedMessage, event::toModelType);
     }
 }
