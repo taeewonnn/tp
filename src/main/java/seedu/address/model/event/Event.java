@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 import javafx.collections.ObservableList;
+import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.UniquePersonList;
 
@@ -17,14 +18,17 @@ import seedu.address.model.person.UniquePersonList;
 public class Event {
 
     private final EventName eventName;
+
+    private final EventDate eventDate;
     private final UniquePersonList persons;
 
     /**
      * Every field must be present and not null.
      */
-    public Event(EventName eventName) {
+    public Event(EventName eventName, EventDate eventDate) {
         requireAllNonNull(eventName);
         this.eventName = eventName;
+        this.eventDate = eventDate;
         persons = new UniquePersonList();
     }
 
@@ -33,9 +37,10 @@ public class Event {
      * @param eventName
      * @param persons
      */
-    public Event(EventName eventName, UniquePersonList persons) {
+    public Event(EventName eventName, EventDate eventDate, UniquePersonList persons) {
         requireAllNonNull(eventName, persons);
         this.eventName = eventName;
+        this.eventDate = eventDate;
         this.persons = new UniquePersonList();
         this.persons.setPersons(persons);
     }
@@ -43,6 +48,11 @@ public class Event {
     public EventName getEventName() {
         return eventName;
     }
+
+    public EventDate getEventDate() {
+        return eventDate;
+    }
+
 
     //// person-level operations
 
@@ -105,7 +115,8 @@ public class Event {
         }
 
         return otherEvent != null
-                && otherEvent.getEventName().equals(getEventName());
+                && otherEvent.getEventName().equals(getEventName())
+                && otherEvent.getEventDate().equals(getEventDate());
     }
 
     /**
@@ -124,7 +135,7 @@ public class Event {
         }
 
         Event otherEvent = (Event) other;
-        return eventName.equals(otherEvent.eventName);
+        return eventName.equals(otherEvent.eventName) && eventDate.equals(otherEvent.eventDate);
     }
 
     @Override
@@ -135,6 +146,9 @@ public class Event {
 
     @Override
     public String toString() {
-        return eventName.toString();
+        return new ToStringBuilder(this)
+                    .add("", eventName)
+                    .add("Date:", eventDate)
+                    .toString();
     }
 }

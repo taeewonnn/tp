@@ -9,6 +9,7 @@ import seedu.address.model.EventBook;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyEventBook;
 import seedu.address.model.event.Event;
+import seedu.address.model.event.EventDate;
 import seedu.address.model.event.EventName;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
@@ -52,7 +53,7 @@ public class SampleDataUtil {
         }
         UniquePersonList a = new UniquePersonList();
         a.setPersons(sampleAb.getPersonList());
-        return new Event[] { new Event(new EventName("Orientation"), a) };
+        return new Event[] { new Event(new EventName("Orientation"), new EventDate("05-07-2024"), a) };
     }
 
     public static ReadOnlyAddressBook getSampleAddressBook() {

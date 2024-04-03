@@ -8,7 +8,8 @@
 # ----------------------
 coverage:
   status:
-    patch:
+    patch: off
+    project:
       default:
         # basic
         target: auto

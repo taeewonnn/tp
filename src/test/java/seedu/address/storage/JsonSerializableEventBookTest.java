@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.EventBook;
 import seedu.address.model.event.Event;
+import seedu.address.model.event.EventDate;
 import seedu.address.model.event.EventName;
 import seedu.address.model.person.UniquePersonList;
 import seedu.address.testutil.TypicalPersons;
@@ -22,8 +23,10 @@ public class JsonSerializableEventBookTest {
         // Setup
         UniquePersonList a = new UniquePersonList();
         a.setPersons(TypicalPersons.getTypicalPersons());
-        JsonAdaptedEvent jsonEvent1 = new JsonAdaptedEvent(new Event(new EventName("Event"), a));
-        JsonAdaptedEvent jsonEvent2 = new JsonAdaptedEvent(new Event(new EventName("Event2"), a));
+        JsonAdaptedEvent jsonEvent1 = new JsonAdaptedEvent(new Event(new EventName("Event"),
+                new EventDate("05-07-2024"), a));
+        JsonAdaptedEvent jsonEvent2 = new JsonAdaptedEvent(new Event(new EventName("Event2"),
+                new EventDate("05-07-2024"), a));
         List<JsonAdaptedEvent> jsonEvents = new ArrayList<>();
         jsonEvents.add(jsonEvent1);
         jsonEvents.add(jsonEvent2);
@@ -34,8 +37,10 @@ public class JsonSerializableEventBookTest {
 
         // Verify
         assertEquals(2, eventBook.getEventList().size());
-        assertEquals(new Event(new EventName("Event"), a), eventBook.getEventList().get(0));
-        assertEquals(new Event(new EventName("Event2"), a), eventBook.getEventList().get(1));
+        assertEquals(new Event(new EventName("Event"), new EventDate("05-07-2024"), a),
+                eventBook.getEventList().get(0));
+        assertEquals(new Event(new EventName("Event2"), new EventDate("05-07-2024"), a),
+                eventBook.getEventList().get(1));
     }
 
     @Test
@@ -43,7 +48,8 @@ public class JsonSerializableEventBookTest {
         // Setup
         UniquePersonList a = new UniquePersonList();
         a.setPersons(TypicalPersons.getTypicalPersons());
-        JsonAdaptedEvent jsonEvent1 = new JsonAdaptedEvent(new Event(new EventName("Event"), a));
+        JsonAdaptedEvent jsonEvent1 = new JsonAdaptedEvent(new Event(new EventName("Event"),
+                new EventDate("05-07-2024"), a));
         List<JsonAdaptedEvent> jsonEvents = new ArrayList<>();
         jsonEvents.add(jsonEvent1);
         jsonEvents.add(jsonEvent1); // Duplicate event

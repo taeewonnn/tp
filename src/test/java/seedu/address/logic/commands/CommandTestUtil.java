@@ -3,6 +3,7 @@ package seedu.address.logic.commands;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EVENT_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
@@ -66,6 +67,10 @@ public class CommandTestUtil {
 
     public static final String VALID_EVENT_NAME_HIKING = "hiking";
     public static final String VALID_EVENT_NAME_BINGO = "bingo";
+
+    public static final String VALID_DATE = "05-07-2024";
+
+    public static final String VALID_EVENT_DATE = " " + PREFIX_DATE + "05-07-2024";
     public static final String EVENT_NAME_DESC_BINGO = " " + PREFIX_EVENT_NAME + VALID_EVENT_NAME_BINGO;
 
     public static final EditEventCommand.EditEventDescriptor EVENT_DESC_BINGO;

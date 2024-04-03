@@ -33,24 +33,48 @@ Eventy is a contact management application, tailored specifically for student ev
 
 ### Creating an event: `addev`
 
-**Format:** `addev ev/ <event name>`
+**Format:** `addev ev/ <event name> d/<date>`
 
 **Description:**
 
-Adds a new event with the specified name for the Event List.
+Adds a new event with the specified name and date for the Event List.
 
 <box type="warning" seamless>
 
 **Caution:**
 
 * `<event name>` should be **alphanumeric**, **non-empty** and **not longer than 64 characters**.
-* Adding an event with a name that already exists, regardless of case, is **not allowed.**
+* `<date>` should be in **dd-MM-yyyy** format
+* Adding an event with a name and date that already exists, regardless of case, is **not allowed.**
   </box>
 
 **Examples:**
 
-- `addev ev/ Orientation camp` adds a new event with the name `Orientation camp`.
+- `addev ev/Orientation camp d/04-05-2024` adds a new event with the name `Orientation camp` that will happen on May 4th, 2024.
 
+### Editing an event: `editev`
+
+**Format:** `editev INDEX ev/ <event name> d/<date>`
+
+**Description:**
+
+Edits an existing event based on index.
+
+<box type="warning" seamless>
+
+**Caution:**
+
+* At least one of `<event name>` and `<date>` should not be null.
+* `<event name>` should be **alphanumeric**, **non-empty** and **not longer than 64 characters**.
+* `<date>` should be in **dd-MM-yyyy** format
+* Editing an event with same `<date>` or `<event name>` is **not allowed.**
+  </box>
+
+**Examples:**
+
+- `editev 1 ev/Orientation camp` changes the event name of event indexed 1 to `Orientation camp`.
+- `editev 1 d/08-09-2024` changes the event date of event indexed 1 to September 8th, 2024.
+- `editev 1 ev/Party d/08-09-2024` changes the event name and date of event indexed 1 to Party and September 8th, 2024.
 
 ### Deleting an event: `delev`
 
@@ -242,7 +266,8 @@ Format: `exit`
 
 | Action                                      | Format, Examples                                                                                                      |
 |---------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
-| **Add Event**                               | `addev ev/ <event name>` <br> e.g., `addev ev/ Orientation camp`                                                      |
+| **Add Event**                               | `addev ev/<event name> d/<date>` <br> e.g., `addev ev/Orientation camp d/04-07-2024`                                  |
+| **Edit Event**                              | `editev INDEX ev/<event name> d/<date>` <br> e.g., `editev 1 ev/Party`                                                |
 | **Delete Event**                            | `delev <index>` <br> e.g., `delev 1`                                                                                  |
 | **Add Participant**                         | `addp n/ <participant name> p/ <phone number> e/ <email>` <br> e.g., `addp n/ David p/ 98987676 e/ david@example.com` |
 | **Selecting Event**                         | `sel <event index>` <br> e.g., `sel                                                                                   |

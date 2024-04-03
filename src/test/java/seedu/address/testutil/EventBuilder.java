@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import seedu.address.model.event.Event;
+import seedu.address.model.event.EventDate;
 import seedu.address.model.event.EventName;
 import seedu.address.model.person.Person;
 
@@ -13,8 +14,11 @@ import seedu.address.model.person.Person;
 public class EventBuilder {
 
     public static final String DEFAULT_EVENT_NAME = "Sample Event";
+    public static final String DEFAULT_EVENT_DATE = "05-07-2024";
 
     private EventName eventName;
+
+    private EventDate eventDate;
     private List<Person> personList;
 
     /**
@@ -22,6 +26,7 @@ public class EventBuilder {
      */
     public EventBuilder() {
         eventName = new EventName(DEFAULT_EVENT_NAME);
+        eventDate = new EventDate(DEFAULT_EVENT_DATE);
         personList = new ArrayList<>();
     }
 
@@ -30,6 +35,7 @@ public class EventBuilder {
      */
     public EventBuilder(Event eventToCopy) {
         eventName = eventToCopy.getEventName();
+        eventDate = eventToCopy.getEventDate();
         personList = eventToCopy.getPersonList();
     }
 
@@ -38,6 +44,7 @@ public class EventBuilder {
      */
     public EventBuilder withEventName(String eventName) {
         this.eventName = new EventName(eventName);
+        this.eventDate = new EventDate(DEFAULT_EVENT_DATE);
         return this;
     }
 
@@ -62,7 +69,7 @@ public class EventBuilder {
      * @return event with fields
      */
     public Event build() {
-        Event event = new Event(eventName);
+        Event event = new Event(eventName, eventDate);
         event.setPersons(personList);
         return event;
     }

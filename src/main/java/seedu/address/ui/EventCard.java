@@ -20,6 +20,9 @@ public class EventCard extends UiPart<Region> {
     @FXML
     private Label name;
 
+    @FXML
+    private Label date;
+
     /**
      * Creates a {@code EventCard} with the given {@code Event} and index to display.
      */
@@ -27,6 +30,7 @@ public class EventCard extends UiPart<Region> {
         super(FXML);
         id.setText(displayedIndex + ". ");
         name.setText(event.getEventName().eventName);
+        date.setText(event.getEventDate().toString());
     }
 
     public Region getRoot() {
