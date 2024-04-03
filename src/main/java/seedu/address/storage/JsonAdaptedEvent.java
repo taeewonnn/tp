@@ -24,7 +24,7 @@ class JsonAdaptedEvent {
 
     private final String eventName;
 
-    private final String eventDateTime;
+    private final String eventDate;
 
     private final List<JsonAdaptedPerson> persons = new ArrayList<>();
 
@@ -33,10 +33,10 @@ class JsonAdaptedEvent {
      */
     @JsonCreator
     public JsonAdaptedEvent(@JsonProperty("eventName") String eventName,
-                            @JsonProperty("eventDateTime") String eventDateTime,
+                            @JsonProperty("eventDate") String eventDate,
                              @JsonProperty("persons") List<JsonAdaptedPerson> persons) {
         this.eventName = eventName;
-        this.eventDateTime = eventDateTime;
+        this.eventDate = eventDate;
         if (persons != null) {
             this.persons.addAll(persons);
         }
@@ -47,7 +47,7 @@ class JsonAdaptedEvent {
      */
     public JsonAdaptedEvent(Event source) {
         eventName = source.getEventName().toString();
-        eventDateTime = source.getEventDate().toString();
+        eventDate = source.getEventDate().toString();
         persons.addAll(source.getPersonList().stream()
                 .map(JsonAdaptedPerson::new)
                 .collect(Collectors.toList()));
@@ -69,7 +69,7 @@ class JsonAdaptedEvent {
                     EventName.class.getSimpleName()));
         }
 
-        if (eventDateTime == null) {
+        if (eventDate == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
                     EventDate.class.getSimpleName()));
         }
@@ -78,7 +78,7 @@ class JsonAdaptedEvent {
             throw new IllegalValueException(Name.MESSAGE_CONSTRAINTS);
         }
         final EventName modelEventName = new EventName(eventName);
-        final EventDate modelEventDate = new EventDate(eventDateTime);
+        final EventDate modelEventDate = new EventDate(eventDate);
 
         return new Event(modelEventName, modelEventDate, eventPersons);
     }

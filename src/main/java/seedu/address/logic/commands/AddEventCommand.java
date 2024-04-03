@@ -20,8 +20,10 @@ public class AddEventCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Creates and adds an event to the address book. "
             + "Parameters: "
             + PREFIX_EVENT_NAME + "EVENT_NAME"
-            + PREFIX_DATE + "EVENT_DATE";
-
+            + PREFIX_DATE + "EVENT_DATE"
+            + "Example: " + COMMAND_WORD + " "
+            + PREFIX_EVENT_NAME + "Party "
+            + PREFIX_DATE + "05-04-2024 ";
 
     public static final String MESSAGE_SUCCESS = "New event created: %1$s";
     public static final String MESSAGE_DUPLICATE_EVENT = "This event already exists in the address book";
