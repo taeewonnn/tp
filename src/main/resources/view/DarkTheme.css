@@ -301,7 +301,7 @@
 }
 
 #cardPane {
-    -fx-background-color: #3e7b91;
+    -fx-background-color: #2E566B;
     -fx-border-width: 3;
     -fx-padding: 1 3 1 3;
 }
@@ -337,8 +337,8 @@
 }
 
 #tags .label {
-    -fx-text-fill: white;
-    -fx-background-color: #3e7b91;
+    -fx-text-fill: black;
+    -fx-background-color: #FFA500;
     -fx-padding: 1 3 1 3;
     -fx-font-size: 11;
 }
