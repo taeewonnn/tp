@@ -2,6 +2,8 @@ package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.commands.CommandTestUtil.EVENT_NAME_DESC_BINGO;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_DATE;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_EVENT_DATE;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EVENT_NAME_BINGO;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
@@ -55,6 +57,19 @@ public class EditEventCommandParserTest {
 
         EditEventCommand.EditEventDescriptor descriptor = new EditEventDescriptorBuilder()
                 .withName(VALID_EVENT_NAME_BINGO).build();
+
+        EditEventCommand expectedCommand = new EditEventCommand(targetIndex, descriptor);
+
+        assertParseSuccess(parser, userInput, expectedCommand);
+    }
+
+    @Test
+    public void parse_withDate_success() {
+        Index targetIndex = INDEX_SECOND_EVENT;
+        String userInput = targetIndex.getOneBased() + VALID_EVENT_DATE;
+
+        EditEventCommand.EditEventDescriptor descriptor = new EditEventDescriptorBuilder()
+                .withDate(VALID_DATE).build();
 
         EditEventCommand expectedCommand = new EditEventCommand(targetIndex, descriptor);
 

@@ -66,6 +66,8 @@ public class CommandTestUtil {
     public static final String VALID_EVENT_NAME_HIKING = "hiking";
     public static final String VALID_EVENT_NAME_BINGO = "bingo";
 
+    public static final String VALID_DATE = "05-07-2024";
+
     public static final String VALID_EVENT_DATE = " " + PREFIX_DATE + "05-07-2024";
     public static final String EVENT_NAME_DESC_BINGO = " " + PREFIX_EVENT_NAME + VALID_EVENT_NAME_BINGO;
 
