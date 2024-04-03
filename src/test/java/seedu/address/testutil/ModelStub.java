@@ -182,4 +182,15 @@ public class ModelStub implements Model {
     public void updateFilteredPersonListOfSelectedEvent(Predicate<Person> predicate) {
         throw new AssertionError("This method should not be called.");
     }
+
+    public void exportEventPersonData(boolean shouldExportName, boolean shouldExportPhone,
+                                      boolean shouldExportEmail, boolean shouldExportAddress) {
+        throw new AssertionError("This method should not be called.");
+    };
+
+    public void exportGlobalPersonData(boolean shouldExportName, boolean shouldExportPhone,
+                                       boolean shouldExportEmail, boolean shouldExportAddress) {
+        throw new AssertionError("This method should not be called.");
+    };
+
 }

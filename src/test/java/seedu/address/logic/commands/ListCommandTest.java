@@ -9,6 +9,7 @@ import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import seedu.address.export.PersonDataExporter;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
@@ -23,8 +24,10 @@ public class ListCommandTest {
 
     @BeforeEach
     public void setUp() {
-        model = new ModelManager(getTypicalAddressBook(), new UserPrefs(), getTypicalEventBook());
-        expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs(), getTypicalEventBook());
+        model = new ModelManager(getTypicalAddressBook(), new UserPrefs(),
+                getTypicalEventBook(), new PersonDataExporter());
+        expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs(),
+                getTypicalEventBook(), new PersonDataExporter());
     }
 
     @Test

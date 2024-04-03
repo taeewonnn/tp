@@ -10,6 +10,7 @@ import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
+import seedu.address.export.PersonDataExporter;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.ModelManager;
@@ -33,7 +34,8 @@ public class InviteCommandTest {
 
     @Test
     public void eventIndex_outOfRange_throwsCommandException() {
-        ModelManager model = new ModelManager(getTypicalAddressBook(), new UserPrefs(), getTypicalEventBook());
+        ModelManager model = new ModelManager(getTypicalAddressBook(), new UserPrefs(),
+                getTypicalEventBook(), new PersonDataExporter());
         model.setEventBook(getTypicalEventBook());
         assertThrows(CommandException.class, () ->
                 new InviteCommand(Index.fromZeroBased(100)).execute(model));
@@ -41,7 +43,8 @@ public class InviteCommandTest {
 
     @Test
     public void execute_duplicatePerson_throwsCommandException() {
-        ModelManager model = new ModelManager(getTypicalAddressBook(), new UserPrefs(), getTypicalEventBook());
+        ModelManager model = new ModelManager(getTypicalAddressBook(), new UserPrefs(),
+                getTypicalEventBook(), new PersonDataExporter());
         model.setEventBook(getTypicalEventBook());
         InviteCommand inviteCommand = new InviteCommand(Index.fromZeroBased(0));
 
@@ -58,8 +61,9 @@ public class InviteCommandTest {
     }
 
     @Test
-    public void execute_eventNotSelected_throwsCommandException() throws CommandException {
-        ModelManager model = new ModelManager(getTypicalAddressBook(), new UserPrefs(), getTypicalEventBook());
+    public void execute_eventNotSelected_throwsCommandException() {
+        ModelManager model = new ModelManager(getTypicalAddressBook(), new UserPrefs(),
+                getTypicalEventBook(), new PersonDataExporter());
         model.setEventBook(getTypicalEventBook());
         InviteCommand inviteCommand = new InviteCommand(Index.fromZeroBased(0));
 
@@ -68,7 +72,8 @@ public class InviteCommandTest {
 
     @Test
     public void execute_selectEventAndInvitePerson_successful() throws CommandException {
-        ModelManager model = new ModelManager(getTypicalAddressBook(), new UserPrefs(), getTypicalEventBook());
+        ModelManager model = new ModelManager(getTypicalAddressBook(), new UserPrefs(),
+                getTypicalEventBook(), new PersonDataExporter());
         model.setEventBook(getTypicalEventBook());
         InviteCommand inviteCommand = new InviteCommand(Index.fromZeroBased(0));
 

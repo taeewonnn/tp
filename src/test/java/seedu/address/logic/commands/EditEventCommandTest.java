@@ -15,6 +15,7 @@ import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
+import seedu.address.export.PersonDataExporter;
 import seedu.address.model.EventBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
@@ -25,7 +26,8 @@ import seedu.address.testutil.EventBuilder;
 
 public class EditEventCommandTest {
 
-    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs(), new EventBook());
+    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs(),
+            new EventBook(), new PersonDataExporter());
 
     @Test
     public void execute_allFieldsSpecifiedUnfilteredList_success() {
@@ -38,7 +40,8 @@ public class EditEventCommandTest {
 
         String expectedMessage = String.format(EditEventCommand.MESSAGE_EDIT_EVENT_SUCCESS, editedEvent.getEventName());
 
-        Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs(), new EventBook());
+        Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs(),
+                new EventBook(), new PersonDataExporter());
         expectedModel.addEvent(editedEvent);
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);

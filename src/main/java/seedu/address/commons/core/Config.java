@@ -17,6 +17,7 @@ public class Config {
     // Config values customizable through config file
     private Level logLevel = Level.INFO;
     private Path userPrefsFilePath = Paths.get("preferences.json");
+    private Path personExportFilePath = Paths.get("exported_participant_data.csv");
 
     public Level getLogLevel() {
         return logLevel;
@@ -34,6 +35,14 @@ public class Config {
         this.userPrefsFilePath = userPrefsFilePath;
     }
 
+    public Path getPersonExportFilePath() {
+        return personExportFilePath;
+    }
+
+    public void setPersonExportFilePath(Path personExportFilePath) {
+        this.personExportFilePath = personExportFilePath;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -47,12 +56,13 @@ public class Config {
 
         Config otherConfig = (Config) other;
         return Objects.equals(logLevel, otherConfig.logLevel)
-                && Objects.equals(userPrefsFilePath, otherConfig.userPrefsFilePath);
+                && Objects.equals(userPrefsFilePath, otherConfig.userPrefsFilePath)
+                && Objects.equals(personExportFilePath, otherConfig.personExportFilePath);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(logLevel, userPrefsFilePath);
+        return Objects.hash(logLevel, userPrefsFilePath, personExportFilePath);
     }
 
     @Override
@@ -60,7 +70,7 @@ public class Config {
         return new ToStringBuilder(this)
                 .add("logLevel", logLevel)
                 .add("userPrefsFilePath", userPrefsFilePath)
+                .add("personExportFilePath", personExportFilePath)
                 .toString();
     }
-
 }

@@ -3,6 +3,7 @@ package seedu.address.model;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
@@ -12,6 +13,8 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.export.PersonDataExporter;
+import seedu.address.export.PersonExporter;
 import seedu.address.model.event.Event;
 import seedu.address.model.person.Person;
 
@@ -24,6 +27,7 @@ public class ModelManager implements Model {
     private final EventBook eventBook;
     private final AddressBook addressBook;
     private final UserPrefs userPrefs;
+    private final PersonExporter personExporter;
     private final FilteredList<Event> filteredEvents;
     private final FilteredList<Person> filteredPersonsOfSelectedEvent;
     private final FilteredList<Person> filteredPersons;
@@ -31,8 +35,9 @@ public class ModelManager implements Model {
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
      */
-    public ModelManager(ReadOnlyAddressBook addressBook, ReadOnlyUserPrefs userPrefs, ReadOnlyEventBook eventBook) {
-        requireAllNonNull(addressBook, userPrefs, eventBook);
+    public ModelManager(ReadOnlyAddressBook addressBook, ReadOnlyUserPrefs userPrefs,
+                        ReadOnlyEventBook eventBook, PersonExporter personExporter) {
+        requireAllNonNull(addressBook, userPrefs, eventBook, personExporter);
 
         logger.fine("Initializing with address book: " + addressBook
                 + " and user prefs " + userPrefs + " and event book ");
@@ -40,13 +45,15 @@ public class ModelManager implements Model {
         this.eventBook = new EventBook(eventBook);
         this.addressBook = new AddressBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
+        this.personExporter = personExporter;
+
         filteredEvents = new FilteredList<>(this.eventBook.getEventList());
         filteredPersonsOfSelectedEvent = new FilteredList<>(this.eventBook.getPersonsOfSelectedEventList());
         filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
     }
 
     public ModelManager() {
-        this(new AddressBook(), new UserPrefs(), new EventBook());
+        this(new AddressBook(), new UserPrefs(), new EventBook(), new PersonDataExporter());
     }
 
     //=========== UserPrefs ==================================================================================
@@ -164,7 +171,8 @@ public class ModelManager implements Model {
         return addressBook.equals(otherModelManager.addressBook)
                 && userPrefs.equals(otherModelManager.userPrefs)
                 && filteredPersons.equals(otherModelManager.filteredPersons)
-                && filteredEvents.equals(otherModelManager.filteredEvents);
+                && filteredEvents.equals(otherModelManager.filteredEvents)
+                && personExporter.equals(otherModelManager.personExporter);
     }
 
     //=========== EventBook ================================================================================
@@ -260,10 +268,28 @@ public class ModelManager implements Model {
         return filteredPersonsOfSelectedEvent;
     }
 
+
     @Override
     public void updateFilteredPersonListOfSelectedEvent(Predicate<Person> predicate) {
         requireNonNull(predicate);
         filteredPersonsOfSelectedEvent.setPredicate(predicate);
+    }
+
+
+    //=========== Exports ============================================================================================
+
+    @Override
+    public void exportEventPersonData(boolean shouldExportName, boolean shouldExportPhone,
+                                      boolean shouldExportEmail, boolean shouldExportAddress) throws IOException {
+        personExporter.exportToCsv(filteredPersonsOfSelectedEvent,
+                shouldExportName, shouldExportPhone, shouldExportEmail, shouldExportAddress);
+    }
+
+    @Override
+    public void exportGlobalPersonData(boolean shouldExportName, boolean shouldExportPhone,
+                                       boolean shouldExportEmail, boolean shouldExportAddress) throws IOException {
+        personExporter.exportToCsv(filteredPersons,
+                shouldExportName, shouldExportPhone, shouldExportEmail, shouldExportAddress);
     }
 
 }
