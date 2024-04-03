@@ -223,11 +223,13 @@ public class ModelManager implements Model {
     @Override
     public void selectEvent(Event event) {
         eventBook.selectEvent(event);
+        updateFilteredPersonListOfSelectedEvent(PREDICATE_SHOW_ALL_PERSONS);
     }
 
     @Override
     public void deselectEvent() {
         eventBook.deselectEvent();
+        updateFilteredPersonListOfSelectedEvent(PREDICATE_SHOW_ALL_PERSONS);
     }
 
     @Override
@@ -240,6 +242,7 @@ public class ModelManager implements Model {
     public void addPersonToSelectedEvent(Person person) {
         requireNonNull(person);
         eventBook.addPersonToSelectedEvent(person);
+        updateFilteredPersonListOfSelectedEvent(PREDICATE_SHOW_ALL_PERSONS);
     }
 
     @Override
@@ -265,6 +268,14 @@ public class ModelManager implements Model {
         return filteredPersonsOfSelectedEvent;
     }
 
+
+    @Override
+    public void updateFilteredPersonListOfSelectedEvent(Predicate<Person> predicate) {
+        requireNonNull(predicate);
+        filteredPersonsOfSelectedEvent.setPredicate(predicate);
+    }
+
+
     //=========== Exports ============================================================================================
 
     @Override
@@ -280,4 +291,5 @@ public class ModelManager implements Model {
         personExporter.exportToCsv(filteredPersons,
                 shouldExportName, shouldExportPhone, shouldExportEmail, shouldExportAddress);
     }
+
 }

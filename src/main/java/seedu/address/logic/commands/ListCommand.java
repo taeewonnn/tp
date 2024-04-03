@@ -12,13 +12,19 @@ public class ListCommand extends Command {
 
     public static final String COMMAND_WORD = "list";
 
-    public static final String MESSAGE_SUCCESS = "Listed all persons";
-
+    public static final String MESSAGE_SUCCESS_GLOBAL = "Listed all persons in Global List";
+    public static final String MESSAGE_SUCCESS_EVENT = "Listed all persons in the Selected Event";
 
     @Override
     public CommandResult execute(Model model) {
         requireNonNull(model);
-        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-        return new CommandResult(MESSAGE_SUCCESS);
+
+        if (model.isAnEventSelected()) {
+            model.updateFilteredPersonListOfSelectedEvent(PREDICATE_SHOW_ALL_PERSONS);
+            return new CommandResult(MESSAGE_SUCCESS_EVENT);
+        } else {
+            model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+            return new CommandResult(MESSAGE_SUCCESS_GLOBAL);
+        }
     }
 }

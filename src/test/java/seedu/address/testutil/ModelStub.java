@@ -179,6 +179,10 @@ public class ModelStub implements Model {
     }
 
     @Override
+    public void updateFilteredPersonListOfSelectedEvent(Predicate<Person> predicate) {
+        throw new AssertionError("This method should not be called.");
+    }
+
     public void exportEventPersonData(boolean shouldExportName, boolean shouldExportPhone,
                                       boolean shouldExportEmail, boolean shouldExportAddress) {
         throw new AssertionError("This method should not be called.");
@@ -188,4 +192,5 @@ public class ModelStub implements Model {
                                        boolean shouldExportEmail, boolean shouldExportAddress) {
         throw new AssertionError("This method should not be called.");
     };
+
 }
