@@ -29,7 +29,7 @@ Eventy is a contact management application, tailored specifically for student ev
 
 ## UI Layout Description
 
-![UiLayout](images/UiLayout.jpg)
+![UiLayout](images/UILayout.png)
 
 1. **Command Box:** Box for users to input the command to be executed by Eventy.
 2. **Result Display Box:** Box that displays the result of executing the entered command.
@@ -62,6 +62,12 @@ Adds a new event with the specified name and date for the Event List.
 
 - `addev ev/Orientation camp d/04-05-2024` adds a new event with the name `Orientation camp` that will happen on May 4th, 2024.
   
+Before:
+
+![Ui](images/beforeaddev.png)
+
+After:
+
 ![Ui](images/addev.png)
 
 ### Editing an event: `editev`
