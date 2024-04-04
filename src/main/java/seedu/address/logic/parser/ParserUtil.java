@@ -127,10 +127,12 @@ public class ParserUtil {
     /**
      * Parses {@code String eventName} into a {@code EventName}.
      */
-    public static EventName parseEventName(String eventName) {
+    public static EventName parseEventName(String eventName) throws ParseException {
         requireNonNull(eventName);
         String trimmedEventName = eventName.trim();
-        // Currently all event names are valid
+        if (!Name.isValidName(trimmedEventName)) {
+            throw new ParseException(EventName.MESSAGE_CONSTRAINTS);
+        }
         return new EventName(trimmedEventName);
     }
 
