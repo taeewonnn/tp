@@ -72,7 +72,7 @@ After:
 
 ### Editing an event: `editev`
 
-**Format:** `editev INDEX ev/<event name> d/<date>`
+**Format:** `editev <event index> ev/<event name> d/<date>`
 
 **Description:**
 
@@ -82,10 +82,12 @@ Edits an existing event based on index.
 
 **Caution:**
 
+* `<event index` should be **non-empty**, a **positive integer** no larger than the number of events in the event list.
 * At least one of `<event name>` and `<date>` should not be null.
 * `<event name>` should be **alphanumeric**, **non-empty** and **not longer than 64 characters**.
 * `<date>` should be in **dd-MM-yyyy** format
-* Editing an event with same `<date>` or `<event name>` is **not allowed.**
+* Events are **not** to be edited with `<date>` and `<event name>` that matches with another event containing the 
+  same `<date>` and `<event name>` to avoid any confusion.
   </box>
 
 **Examples:**
@@ -96,7 +98,7 @@ Edits an existing event based on index.
 
 ### Deleting an event: `delev`
 
-**Format:** `delev <index>`
+**Format:** `delev <event index>`
 
 **Description:**
 
@@ -106,21 +108,21 @@ Deletes an event and all its relevant information with its index in the event li
 
 **Caution:**
 
-* `<index>` should be **numeric** and **non-empty**.
-* When an event is selected, it cannot be deleted while other non-selected events can be deleted. 
+* `<event index>` should be **non-empty**, a **positive integer** no larger than the number of events in the event list.
+* You cannot delete an event that is currently selected. 
   </box>
 
 **Examples:**
 
 - `delev 1` deletes the 1st event in the displayed list.
 
-### Adding participant and their information to the global participant list: `addp`
+### Adding person and their information to the global participant list: `addp`
 
 **Format:** `addp n/<participant name> p/<phone number> e/<email> a/<address> t/<tags>`
 
 **Description:**
 
-Adds a new participant to the app, allowing them to be added to an event later.
+Adds a new person to the app, allowing them to be added to an event later.
 
 <box type="warning" seamless>
 
@@ -178,11 +180,11 @@ Deselects the selected event and returns to the global participant list.
 
 ### Deleting a participant from the global participant list or an event participant list: `delp`
 
-**Format:** `delp <index>`
+**Format:** `delp <participant index>`
 
 **Description:**
 
-- If **no event is selected**, this deletes the participant from both the **global participant list** and **all the
+- If **no event is selected**, this deletes the person from both the **global participant list** and **all the
   events** he/she is in by **his/her index in the global participant list**.
 - If **an event is selected**, this only removes the participant from the event by **his/her index in the
   event participant list**.
@@ -191,10 +193,13 @@ Deselects the selected event and returns to the global participant list.
 
 **Caution:**
 
-* `<index>` should be an **integer**.
-* A participant's `<index>` in an event participant list can be **different** from that in the global participant list.
-* `<index>` should be no larger than the number of participants in the global participant list if no event is selected.
-* `<index>` should be no larger than the number of participants in the event participant list if an event is selected.
+* `<participant index>` should be an **integer**.
+* A participant's `<participant index>` in an event participant list can be **different** from that in the global 
+  participant list.
+* `<participant index>` should be no larger than the number of participants in the global participant list if no event 
+  is selected.
+* `<participant index>` should be no larger than the number of participants in the event participant list if an event 
+  is selected.
 </box>
 
 **Examples:**
@@ -202,7 +207,7 @@ Deselects the selected event and returns to the global participant list.
 - When no event is selected, `delp 9` deletes the 9th participant completely.
 - `delp 9` after `sel 3` removes the 9th participant from the 3rd event's participant list.
 
-### Edit existing participant: `editp`
+### Editing existing participant: `editp`
 
 **Format:** `editp <participant index> n/<participant name> p/<phone number> e/<email> a/<address> t/<tags>`
 
@@ -221,7 +226,7 @@ Updates the contact information of a participant in the app.
 
 - `editp 5 n/Max p/00000000 e/test@gmail.com` Edits contact details of participant indexed 5.
   
-### Invite person to selected event: `inv`
+### Inviting participant to selected event: `inv`
 
 **Format:** `inv <participant index>`
 
@@ -248,21 +253,47 @@ Before:
 After:
 
 ![after inviting participant](images/afterinvite.png)
+
+### Exporting the chosen details of all the filtered persons to a CSV file.
+
+**Format:** `export DETAILS [MORE_DETAILS]`
+
+**Description:**
+
+Exports only the chosen details of all filtered persons to a CSV file.
+
+<box type="warning" seamless>
+
+**Caution:**
+
+* `DETAILS` provided should be **non-empty**.
+* `DETAILS` provided should be in **prefix**.
+  </box>
   
+**Examples:**
+* `export n/` exports only the names of all the filtered persons.
+* `export n/ p/` exports only the names and phone numbers of all the filtered persons.
+* `export n/ p/ e/` exports only the names, phone numbers and emails of all the filtered persons.
+* `export n/ p/ e/ a/` exports the names, phone numbers, emails and addresses of all the filtered persons.
+
 ### Clearing all entries : `clear`
+
+**Format:** `clear`
+
+**Description:**
 
 Clears all entries from the address book.
 
-Format: `clear`
-
 ### Locating persons by name: `find`
 
-Finds persons by their names or tags.
-
-Format: 
+**Format:**
 1. `find n/KEYWORD [MORE_KEYWORDS]`
 2. `find t/KEYWORD t/[MORE_KEYWORDS]`
 3. `find n/KEYWORD [MORE_KEYWORDS] t/KEYWORD t/[MORE_KEYWORDS]`
+
+**Description:**
+- If **no event is selected**, this finds the person by their names or/and tags from the **global participant list**.
+- If **an event is selected**, this finds the person by their names or/and tags from the **event participant list**.
 
 * The search by name is case-insensitive. e.g. `hans` will match `Hans`
 * The search by tag is case-sensitive. e.g. `friends` will not match `Friends`
@@ -276,7 +307,15 @@ Format:
   2. For find with multiple tags given, person matching all tags will be returned (i.e. `AND` search).
 * **Format 3:** Person matching the name and tags will be returned.
 
-Examples:
+<box type="warning" seamless>
+
+**Caution:**
+
+* `<KEYWORD>` name should be **alphabetic**, **non-empty** and **not longer than 64 characters**.
+* `<KEYWORD>` tag should be **alphabetic**, **non-empty** and **not longer than 64 characters**.
+  </box>
+
+**Examples:**
 * `find n/John` returns `john` and `John Doe`
 * `find n/alex david` returns `Alex Yeoh`, `David Li`
 * `find t/friends` returns `john` and `David`, who contain `friends` tag.
@@ -287,15 +326,20 @@ Examples:
 
 ### Viewing help : `help`
 
+**Description:**
+
 Shows a message explaining how to access the help page.
 
 ![help message](images/helpMessage.png)
 
-Format: `help`
+**Format:** `help`
 
 ### Listing all persons : `list`
 
-Shows a list of all persons in the address book.
+**Description:**
+
+- If **no event is selected**, this shows a list of all persons in the **global participant list**.
+- If **an event is selected**, this shows a list of all persons in the **event participant list**.
 
 Format: `list`
 
