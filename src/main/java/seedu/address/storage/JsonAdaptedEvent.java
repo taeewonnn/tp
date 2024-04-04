@@ -11,7 +11,6 @@ import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.event.Event;
 import seedu.address.model.event.EventDate;
 import seedu.address.model.event.EventName;
-import seedu.address.model.person.Name;
 import seedu.address.model.person.UniquePersonList;
 
 
@@ -74,8 +73,8 @@ class JsonAdaptedEvent {
                     EventDate.class.getSimpleName()));
         }
 
-        if (!Name.isValidName(eventName)) {
-            throw new IllegalValueException(Name.MESSAGE_CONSTRAINTS);
+        if (!EventName.isValidEventName(eventName)) {
+            throw new IllegalValueException(EventName.MESSAGE_CONSTRAINTS);
         }
         final EventName modelEventName = new EventName(eventName);
         final EventDate modelEventDate = new EventDate(eventDate);
