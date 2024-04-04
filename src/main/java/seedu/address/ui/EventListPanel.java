@@ -60,7 +60,7 @@ public class EventListPanel extends UiPart<Region> {
 
         private void updateCellStyle(Event selectedEvent) {
             if (selectedEvent != null && getItem() != null && getItem().equals(selectedEvent)) {
-                setStyle("-fx-background-color: #708090;");
+                setStyle("-fx-background-color: #FACF7C; -fx-background-radius: 5px;");
             } else {
                 setStyle("");
             }
