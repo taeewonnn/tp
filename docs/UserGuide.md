@@ -82,13 +82,13 @@ Edits an existing event based on index.
 
 **Caution:**
 
-* `<event index` should be **non-empty**, a **positive integer** no larger than the number of events in the event list.
-* At least one of `<event name>` and `<date>` should not be null.
+* * `<event index` should be **non-empty**, a **positive integer** no larger than the number of events in the event list.
+At least one of `<event name>` and `<date>` should not be null.
 * `<event name>` should be **alphanumeric**, **non-empty** and **not longer than 64 characters**.
 * `<date>` should be in **dd-MM-yyyy** format
-* Events are **not** to be edited with `<date>` and `<event name>` that matches with another event containing the 
+* Events are **not** to be edited with `<date>` and `<event name>` that matches with another event containing the
   same `<date>` and `<event name>` to avoid any confusion.
-  </box>
+   </box>
 
 **Examples:**
 
@@ -151,7 +151,7 @@ Selects an event from the event list by the event index.
 
 **Caution:**
 
-* `<event index>` should be an **integer** no larger than the number of events in the event list.
+* `<event index>` should be **non-empty**, a **positive integer** no larger than the number of events in the event list.
 </box>
 
 **Examples:**
@@ -193,12 +193,12 @@ Deselects the selected event and returns to the global participant list.
 
 **Caution:**
 
-* `<participant index>` should be an **integer**.
-* A participant's `<participant index>` in an event participant list can be **different** from that in the global 
+* `<participant index>` should be **non-empty** and a **positive integer**.
+* A participant's `<participant index>` in an event participant list can be **different** from that in the global
   participant list.
-* `<participant index>` should be no larger than the number of participants in the global participant list if no event 
+* `<participant index>` should be no larger than the number of participants in the global participant list if no event
   is selected.
-* `<participant index>` should be no larger than the number of participants in the event participant list if an event 
+* `<participant index>` should be no larger than the number of participants in the event participant list if an event
   is selected.
 </box>
 
@@ -219,14 +219,20 @@ Updates the contact information of a participant in the app.
 
 **Caution:**
 
-* `<participant index>` should be within valid range of global participants
+* `<participant index>` should be **non-empty**, a **positive integer** no larger than 
+  the number of participants in the respective list.
+  
+* `<participant name>` should be **alphabetic**, **non-empty** and **not longer than 64 characters**.
+* `<phone number>` should be **numeric**, **non-empty** and **not longer than 15 digits**.
+* `<email>` should be **alphanumeric**, **non-empty** and **not longer than 64 characters**.
+* `<address>` should be **non-empty** and **not longer than 64 characters**.
   </box>
   
 **Examples:**
 
 - `editp 5 n/Max p/00000000 e/test@gmail.com` Edits contact details of participant indexed 5.
   
-### Inviting participant to selected event: `inv`
+### Inviting person to selected event: `inv`
 
 **Format:** `inv <participant index>`
 
@@ -238,7 +244,8 @@ Invite participants from the global participant list to the selected event.
 
 **Caution:**
 
-* `<participant index>` should be within valid range of global participants
+* `<participant index>` should be **non-empty**, a **positive integer** no larger 
+  than the number of persons in the global participants list.
 * Duplicate participants is **not allowed.**
   </box>
 
@@ -256,7 +263,7 @@ After:
 
 ### Exporting the chosen details of all the filtered persons to a CSV file.
 
-**Format:** `export DETAILS [MORE_DETAILS]`
+**Format:** `export n/ p/ e/ a/`
 
 **Description:**
 
@@ -266,8 +273,8 @@ Exports only the chosen details of all filtered persons to a CSV file.
 
 **Caution:**
 
-* `DETAILS` provided should be **non-empty**.
-* `DETAILS` provided should be in **prefix**.
+* `n/ p/ e/ a/` provided should be **non-empty** and be in **prefix**.
+* `Prefix` only recognize the four prefixes written above. Do not input any other unknown prefixes.
   </box>
   
 **Examples:**
@@ -326,13 +333,13 @@ Clears all entries from the address book.
 
 ### Viewing help : `help`
 
+**Format:** `help`
+
 **Description:**
 
 Shows a message explaining how to access the help page.
 
 ![help message](images/helpMessage.png)
-
-**Format:** `help`
 
 ### Listing all persons : `list`
 
@@ -394,3 +401,4 @@ Format: `exit`
 |a/     |Address       |
 |t/     |Tags          |
 |ev/    |Event name    |
+|d/     |Event date    |
