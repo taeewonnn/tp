@@ -17,7 +17,7 @@ Eventy is a contact management application, tailored specifically for student ev
 
 1. Ensure you have Java `11` or above installed in your Computer.
 
-2. Download the latest `eventy.jar` from [here](https://github.com/se-edu/addressbook-level3/releases).
+2. Download the latest `eventy.jar` from [here](https://github.com/AY2324S2-CS2103T-T10-3/tp/releases).
 
 3. Copy the file to the folder you want to use as the _home folder_ for your Eventy.
 
@@ -27,13 +27,23 @@ Eventy is a contact management application, tailored specifically for student ev
 
 5. Refer to the [Features](#features) below for details of each command.
 
+## UI Layout Description
+
+![UiLayout](images/UILayout.png)
+
+1. **Command Box:** Box for users to input the command to be executed by Eventy.
+2. **Result Display Box:** Box that displays the result of executing the entered command.
+3. **Event List:** Box that displays the all the events being planned.
+4. **Event Participant List:** Box that displays all the participants in the selected event.
+5. **Global Participant List:** Box that displays all the contacts saved.
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## Features
 
 ### Creating an event: `addev`
 
-**Format:** `addev ev/ <event name> d/<date>`
+**Format:** `addev ev/<event name> d/<date>`
 
 **Description:**
 
@@ -51,10 +61,18 @@ Adds a new event with the specified name and date for the Event List.
 **Examples:**
 
 - `addev ev/Orientation camp d/04-05-2024` adds a new event with the name `Orientation camp` that will happen on May 4th, 2024.
+  
+Before:
+
+![before adding event](images/beforeaddev.png)
+
+After:
+
+![after adding event](images/addev.png)
 
 ### Editing an event: `editev`
 
-**Format:** `editev INDEX ev/ <event name> d/<date>`
+**Format:** `editev INDEX ev/<event name> d/<date>`
 
 **Description:**
 
@@ -89,6 +107,7 @@ Deletes an event and all its relevant information with its index in the event li
 **Caution:**
 
 * `<index>` should be **numeric** and **non-empty**.
+* When an event is selected, it cannot be deleted while other non-selected events can be deleted. 
   </box>
 
 **Examples:**
@@ -97,23 +116,27 @@ Deletes an event and all its relevant information with its index in the event li
 
 ### Adding participant and their information to the global participant list: `addp`
 
-**Format:** `addp n/ <participant name> p/ <phone number> e/ <email> a/ <address> t/ <tags>`
+**Format:** `addp n/<participant name> p/<phone number> e/<email> a/<address> t/<tags>`
 
 **Description:**
 
 Adds a new participant to the app, allowing them to be added to an event later.
+
+<box type="warning" seamless>
 
 **Caution:**
 
 * `<participant name>` should be **alphabetic**, **non-empty** and **not longer than 64 characters**.
 * `<phone number>` should be **numeric**, **non-empty** and **not longer than 15 digits**.
 * `<email>` should be **alphanumeric**, **non-empty** and **not longer than 64 characters**.
+* `<address>` should be **non-empty** and **not longer than 64 characters**.
+  </box>
 
 **Examples:**
 
-- `addp n/David p/98987676 e/david@example.com a/ NUS t/ student` adds a participant named `David`
+- `addp n/David p/98987676 e/david@example.com a/NUS t/student` adds a participant named `David`
   with the phone number `98987676` and email of `david@example.com` to the displayed contacts list.
-
+  
 ### Selecting an event: `sel`
 
 **Format:** `sel <event index>`
@@ -132,6 +155,14 @@ Selects an event from the event list by the event index.
 **Examples:**
 
 - `sel 3` selects the 3rd event.
+
+Before:
+
+![before selecting event](images/beforesel.png)
+
+After:
+
+![after selecting event](images/aftersel.png)
 
 ### Deselecting an event: `desel`
 
@@ -173,19 +204,22 @@ Deselects the selected event and returns to the global participant list.
 
 ### Edit existing participant: `editp`
 
-**Format:** `editp <participant index> n/ <participant name> p/ <phone number> e/ <email>`
+**Format:** `editp <participant index> n/<participant name> p/<phone number> e/<email> a/<address> t/<tags>`
 
 **Description:**
 
 Updates the contact information of a participant in the app.
 
+<box type="warning" seamless>
+
 **Caution:**
 
 * `<participant index>` should be within valid range of global participants
-
+  </box>
+  
 **Examples:**
 
-- `editp 5 n/ Max p/ 00000000 e/ test@gmail.com` Edits contact details of participant indexed 5.
+- `editp 5 n/Max p/00000000 e/test@gmail.com` Edits contact details of participant indexed 5.
   
 ### Invite person to selected event: `inv`
 
@@ -195,14 +229,25 @@ Updates the contact information of a participant in the app.
 
 Invite participants from the global participant list to the selected event.
 
+<box type="warning" seamless>
+
 **Caution:**
 
 * `<participant index>` should be within valid range of global participants
 * Duplicate participants is **not allowed.**
+  </box>
 
 **Examples:**
 
 - `inv 5` Adds participant indexed 5 to selected event.
+
+Before:
+
+![before inviting participant](images/beforeinvite.png)
+
+After:
+
+![after inviting participant](images/afterinvite.png)
   
 ### Clearing all entries : `clear`
 
@@ -212,21 +257,33 @@ Format: `clear`
 
 ### Locating persons by name: `find`
 
-Finds persons whose names contain any of the given keywords.
+Finds persons by their names or tags.
 
-Format: `find KEYWORD [MORE_KEYWORDS]`
+Format: 
+1. `find n/KEYWORD [MORE_KEYWORDS]`
+2. `find t/KEYWORD t/[MORE_KEYWORDS]`
+3. `find n/KEYWORD [MORE_KEYWORDS] t/KEYWORD t/[MORE_KEYWORDS]`
 
-* The search is case-insensitive. e.g. `hans` will match `Hans`
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
-* Only the name is searched.
-* Only full words will be matched e.g. `Han` will not match `Hans`
-* Persons matching at least one keyword will be returned (i.e. `OR` search).
+* The search by name is case-insensitive. e.g. `hans` will match `Hans`
+* The search by tag is case-sensitive. e.g. `friends` will not match `Friends`
+* The order of the name/tag does not matter. e.g. `Hans Bo` will match `Bo Hans`
+* Only full names/tags will be matched e.g. `Han` will not match `Hans`
+* **Format 1:** Persons matching at least one name will be returned (i.e. `OR` search).
   e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
+  
+* **Format 2:** 
+  1. For find with one tag given, all persons with the tags will be returned (i.e. `OR` search).
+  2. For find with multiple tags given, person matching all tags will be returned (i.e. `AND` search).
+* **Format 3:** Person matching the name and tags will be returned.
 
 Examples:
-* `find John` returns `john` and `John Doe`
-* `find alex david` returns `Alex Yeoh`, `David Li`<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
+* `find n/John` returns `john` and `John Doe`
+* `find n/alex david` returns `Alex Yeoh`, `David Li`
+* `find t/friends` returns `john` and `David`, who contain `friends` tag.
+* `find t/friends t/collegues`  returns `john`, who contains `friends` and `colleagues` tags.
+* `find n/Alex t/friends t/teacher`  returns `Alex`, who contains `friends` and `teacher` tags.<br>
+  
+![result for 'find alex david'](images/findAlexDavidResult.png)
 
 ### Viewing help : `help`
 
@@ -247,6 +304,7 @@ Format: `list`
 Exits the program.
 
 Format: `exit`
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## FAQ
@@ -269,15 +327,26 @@ Format: `exit`
 | **Add Event**                               | `addev ev/<event name> d/<date>` <br> e.g., `addev ev/Orientation camp d/04-07-2024`                                  |
 | **Edit Event**                              | `editev INDEX ev/<event name> d/<date>` <br> e.g., `editev 1 ev/Party`                                                |
 | **Delete Event**                            | `delev <index>` <br> e.g., `delev 1`                                                                                  |
-| **Add Participant**                         | `addp n/ <participant name> p/ <phone number> e/ <email>` <br> e.g., `addp n/ David p/ 98987676 e/ david@example.com` |
+| **Add Participant**                         | `addp n<participant name> p/<phone number> e/<email> a/<address> t/<tags>` <br> e.g., `addp n/David p/98987676 e/david@example.com a/NUS t/friends` |
 | **Selecting Event**                         | `sel <event index>` <br> e.g., `sel                                                                                   |
 | **Deselecting Event**                       | `desel` deselect the current selected event                                                                           |
-| **Deleting a participant from global list** | `del 3` delete the 3rd participant from the global participant list                                                   |
-| **Deleting a participant from an event**    | `del 3` delete the 3rd participant from event list of selected event                                                  |
-| **Edit existing participant**               | `editp 5 n/ Max p/ 00000000 e/ test@gmail.com` Edits contact details of participant indexed 5                         |
-| **Invite person to selected event**         | `inv 5` Adds participant indexed 5 to selected event                                                                  |
-| **Locating persons by name**                | `find John` returns `john` and `John Doe`                                                                             |
+| **Deleting a participant from global list** | `delp 3` delete the 3rd participant from the global participant list                                                  |
+| **Deleting a participant from an event**    | `delp 3` delete the 3rd participant from event list of selected event                                                 |
+| **Edit existing participant**               | `editp 5 n/Max p/00000000 e/test@gmail.com a/NUS t/friends` Edits contact details of participant indexed 5            |
+| **Invite person to a selected event**       | `inv 5` Adds participant indexed 5 to selected event                                                                  |
+| **Locating persons by name/tag**            | `find n/John t/friends` returns `john`                                                                                |
 | **Clear all entries**                       | `clear` clear all entries from eventy                                                                                 |
 | **Viewing help**                            | `help` Shows a message explaining how to access the help page                                                         |
 | **Listing all persons**                     | `list` Shows a list of all persons in the address book.                                                               |
 | **Exiting the program**                     | `exit` Exits the program                                                                                              |
+
+## Prefix translation table
+
+|Prefix |Translation   |
+|-------|--------------|
+|n/     |Name          |
+|p/     |Phone number  |
+|e/     |Email         |
+|a/     |Address       |
+|t/     |Tags          |
+|ev/    |Event name    |
