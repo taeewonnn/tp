@@ -82,7 +82,7 @@ Edits an existing event based on index.
 
 **Caution:**
 
-* `<event index` should be **non-empty**, a **positive integer** no larger than the number of events in the event list.
+* `<event index>` should be **non-empty**, a **positive integer** no larger than the number of events in the event list.
 * At least one of `<event name>` and `<date>` should not be null.
 * `<event name>` should be **alphanumeric**, **non-empty** and **not longer than 64 characters**.
 * `<date>` should be in **dd-MM-yyyy** format
@@ -151,7 +151,8 @@ Selects an event from the event list by the event index.
 
 **Caution:**
 
-* `<event index>` should be an **integer** no larger than the number of events in the event list.
+* `<event index>` should be **non-empty**, a **positive integer** no larger than 
+  the number of events in the event list.
 </box>
 
 **Examples:**
@@ -193,7 +194,7 @@ Deselects the selected event and returns to the global participant list.
 
 **Caution:**
 
-* `<participant index>` should be an **integer**.
+* `<participant index>` should be **non-empty** and a **positive integer**
 * A participant's `<participant index>` in an event participant list can be **different** from that in the global 
   participant list.
 * `<participant index>` should be no larger than the number of participants in the global participant list if no event 
@@ -219,7 +220,8 @@ Updates the contact information of a participant in the app.
 
 **Caution:**
 
-* `<participant index>` should be within valid range of global participants
+* `<participant index>` should be **non-empty**, a **positive integer** no larger than the number of persons in 
+  the global participant list.
   </box>
   
 **Examples:**
@@ -238,7 +240,8 @@ Invite participants from the global participant list to the selected event.
 
 **Caution:**
 
-* `<participant index>` should be within valid range of global participants
+* `<participant index>` should be **non-empty**, a **positive integer** no larger than the number of persons in the
+  global participant list.
 * Duplicate participants is **not allowed.**
   </box>
 
@@ -394,3 +397,4 @@ Format: `exit`
 |a/     |Address       |
 |t/     |Tags          |
 |ev/    |Event name    |
+|d/     |Event date    |
