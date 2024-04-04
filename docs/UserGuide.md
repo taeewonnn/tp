@@ -82,7 +82,7 @@ Edits an existing event based on index.
 
 **Caution:**
 
-* * `<event index` should be **non-empty**, a **positive integer** no larger than the number of events in the event list.
+* `<event index` should be **non-empty**, a **positive integer** no larger than the number of events in the event list.
 At least one of `<event name>` and `<date>` should not be null.
 * `<event name>` should be **alphanumeric**, **non-empty** and **not longer than 64 characters**.
 * `<date>` should be in **dd-MM-yyyy** format
@@ -132,6 +132,7 @@ Adds a new person to the app, allowing them to be added to an event later.
 * `<phone number>` should be **numeric**, **non-empty** and **not longer than 15 digits**.
 * `<email>` should be **alphanumeric**, **non-empty** and **not longer than 64 characters**.
 * `<address>` should be **non-empty** and **not longer than 64 characters**.
+* Adding a person with the same **name**(Case-sensitive) that already exists, regardless of case, is **not allowed**.  
   </box>
 
 **Examples:**
@@ -184,8 +185,7 @@ Deselects the selected event and returns to the global participant list.
 
 **Description:**
 
-- If **no event is selected**, this deletes the person from both the **global participant list** and **all the
-  events** he/she is in by **his/her index in the global participant list**.
+- If **no event is selected**, this deletes the person from both the **global participant list**.
 - If **an event is selected**, this only removes the participant from the event by **his/her index in the
   event participant list**.
 
@@ -200,11 +200,13 @@ Deselects the selected event and returns to the global participant list.
   is selected.
 * `<participant index>` should be no larger than the number of participants in the event participant list if an event
   is selected.
+* Deleting a participant in the global participants list will not delete the same participant in 
+  all event participant list
 </box>
 
 **Examples:**
 
-- When no event is selected, `delp 9` deletes the 9th participant completely.
+- When no event is selected, `delp 9` deletes the 9th participant from the global participant list only.
 - `delp 9` after `sel 3` removes the 9th participant from the 3rd event's participant list.
 
 ### Editing existing participant: `editp`
@@ -218,10 +220,12 @@ Updates the contact information of a participant in the app.
 <box type="warning" seamless>
 
 **Caution:**
-
+* Editing a participant in the global participant list will edit the same participant in all event participant lists.
+* At least one of the optional fields must be provided.
+* When editing tags, the existing tags of the person will be removed i.e adding of tags is not cumulative
+* You can remove all the person’s tags by typing t/ without specifying any tags after it.
 * `<participant index>` should be **non-empty**, a **positive integer** no larger than 
-  the number of participants in the respective list.
-  
+  the number of participants in the global participant list.
 * `<participant name>` should be **alphabetic**, **non-empty** and **not longer than 64 characters**.
 * `<phone number>` should be **numeric**, **non-empty** and **not longer than 15 digits**.
 * `<email>` should be **alphanumeric**, **non-empty** and **not longer than 64 characters**.
@@ -245,7 +249,7 @@ Invite participants from the global participant list to the selected event.
 **Caution:**
 
 * `<participant index>` should be **non-empty**, a **positive integer** no larger 
-  than the number of persons in the global participants list.
+  than the number of persons in the global participant list.
 * Duplicate participants is **not allowed.**
   </box>
 
@@ -273,7 +277,8 @@ Exports only the chosen details of all filtered persons to a CSV file.
 
 **Caution:**
 
-* `n/ p/ e/ a/` provided should be **non-empty** and be in **prefix**.
+* At least one of the optional fields must be provided.
+* `n/ p/ e/ a/` provided should be in **prefix**.
 * `Prefix` only recognize the four prefixes written above. Do not input any other unknown prefixes.
   </box>
   
@@ -290,6 +295,11 @@ Exports only the chosen details of all filtered persons to a CSV file.
 **Description:**
 
 Clears all entries from the address book.
+
+**Caution:**
+
+* This deletes all entries!! Be careful!!
+  </box>
 
 ### Locating persons by name: `find`
 
