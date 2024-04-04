@@ -88,6 +88,7 @@ At least one of `<event name>` and `<date>` should not be null.
 * `<date>` should be in **dd-MM-yyyy** format
 * Events are **not** to be edited with `<date>` and `<event name>` that matches with another event containing the
   same `<date>` and `<event name>` to avoid any confusion.
+   </box>
 
 **Examples:**
 
@@ -183,7 +184,7 @@ Deselects the selected event and returns to the global participant list.
 
 **Description:**
 
-- If **no event is selected**, this deletes the participant from both the **global participant list** and **all the
+- If **no event is selected**, this deletes the person from both the **global participant list** and **all the
   events** he/she is in by **his/her index in the global participant list**.
 - If **an event is selected**, this only removes the participant from the event by **his/her index in the
   event participant list**.
@@ -260,7 +261,6 @@ After:
 
 ![after inviting participant](images/afterinvite.png)
 
-
 ### Exporting the chosen details of all the filtered persons to a CSV file.
 
 **Format:** `export n/ p/ e/ a/`
@@ -276,7 +276,7 @@ Exports only the chosen details of all filtered persons to a CSV file.
 * `n/ p/ e/ a/` provided should be **non-empty** and be in **prefix**.
 * `Prefix` only recognize the four prefixes written above. Do not input any other unknown prefixes.
   </box>
-
+  
 **Examples:**
 * `export n/` exports only the names of all the filtered persons.
 * `export n/ p/` exports only the names and phone numbers of all the filtered persons.
@@ -323,8 +323,6 @@ Clears all entries from the address book.
   </box>
 
 **Examples:**
-
-Examples:
 * `find n/John` returns `john` and `John Doe`
 * `find n/alex david` returns `Alex Yeoh`, `David Li`
 * `find t/friends` returns `john` and `David`, who contain `friends` tag.
@@ -335,7 +333,7 @@ Examples:
 
 ### Viewing help : `help`
 
-Format: `help`
+**Format:** `help`
 
 **Description:**
 
