@@ -64,11 +64,11 @@ Adds a new event with the specified name and date for the Event List.
   
 Before:
 
-![Ui](images/beforeaddev.png)
+![before adding event](images/beforeaddev.png)
 
 After:
 
-![Ui](images/addev.png)
+![after adding event](images/addev.png)
 
 ### Editing an event: `editev`
 
@@ -158,11 +158,11 @@ Selects an event from the event list by the event index.
 
 Before:
 
-![Ui](images/beforesel.png)
+![before selecting event](images/beforesel.png)
 
 After:
 
-![Ui](images/aftersel.png)
+![after selecting event](images/aftersel.png)
 
 ### Deselecting an event: `desel`
 
@@ -243,11 +243,11 @@ Invite participants from the global participant list to the selected event.
 
 Before:
 
-![Ui](images/beforeinvite.png)
+![before inviting participant](images/beforeinvite.png)
 
 After:
 
-![Ui](images/afterinvite.png)
+![after inviting participant](images/afterinvite.png)
   
 ### Clearing all entries : `clear`
 
