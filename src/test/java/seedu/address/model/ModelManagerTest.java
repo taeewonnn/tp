@@ -133,8 +133,8 @@ public class ModelManagerTest {
     }
 
     @Test
-    public void deleteEvent_nullEvent_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> modelManager.deleteEvent(null));
+    public void deleteEvent_nullEvent_throwsAssertionError() {
+        assertThrows(AssertionError.class, () -> modelManager.deleteEvent(null));
     }
 
     @Test

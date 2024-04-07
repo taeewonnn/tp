@@ -6,15 +6,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.event.Event;
 import seedu.address.model.event.UniqueEventList;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.UniquePersonList;
-
 
 /**
  * Wraps all data at the event-book level.
@@ -55,7 +54,7 @@ public class EventBook implements ReadOnlyEventBook {
      * @return {@code true} if the selected event exists; {@code false} otherwise.
      */
     public boolean isSameSelectedEvent(Event event) {
-        requireNonNull(event);
+        assert event != null;
         return event.equals(selectedEvent);
     }
 
@@ -90,7 +89,7 @@ public class EventBook implements ReadOnlyEventBook {
      * @return {@code true} if the event exists; {@code false} otherwise.
      */
     public boolean hasEvent(Event event) {
-        requireNonNull(event);
+        assert event != null;
         return events.contains(event);
     }
 
@@ -100,6 +99,7 @@ public class EventBook implements ReadOnlyEventBook {
      * @param event The event to be added.
      */
     public void addEvent(Event event) {
+        assert event != null;
         events.add(event);
     }
 
@@ -110,17 +110,19 @@ public class EventBook implements ReadOnlyEventBook {
      * @param editedEvent The replacement event.
      */
     public void setEvent(Event target, Event editedEvent) {
-        requireNonNull(editedEvent);
+        assert target != null;
+        assert editedEvent != null;
         events.setEvent(target, editedEvent);
     }
 
     /**
      * Removes an event from the event book.
      *
-     * @param key The event to be removed.
+     * @param event The event to be removed.
      */
-    public void removeEvent(Event key) {
-        events.remove(key);
+    public void removeEvent(Event event) {
+        assert event != null;;
+        events.remove(event);
     }
 
     // Select Event Methods
@@ -140,6 +142,7 @@ public class EventBook implements ReadOnlyEventBook {
      * @param event The event to be selected.
      */
     public void selectEvent(Event event) {
+        assert event != null;
         selectedEvent = event;
         selectedEventObservable.set(event);
 
@@ -175,10 +178,10 @@ public class EventBook implements ReadOnlyEventBook {
      * @param person The person to be added.
      */
     public void addPersonToSelectedEvent(Person person) {
-        if (isAnEventSelected()) {
-            selectedEvent.addPerson(person);
-            updatePersonListOfSelectedEvent();
-        }
+        assert(isAnEventSelected());
+        selectedEvent.addPerson(person);
+
+        updatePersonListOfSelectedEvent();
     }
 
     /**
@@ -187,10 +190,10 @@ public class EventBook implements ReadOnlyEventBook {
      * @param person The person to be deleted.
      */
     public void deletePersonFromSelectedEvent(Person person) {
-        if (isAnEventSelected()) {
-            selectedEvent.deletePerson(person);
-            updatePersonListOfSelectedEvent();
-        }
+        assert(isAnEventSelected());
+        selectedEvent.deletePerson(person);
+
+        updatePersonListOfSelectedEvent();
     }
 
     /**
@@ -227,7 +230,7 @@ public class EventBook implements ReadOnlyEventBook {
     }
 
     @Override
-    public ObservableValue<Event> getSelectedEvent() {
+    public ReadOnlyObjectProperty<Event> getSelectedEvent() {
         return selectedEventObservable;
     }
 
