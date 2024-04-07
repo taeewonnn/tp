@@ -106,26 +106,83 @@ public interface Model {
      */
     void updateFilteredPersonList(Predicate<Person> predicate);
 
+    /**
+     * Checks if the specified event exists in Event Book.
+     *
+     * @param event The event to check for existence.
+     * @return {@code true} if the event exists; {@code false} otherwise.
+     */
     boolean hasEvent(Event event);
 
+    /**
+     * Deletes the specified event from Event Book.
+     *
+     * @param target The event to be deleted.
+     */
     void deleteEvent(Event target);
 
+    /**
+     * Adds a new event to Event Book.
+     *
+     * @param event The event to be added.
+     */
     void addEvent(Event event);
 
+    /**
+     * Updates the information of an existing event.
+     *
+     * @param target      The event to be updated.
+     * @param editedEvent The updated event information.
+     */
     void setEvent(Event target, Event editedEvent);
 
+    /**
+     * Checks if an event is currently selected.
+     *
+     * @return {@code true} if an event is selected; {@code false} otherwise.
+     */
     boolean isAnEventSelected();
 
+    /**
+     * Checks if the specified event is the currently selected event.
+     *
+     * @param event The event to compare with the selected event.
+     * @return {@code true} if the specified event is selected; {@code false} otherwise.
+     */
     boolean isSameSelectedEvent(Event event);
 
+    /**
+     * Selects the specified event.
+     *
+     * @param event The event to be selected.
+     */
     void selectEvent(Event event);
 
+    /**
+     * Deselects the currently selected event.
+     */
     void deselectEvent();
 
+    /**
+     * Checks if a person is part of the currently selected event.
+     *
+     * @param person The person to check for in the selected event.
+     * @return {@code true} if the person is in the selected event; {@code false} otherwise.
+     */
     boolean isPersonInSelectedEvent(Person person);
 
+    /**
+     * Adds a person to the currently selected event.
+     *
+     * @param person The person to be added to the selected event.
+     */
     void addPersonToSelectedEvent(Person person);
 
+    /**
+     * Deletes a person from the currently selected event.
+     *
+     * @param person The person to be removed from the selected event.
+     */
     void deletePersonFromSelectedEvent(Person person);
 
     /**
