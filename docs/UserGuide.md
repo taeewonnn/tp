@@ -87,7 +87,7 @@ Edits an existing event based on index.
 * `<event name>` should only contain **alphanumeric** characters and **spaces**, and be **non-empty**.
 * `<date>` should be in **dd-MM-yyyy** format
 * Events are **not** to be edited to have an `<event name>` and `<date>` that matches another event with the
-  same `<event name>` and `<date>` to avoid duplicate events.
+  same case-sensitive `<event name>` and `<date>` to avoid duplicate events.
    </box>
 
 **Examples:**
