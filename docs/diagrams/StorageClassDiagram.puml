@@ -1,6 +1,6 @@
 @startuml
 !include style.puml
-skinparam arrowThickness 1.0
+skinparam arrowThickness 1.1
 skinparam arrowColor STORAGE_COLOR
 skinparam classBackgroundColor STORAGE_COLOR
 
@@ -22,36 +22,22 @@ Class JsonAdaptedPerson
 Class JsonAdaptedTag
 }
 
-package "EventBook Storage" #F4F6F6{
-Class "<<interface>>\nEventBookStorage" as EventBookStorage
-Class JsonEventBookStorage
-Class JsonSerializableEventBook
-Class JsonAdaptedEvent
-}
-
 }
 
 Class HiddenOutside #FFFFFF
 HiddenOutside ..> Storage
 
 StorageManager .up.|> Storage
-StorageManager -down-> "1" UserPrefsStorage
-StorageManager -down-> "1" AddressBookStorage
-StorageManager -down-> "1" EventBookStorage
+StorageManager -up-> "1" UserPrefsStorage
+StorageManager -up-> "1" AddressBookStorage
 
-
-Storage -down-|> UserPrefsStorage
-Storage -down-|> AddressBookStorage
-Storage -down-|> EventBookStorage
+Storage -left-|> UserPrefsStorage
+Storage -right-|> AddressBookStorage
 
 JsonUserPrefsStorage .up.|> UserPrefsStorage
 JsonAddressBookStorage .up.|> AddressBookStorage
-JsonEventBookStorage .up.|> EventBookStorage
 JsonAddressBookStorage ..> JsonSerializableAddressBook
-JsonEventBookStorage ..> JsonSerializableEventBook
 JsonSerializableAddressBook --> "*" JsonAdaptedPerson
-JsonSerializableEventBook --> "*" JsonAdaptedEvent
 JsonAdaptedPerson --> "*" JsonAdaptedTag
-JsonAdaptedEvent --> "*" JsonAdaptedPerson
 
 @enduml
