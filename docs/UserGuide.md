@@ -137,7 +137,7 @@ Adds a new person to the app, allowing them to be added to an event later.
        - end with a domain label at least 2 characters long
        - have each domain label start and end with alphanumeric characters
        - have each domain label consist of alphanumeric characters, separated only by hyphens, if any
-* `<address>` Addresses can take **any values**, and it should **not be non-empty**.
+* `<address>` Addresses can take **any values**, and it should be **non-empty**.
 * Adding a person with the same **name**(Case-sensitive) that already exists is **not allowed**.  
   </box>
 
@@ -241,7 +241,7 @@ Updates the contact information of a participant in the app.
        - end with a domain label at least 2 characters long
        - have each domain label start and end with alphanumeric characters
        - have each domain label consist of alphanumeric characters, separated only by hyphens, if any
-* `<address>` Addresses can take **any values**, and it should **not be non-empty**.
+* `<address>` Addresses can take **any values**, and it should be **non-empty**.
 * Adding a person with the same **case-sensitive name** that already exists is **not allowed**.  
   </box>
   
