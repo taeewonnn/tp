@@ -23,7 +23,7 @@ public class DeletePersonCommand extends Command {
             + ": When no event is selected, deletes the person identified by the index number used in the displayed "
             + "person list; when an event is selected, deletes a person identified using it's displayed index from "
             + "the event.\n"
-            + "Parameters: INDEX (must be a positive integer)\n"
+            + "Parameters: INDEX (must be a positive integer and have a corresponding person)\n"
             + "Example: " + COMMAND_WORD + " 1";
 
     public static final String MESSAGE_DELETE_PERSON_GLOBAL_SUCCESS = "Deleted Person: %1$s from the address book.";
