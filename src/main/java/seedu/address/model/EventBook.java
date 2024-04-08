@@ -179,9 +179,12 @@ public class EventBook implements ReadOnlyEventBook {
      */
     public void addPersonToSelectedEvent(Person person) {
         assert(isAnEventSelected());
-        selectedEvent.addPerson(person);
 
-        updatePersonListOfSelectedEvent();
+        if (isAnEventSelected()) {
+            selectedEvent.addPerson(person);
+            updatePersonListOfSelectedEvent();
+        }
+
     }
 
     /**
@@ -191,9 +194,11 @@ public class EventBook implements ReadOnlyEventBook {
      */
     public void deletePersonFromSelectedEvent(Person person) {
         assert(isAnEventSelected());
-        selectedEvent.deletePerson(person);
 
-        updatePersonListOfSelectedEvent();
+        if (isAnEventSelected()) {
+            selectedEvent.deletePerson(person);
+            updatePersonListOfSelectedEvent();
+        }
     }
 
     /**
