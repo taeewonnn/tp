@@ -160,6 +160,39 @@ Classes used by multiple components are in the `seedu.addressbook.commons` packa
 
 This section describes some noteworthy details on how certain features are implemented.
 
+### Add person to Global Participant List
+
+The `AddPersonCommand` allows users to add a person to the global participant list
+
+#### Implementation Details
+
+The `AddPersonCommand` is implemented by extending the base `Command` class. It uses prefixes such as `/n`, `/p`, `/a`, `/e`, `/t`, specifying 
+required data fields `participant name`, `phone number`, `address`, `email`, `tags` respectively. Once the data fields are filled, 
+a new person is added. It implements the following operations:
+
+* `execute(Model)` — Checks the current address book state by calling `hasPerson(toAdd)`, and throws a `CommandException` if a duplicate person is found.
+* `addPerson(toAdd)` — Adds the person to the global participant list. This operation is exposed in the `Model` interface as `Model#addPerson(Person)`.
+
+The add command is initiated by firstly checking the filtered person list to ensure no duplicate is found, after which `Model#addPerson(Person)` is called to complete the actual addition.
+
+Given below is an example usage scenario of how the addition mechanism behaves when the user tries to add a person to the global participant list.
+
+Step 1. The user launches the application, with some events and participants added to the address book already. 
+The `AddressBook` will be initialized with the previously saved address book state.
+
+Step 2. The user executes `addp` command with the specific data at each prefix to specify the person to be added.
+The `AddCommand` will then call `excecute()`, which checks whether there is a duplicate person in the global participant list before calling `addPerson(Person)`.
+
+<box type="info" seamless>
+
+**Note:** All prefixes are compulsory to fill up except tags.
+
+</box>
+
+#### Sequence Diagram
+
+<puml src="diagrams/AddPersonSequenceDiagram.puml" />
+
 ### Invite Person to Event
 
 The `InvitePersonCommand` allows users to invite a person to the selected event from the global address book.
@@ -170,11 +203,11 @@ The `InvitePersonCommand` is implemented by extending the base `Command` class. 
 
 * `execute(Model)` — Checks the current address book state by calling `isAnEventSelected()`, and throws a `CommandException` if no event is selected.
   It also calls `isPersonInSelectedEvent` to ensure the invitee is not already added to the event by throwing a `CommandException` if he is already on the invitee list.
-* `addPersonToSelectedEvent(Person)` — Adds the participant to the selected event. in the filtered global participant list. This operation is exposed in the `Model` interface as `Model#addPersonToSelectedEvent(Person)`.
+* `addPersonToSelectedEvent(Person)` — Adds the participant to the selected event from the filtered global participant list. This operation is exposed in the `Model` interface as `Model#addPersonToSelectedEvent(Person)`.
 
 The invite command is initiated by firstly retrieving the filtered person list and locating the `personToInvite` object in it, after which `Model#addPersonToSelectedEvent(Person)(Person)` is called to complete the actual invitation.
 
-Given below is an example usage scenario of how the deletion mechanism behaves when the user tries to delete a participant from the global participant list.
+Given below is an example usage scenario of how the invitation mechanism behaves when the user tries to invite a participant from the global participant list.
 
 Step 1. The user launches the application, with some events and participants added to the address book already. The `AddressBook` will be initialized with the previously saved address book state, and the `selectedEvent` in the `EventBook` will initially be `null`.
 
