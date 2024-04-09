@@ -53,7 +53,7 @@ Adds a new event with the specified name and date for the Event List.
 
 **Caution:**
 * `<event name>` should be **alphanumeric**, **non-empty** and **not longer than 64 characters**.
-* `<date>` should be in **dd-MM-yyyy** format
+* `<date>` should be **non-empty** and in **dd-MM-yyyy** format
 * Adding an event with a name and date that already exists, regardless of case, is **not allowed.**
   </box>
 
@@ -79,10 +79,12 @@ Edits an existing event based on index.
 <box type="warning" seamless>
 
 **Caution:**
-* `<event index` should be **non-empty**, a **positive integer** no larger than the number of events in the event list.
+* At least one of the optional fields must be provided.
+* Editing with the same input is **allowed**.
+* `<event index>` should be **non-empty**, a **positive integer** no larger than the number of events in the event list.
 At least one of `<event name>` and `<date>` should not be null.
 * `<event name>` should be **alphanumeric**, **non-empty** and **not longer than 64 characters**.
-* `<date>` should be in **dd-MM-yyyy** format
+* `<date>` should be **non-empty** and in **dd-MM-yyyy** format
 * Events are **not** to be edited with `<date>` and `<event name>` that matches with another event containing the
   same `<date>` and `<event name>` to avoid any confusion.
    </box>
