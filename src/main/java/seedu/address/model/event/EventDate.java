@@ -5,6 +5,7 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 
 /**
  * Represents an Event's date.
@@ -17,7 +18,8 @@ public class EventDate {
 
     public static final String VALIDATION_REGEX = "^([0-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-(\\d{4})$";
 
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-uuuu")
+            .withResolverStyle(ResolverStyle.STRICT);
 
     public final LocalDate eventDate;
 
@@ -40,8 +42,21 @@ public class EventDate {
         }
     }
 
+    /**
+     * Checks for date validity.
+     *
+     * @param test An input date.
+     */
     public static boolean isValidDate(String test) {
-        return test.matches(VALIDATION_REGEX);
+        if (!test.matches(VALIDATION_REGEX)) {
+            return false;
+        }
+        try {
+            LocalDate.parse(test, DATE_TIME_FORMATTER);
+            return true;
+        } catch (DateTimeParseException ex) {
+            return false;
+        }
     }
 
     @Override
