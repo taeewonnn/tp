@@ -26,7 +26,7 @@ public class Event {
      * Every field must be present and not null.
      */
     public Event(EventName eventName, EventDate eventDate) {
-        requireAllNonNull(eventName);
+        requireAllNonNull(eventName, eventDate);
         this.eventName = eventName;
         this.eventDate = eventDate;
         persons = new UniquePersonList();
@@ -41,6 +41,7 @@ public class Event {
         requireAllNonNull(eventName, persons);
         this.eventName = eventName;
         this.eventDate = eventDate;
+
         this.persons = new UniquePersonList();
         this.persons.setPersons(persons);
     }
@@ -67,9 +68,9 @@ public class Event {
     /**
      * Returns true if a person with the same identity as {@code person} exists in the address book.
      */
-    public boolean hasPerson(Person person) {
-        requireNonNull(person);
-        return persons.contains(person);
+    public boolean hasPerson(Person p) {
+        requireNonNull(p);
+        return persons.contains(p);
     }
 
     /**
@@ -77,6 +78,7 @@ public class Event {
      * The person must not already exist in the event.
      */
     public void addPerson(Person p) {
+        requireNonNull(p);
         persons.add(p);
     }
 
@@ -85,6 +87,7 @@ public class Event {
      * The person must already exist in the event.
      */
     public void deletePerson(Person p) {
+        requireNonNull(p);
         persons.remove(p);
     }
 
@@ -95,7 +98,6 @@ public class Event {
      */
     public void setPerson(Person target, Person editedPerson) {
         requireNonNull(editedPerson);
-
         persons.setPerson(target, editedPerson);
     }
 
@@ -141,7 +143,7 @@ public class Event {
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(eventName);
+        return Objects.hash(eventName, eventDate);
     }
 
     @Override

@@ -14,7 +14,7 @@ import seedu.address.model.event.Event;
 import seedu.address.model.person.Person;
 
 /**
- * Panel containing the list of persons.
+ * Panel containing the list of persons of the selected event.
  */
 public class PersonListOfSelectedEventPanel extends UiPart<Region> {
     private static final String FXML = "PersonListOfSelectedEventPanel.fxml";
@@ -27,7 +27,8 @@ public class PersonListOfSelectedEventPanel extends UiPart<Region> {
     private Label emptyListLabel;
 
     /**
-     * Creates a {@code PersonListPanel} with the given {@code ObservableList}.
+     * Creates a {@code PersonListOfSelectedEventPanel} with the given {@code ObservableValue} and
+     * {@code ObservableList}.
      */
     public PersonListOfSelectedEventPanel(ObservableValue<Event> selectedEvent, ObservableList<Person> personList) {
         super(FXML);

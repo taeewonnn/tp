@@ -23,8 +23,9 @@ public class EventBook implements ReadOnlyEventBook {
 
     private final UniqueEventList events;
     private final UniquePersonList personsOfSelectedEvent;
+    private Event selectedEvent; // null when no event is selected
     private final SimpleObjectProperty<Event> selectedEventObservable;
-    private Event selectedEvent;
+
 
     // Non-static initialization block
     {

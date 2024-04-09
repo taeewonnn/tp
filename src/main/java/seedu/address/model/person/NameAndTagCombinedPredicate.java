@@ -7,7 +7,8 @@ import java.util.function.Predicate;
 import seedu.address.model.tag.Tag;
 
 /**
- * A predicate that combines checks for a {@code Person}'s name and tags.
+ * A predicate that enables checks for a {@code Person}'s name and tags, by combining the
+ * NameContainsKeywordsPredicate and TagContainsKeywordsPredicate predicates.
  */
 public class NameAndTagCombinedPredicate implements Predicate<Person> {
     private final NameContainsKeywordsPredicate namePredicate;
