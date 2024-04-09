@@ -49,8 +49,11 @@ deactivate AddressBookParser
 LogicManager -> SelectCommand : execute(m)
 activate SelectCommand
 
-SelectCommand -> Model : selectEvent(eventToSelect)
+
+SelectCommand -> Model : getFilteredEventList()
 activate Model
+Model --> SelectCommand : lastShownEventList
+SelectCommand -> Model : selectEvent(eventToSelect)
 Model --> SelectCommand
 deactivate Model
 
