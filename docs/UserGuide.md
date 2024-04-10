@@ -6,14 +6,51 @@ pageNav: 3
 
 # Eventy User Guide
 
-"Eventy", a contact management application tailored specifically for student event organizers, offers a new standard of streamlined and automated contact organization. It serves as your single source of truth for storing, managing, and retrieving all contact-related information.
+## Introduction 
 
-<!-- * Table of Contents -->
-<page-nav-print />
+**Eventy** is a contact management application which offers a new standard of streamlined and automated contact organization.
+Eventy is a combination of Command Line Interface(CLI) and Graphical User Interface(GUI), which entails both fast typing
+and visual representation.
+
+The application is **tailored specifically for student event organizers**, providing a new standard protocol of event planning.
+However, with the versatility and flexibility of the application, anyone can use it with ease.
+
+**Bid farewell to troublesome event management** as Eventy will serve as your single source of truth 
+for storing, managing, planning and retrieving all contact-related information.
+
+## Table of Contents
+* [Introduction](#introduction)
+* [Table of Contents](#table-of-contents)
+* [1. Quick start](#1-quick-start)
+* [2. UI Layout Description](#2-ui-layout-description)
+* [3. Features](#3-features)
+    * [3.1 Event Management](#31-event-management)
+        * [3.1.1 Creating an event](#311-creating-an-event-addev)
+        * [3.1.2 Editing an event](#312-editing-an-event-editev)
+        * [3.1.3 Deleting an event](#313-deleting-an-event-delev)
+        * [3.1.4 Selecting an event](#314-selecting-an-event-sel)
+        * [3.1.5 Deselecting an event](#315-deselecting-an-event-desel)
+    * [3.2 Contact Management](#32-contact-management)
+        * [3.2.1 Adding person and their information to the global participant list](#321-adding-person-and-their-information-to-the-global-participant-list-addp)
+        * [3.2.2 Inviting person to selected event](#322-inviting-person-to-selected-event-inv)
+        * [3.2.3 Deleting a participant from the global participant list or an event participant list](#323-deleting-a-participant-from-the-global-participant-list-or-an-event-participant-list-delp)
+        * [3.2.4 Editing existing participant](#324-editing-existing-participant-editp)
+    * [3.3 Export function](#33-export-function)
+        * [3.3.1 Exporting the chosen details of all the filtered persons to a CSV file](#331-exporting-the-chosen-details-of-all-the-filtered-persons-to-a-csv-file-export)
+    * [3.4 Other commands](#34-other-commands)
+        * [3.4.1 Clearing all entries](#341-clearing-all-entries-clear)
+        * [3.4.2 Locating persons by name](#342-locating-persons-by-name-find)
+        * [3.4.3 Viewing help](#343-viewing-help-help)
+        * [3.4.4 Listing all persons](#344-listing-all-persons-list)
+        * [3.4.5 Exiting the program](#345-exiting-the-program-exit)
+* [4. FAQ](#4-faq)
+* [5. Known issues](#5-known-issues)
+* [6. Command summary](#6-command-summary)
+* [7. Prefix translation table](#7-prefix-translation-table)
 
 --------------------------------------------------------------------------------------------------------------------
 
-## Quick start
+## 1. Quick start
 
 1. Ensure you have Java `11` or above installed in your Computer.
 
@@ -25,9 +62,9 @@ pageNav: 3
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![Ui](images/Ui.png)
 
-5. Refer to the [Features](#features) below for details of each command.
+5. Refer to the [Features](#3-features) below for details of each command.
 
-## UI Layout Description
+## 2. UI Layout Description
 
 ![UiLayout](images/UILayout.png)
 
@@ -39,11 +76,30 @@ pageNav: 3
 
 --------------------------------------------------------------------------------------------------------------------
 
-## Features
+## 3. Features
 
-### Creating an event: `addev`
+<box type="info" seamless>
 
-**Format:** `addev ev/<event name> d/<date>`
+**Notes about the command format:**
+* Words in `<UPPER_CASE>` are the parameters to be supplied by the user.
+  e.g. in addp `n/<NAME>`, `<NAME>` is a parameter which can be used as `addp n/John Doe`.
+* Items in square brackets are optional.
+  e.g `n/<NAME> [t/<TAG>]` can be used as `n/John Doe t/friend` or as `n/John Doe`.
+* Items with …​ after them can be used multiple times including zero times.
+  e.g. `[t/<TAG>]…​` can be used as ` ` (i.e. 0 times), `t/friend`, `t/friend t/family` etc.
+* Parameters can be in any order.
+  e.g. if the command specifies `n/<NAME> p/<PHONE_NUMBER>`, `p/<PHONE_NUMBER> n/<NAME>` is also acceptable.
+* Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.
+  e.g. if the command specifies `help 123`, it will be interpreted as `help`.
+* If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines
+  as space characters surrounding line-breaks may be omitted when copied over to the application.
+  </box>
+
+### 3.1 Event Management
+
+#### 3.1.1 Creating an event: `addev`
+
+**Format:** `addev ev/<EVENT NAME> d/<DATE>`
 
 **Description:**
 
@@ -52,25 +108,25 @@ Adds a new event with the specified name and date for the Event List.
 <box type="warning" seamless>
 
 **Caution:**
-* `<event name>` should only contain **alphanumeric** characters and **spaces**, and be **non-empty**.
-* `<date>` should be in the **dd-MM-yyyy** format. E.g.`29-08-2024`
+* `<EVENT NAME>` should only contain **alphanumeric** characters and **spaces**, and be **non-empty**.
+* `<DATE>` should be in the **dd-MM-yyyy** format. E.g.`29-08-2024`
 * You **cannot** add an event with the same case-sensitive name and date as an event that already exists in Eventy. 
   </box>
 
 **Examples:**
 - `addev ev/Hall dining d/07-08-2024` adds a new event with the name `Hall Dining`, with the date August 7th, 2024.
-  
-Before:
+
+Before(event list box):
 
 ![before adding event](images/beforeaddev.png)
 
-After:
+After(event list box):
 
 ![after adding event](images/addev.png)
 
-### Editing an event: `editev`
+#### 3.1.2 Editing an event: `editev`
 
-**Format:** `editev <event index> [ev/<event name>] [d/<date>]`
+**Format:** `editev <EVENT INDEX> [ev/<EVENT NAME>] [d/<DATE>]`
 
 **Description:**
 
@@ -81,11 +137,11 @@ Edits an existing event based on index.
 **Caution:**
 * At least one of the optional fields must be provided.
 * Editing data fields with the same input is **allowed**.
-* `<event index>` should be **non-empty**, a **positive integer** no larger than the number of events in the event list.
-* `<event name>` should only contain **alphanumeric** characters and **spaces**, and be **non-empty**.
-* `<date>` should be in **dd-MM-yyyy** format
-* Events are **not** to be edited to have an `<event name>` and `<date>` that matches another event with the
-  same case-sensitive `<event name>` and `<date>` to avoid duplicate events.
+* `<EVENT INDEX>` should be **non-empty**, a **positive integer** no larger than the number of events in the event list.
+* `<EVENT NAME>` should only contain **alphanumeric** characters and **spaces**, and be **non-empty**.
+* `<DATE>` should be in **dd-MM-yyyy** format
+* Events are **not** to be edited to have an `<EVENT NAME>` and `<DATE>` that matches another event with the
+  same case-sensitive `<EVENT NAME>` and `<DATE>` to avoid duplicate events.
    </box>
 
 **Examples:**
@@ -93,9 +149,9 @@ Edits an existing event based on index.
 - `editev 3 d/08-09-2024` changes the event date of event indexed 3 to September 8th, 2024.
 - `editev 7 ev/Party d/08-09-2024` changes the event name and date of event indexed 7 to Party and September 8th, 2024.
 
-### Deleting an event: `delev`
+#### 3.1.3 Deleting an event: `delev`
 
-**Format:** `delev <event index>`
+**Format:** `delev <EVENT INDEX>`
 
 **Description:**
 
@@ -104,16 +160,16 @@ Deletes an event and all its relevant information with its index in the event li
 <box type="warning" seamless>
 
 **Caution:**
-* `<event index>` should be **non-empty**, a **positive integer** no larger than the number of events in the event list.
+* `<EVENT INDEX>` should be **non-empty**, a **positive integer** no larger than the number of events in the event list.
 * You cannot delete an event that is currently selected. 
   </box>
 
 **Examples:**
 - `delev 1` deletes the 1st event in the displayed list.
 
-### Selecting an event: `sel`
+#### 3.1.4 Selecting an event: `sel`
 
-**Format:** `sel <event index>`
+**Format:** `sel <EVENT INDEX>`
 
 **Description:**
 
@@ -122,21 +178,21 @@ Selects an event from the event list by the event index.
 <box type="warning" seamless>
 
 **Caution:**
-* `<event index>` should be **non-empty**, a **positive integer** no larger than the number of events in the event list.
+* `<EVENT INDEX>` should be **non-empty**, a **positive integer** no larger than the number of events in the event list.
 </box>
 
 **Examples:**
 - `sel 3` selects the 3rd event.
 
-Before:
+Before(event list box):
 
 ![before selecting event](images/beforesel.png)
 
-After:
+After(event list box):
 
 ![after selecting event](images/aftersel.png)
 
-### Deselecting an event: `desel`
+#### 3.1.5 Deselecting an event: `desel`
 
 **Format:** `desel`
 
@@ -147,9 +203,11 @@ Deselects the selected event and returns to the global participant list.
 **Examples:**
 - After `select 3` which selects the event with index `3`, `desel` deselects the event indexed `3`.
 
-### Adding person and their information to the global participant list: `addp`
+### 3.2 Contact Management
 
-**Format:** `addp n/<participant name> p/<phone number> e/<email> a/<address> t/<tags>`
+#### 3.2.1 Adding person and their information to the global participant list: `addp`
+
+**Format:** `addp n/<PARTICIPANT NAME> p/<PHONE NUMBER> e/<EMAIL> a/<ADDRESS> [t/<TAGS>]...`
 
 **Description:**
 
@@ -158,16 +216,17 @@ Adds a new person to the app, allowing them to be added to an event later.
 <box type="warning" seamless>
 
 **Caution:**
-* `<participant name>` should be **alphabetic**, **non-empty** and **not longer than 64 characters**.
-* `<phone number>` should only contain **numbers**, and it should be **at least 3 digits long**.
-* `<email>` should be of the format `local-part@domain` and adhere to the following constraints:
+* `<PARTICIPANT NAME>` should be **alphabetic**, **non-empty** and **not longer than 64 characters**.
+* `<PHONE NUMBER>` should only contain **numbers**, and it should be **at least 3 digits long**.
+* `<EMAIL>` should be of the format `local-part@domain` and adhere to the following constraints:
   * The local-part should only contain alphanumeric characters and these special characters, excluding the parentheses, (`+_.-`). The local-part may not start or end with any special characters.
   * This is followed by a '@' and then a domain name. The domain name is made up of domain labels separated by periods.
      - The domain name must:
        - end with a domain label at least 2 characters long
        - have each domain label start and end with alphanumeric characters
        - have each domain label consist of alphanumeric characters, separated only by hyphens, if any
-* `<address>` Addresses can take **any values**, and it should be **non-empty**.
+* `<ADDRESS>` Addresses can take **any values**, and it should be **non-empty**.
+* `<TAGS>` should be **alphanumeric**.
 * Adding a person with the same **case-sensitive name** that already exists is **not allowed**.  
   </box>
 
@@ -175,9 +234,9 @@ Adds a new person to the app, allowing them to be added to an event later.
 - `addp n/David p/98987676 e/david@example.com a/NUS t/student` adds a participant named `David`
   with the phone number `98987676` and email of `david@example.com` to the displayed contacts list.
 
-### Inviting person to selected event: `inv`
+#### 3.2.2 Inviting person to selected event: `inv`
 
-**Format:** `inv <participant index>`
+**Format:** `inv <PARTICIPANT INDEX>`
 
 **Description:**
 
@@ -186,7 +245,7 @@ Invite participants from the global participant list to the selected event.
 <box type="warning" seamless>
 
 **Caution:**
-* `<participant index>` should be **non-empty**, a **positive integer** no larger
+* `<PARTICIPANT INDEX>` should be **non-empty**, a **positive integer** no larger
   than the number of persons in the global participant list.
 * Duplicate participants is **not allowed.**
   </box>
@@ -194,17 +253,17 @@ Invite participants from the global participant list to the selected event.
 **Examples:**
 - `inv 5` Adds participant indexed 5 to selected event.
 
-Before:
+Before(event list and event participant list box):
 
 ![before inviting participant](images/beforeinvite.png)
 
-After:
+After(event list and event participant list box):
 
 ![after inviting participant](images/afterinvite.png)
 
-### Deleting a participant from the global participant list or an event participant list: `delp`
+#### 3.2.3 Deleting a participant from the global participant list or an event participant list: `delp`
 
-**Format:** `delp <participant index>`
+**Format:** `delp <PARTICIPANT INDEX>`
 
 **Description:**
 
@@ -215,12 +274,12 @@ After:
 <box type="warning" seamless>
 
 **Caution:**
-* `<participant index>` should be **non-empty** and a **positive integer**.
-* A participant's `<participant index>` in an event participant list can be **different** from that in the global
+* `<PARTICIPANT INDEX>` should be **non-empty** and a **positive integer**.
+* A participant's `<PARTICIPANT INDEX>` in an event participant list can be **different** from that in the global
   participant list.
-* `<participant index>` should be no larger than the number of participants in the global participant list if no event
+* `<PARTICIPANT INDEX>` should be no larger than the number of participants in the global participant list if no event
   is selected.
-* `<participant index>` should be no larger than the number of participants in the event participant list if an event
+* `<PARTICIPANT INDEX>` should be no larger than the number of participants in the event participant list if an event
   is selected.
 * Deleting a participant in the global participants list will not delete the same participant in 
   all event participant list
@@ -230,9 +289,9 @@ After:
 - When no event is selected, `delp 9` deletes the 9th participant from the global participant list only.
 - `delp 9` after `sel 3` removes the 9th participant from the 3rd event's participant list.
 
-### Editing existing participant: `editp`
+#### 3.2.4 Editing existing participant: `editp`
 
-**Format:** `editp <participant index> [n/<participant name>] [p/<phone number>] [e/<email>] [a/<address>] [t/<tags>]`
+**Format:** `editp <PARTICIPANT INDEX> [n/<PARTICIPANT NAME>] [p/<PHONE NUMBER>] [e/<EMAIL>] [a/<ADDRESS>] [t/<TAGS>]...`
 
 **Description:**
 
@@ -245,27 +304,31 @@ Updates the contact information of a participant in the app.
 * At least one of the optional fields must be provided.
 * When editing tags, the existing tags of the person will be removed i.e adding of tags is not cumulative
 * You can remove all the person’s tags by typing t/ without specifying any tags after it.
-* `<participant index>` should be **non-empty**, a **positive integer** no larger than 
+* `<PARTICIPANT INDEX>` should be **non-empty**, a **positive integer** no larger than 
   the number of participants in the global participant list.
-* `<participant name>` should be **alphabetic**, **non-empty** and **not longer than 64 characters**.
-* `<phone number>` should only contain **numbers**, and it should be **at least 3 digits long**.
-* `<email>` should be of the format `local-part@domain` and adhere to the following constraints:
+* `<PARTICIPANT NAME>` should be **alphabetic**, **non-empty** and **not longer than 64 characters**.
+* `<PHONE NUMBER>` should only contain **numbers**, and it should be **at least 3 digits long**.
+* `<EMAIL>` should be of the format `local-part@domain` and adhere to the following constraints:
   * The local-part should only contain alphanumeric characters and these special characters, excluding the parentheses, (`+_.-`). The local-part may not start or end with any special characters.
   * This is followed by a '@' and then a domain name. The domain name is made up of domain labels separated by periods.
      - The domain name must:
        - end with a domain label at least 2 characters long
        - have each domain label start and end with alphanumeric characters
        - have each domain label consist of alphanumeric characters, separated only by hyphens, if any
-* `<address>` Addresses can take **any values**, and it should be **non-empty**.
+* `<ADDRESS>` Addresses can take **any values**, and it should be **non-empty**.
+* `<TAGS>` should be **alphanumeric**.
+    * You can remove all the person's tags by typing `t/` without any tags after it.
 * Adding a person with the same **case-sensitive name** that already exists is **not allowed**.  
   </box>
   
 **Examples:**
 - `editp 5 n/Max p/00000000 e/test@gmail.com` Edits contact details of participant indexed 5.
 
-### Exporting the chosen details of all the filtered persons to a CSV file.
+### 3.3 Export function
 
-**Format:** `export n/ p/ e/ a/`
+#### 3.3.1 Exporting the chosen details of all the filtered persons to a CSV file: `export`
+
+**Format:** `export [n/] [p/] [e/] [a/]`
 
 **Description:**
 
@@ -285,7 +348,9 @@ Exports only the chosen details of all filtered persons to a CSV file.
 * `export n/ p/ e/` exports only the names, phone numbers and emails of all the filtered persons.
 * `export n/ p/ e/ a/` exports the names, phone numbers, emails and addresses of all the filtered persons.
 
-### Clearing all entries : `clear`
+### 3.4 Other commands
+
+#### 3.4.1 Clearing all entries: `clear`
 
 **Format:** `clear`
 
@@ -297,7 +362,7 @@ Clears all entries from the address book.
 * This deletes all entries!! Be careful!!
   </box>
 
-### Locating persons by name: `find`
+#### 3.4.2 Locating persons by name: `find`
 
 **Format:**
 1. `find n/KEYWORD [MORE_KEYWORDS]`
@@ -336,7 +401,7 @@ Clears all entries from the address book.
   
 ![result for 'find alex david'](images/findAlexDavidResult.png)
 
-### Viewing help : `help`
+#### 3.4.3 Viewing help: `help`
 
 **Format:** `help`
 
@@ -346,7 +411,7 @@ Shows a message explaining how to access the help page.
 
 ![help message](images/helpMessage.png)
 
-### Listing all persons : `list`
+#### 3.4.4 Listing all persons: `list`
 
 **Description:**
 
@@ -355,7 +420,7 @@ Shows a message explaining how to access the help page.
 
 Format: `list`
 
-### Exiting the program : `exit`
+#### 3.4.5 Exiting the program: `exit`
 
 Exits the program.
 
@@ -363,20 +428,20 @@ Format: `exit`
 
 --------------------------------------------------------------------------------------------------------------------
 
-## FAQ
+## 4. FAQ
 
 **Q**: How do I transfer my data to another Computer?<br>
 **A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous AddressBook home folder.
 
 --------------------------------------------------------------------------------------------------------------------
 
-## Known issues
+## 5. Known issues
 
 1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
 
 --------------------------------------------------------------------------------------------------------------------
 
-## Command summary
+## 6. Command summary
 
 | Action                                      | Format, Examples                                                                                                      |
 |---------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
@@ -396,7 +461,7 @@ Format: `exit`
 | **Listing all persons**                     | `list` Shows a list of all persons in the address book.                                                               |
 | **Exiting the program**                     | `exit` Exits the program                                                                                              |
 
-## Prefix translation table
+## 7. Prefix translation table
 
 |Prefix |Translation   |
 |-------|--------------|
