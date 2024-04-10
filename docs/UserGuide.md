@@ -53,14 +53,14 @@ Adds a new event with the specified name and date for the Event List.
 
 **Caution:**
 
-* `<event name>` should be **alphanumeric**, **non-empty** and **not longer than 64 characters**.
-* `<date>` should be in **dd-MM-yyyy** format
-* Adding an event with a name and date that already exists, regardless of case, is **not allowed.**
+* `<event name>` should only contain **alphanumeric** characters and **spaces**, and be **non-empty**.
+* `<date>` should be in the **dd-MM-yyyy** format. E.g.`29-08-2024`
+* You **cannot** add an event with the same case-sensitive name and date as an event that already exists in Eventy. 
   </box>
 
 **Examples:**
 
-- `addev ev/Orientation camp d/04-05-2024` adds a new event with the name `Orientation camp` that will happen on May 4th, 2024.
+- `addev ev/Hall dining d/07-08-2024` adds a new event with the name `Hall Dining`, with the date August 7th, 2024.
   
 Before:
 
@@ -72,7 +72,7 @@ After:
 
 ### Editing an event: `editev`
 
-**Format:** `editev <event index> ev/<event name> d/<date>`
+**Format:** `editev <event index> [ev/<event name>] [d/<date>]`
 
 **Description:**
 
@@ -82,19 +82,19 @@ Edits an existing event based on index.
 
 **Caution:**
 
-* `<event index` should be **non-empty**, a **positive integer** no larger than the number of events in the event list.
-At least one of `<event name>` and `<date>` should not be null.
-* `<event name>` should be **alphanumeric**, **non-empty** and **not longer than 64 characters**.
+* At least one of the optional fields must be provided.
+* `<event index>` should be **non-empty**, a **positive integer** no larger than the number of events in the event list.
+* `<event name>` should only contain **alphanumeric** characters and **spaces**, and be **non-empty**.
 * `<date>` should be in **dd-MM-yyyy** format
-* Events are **not** to be edited with `<date>` and `<event name>` that matches with another event containing the
-  same `<date>` and `<event name>` to avoid any confusion.
+* Events are **not** to be edited to have an `<event name>` and `<date>` that matches another event with the
+  same case-sensitive `<event name>` and `<date>` to avoid duplicate events.
    </box>
 
 **Examples:**
 
 - `editev 1 ev/Orientation camp` changes the event name of event indexed 1 to `Orientation camp`.
-- `editev 1 d/08-09-2024` changes the event date of event indexed 1 to September 8th, 2024.
-- `editev 1 ev/Party d/08-09-2024` changes the event name and date of event indexed 1 to Party and September 8th, 2024.
+- `editev 3 d/08-09-2024` changes the event date of event indexed 3 to September 8th, 2024.
+- `editev 7 ev/Party d/08-09-2024` changes the event name and date of event indexed 7 to Party and September 8th, 2024.
 
 ### Deleting an event: `delev`
 
@@ -129,10 +129,16 @@ Adds a new person to the app, allowing them to be added to an event later.
 **Caution:**
 
 * `<participant name>` should be **alphabetic**, **non-empty** and **not longer than 64 characters**.
-* `<phone number>` should be **numeric**, **non-empty** and **not longer than 15 digits**.
-* `<email>` should be **alphanumeric**, **non-empty** and **not longer than 64 characters**.
-* `<address>` should be **non-empty** and **not longer than 64 characters**.
-* Adding a person with the same **name**(Case-sensitive) that already exists, regardless of case, is **not allowed**.  
+* `<phone number>` should only contain **numbers**, and it should be **at least 3 digits long**.
+* `<email>` should be of the format `local-part@domain` and adhere to the following constraints:
+  * The local-part should only contain alphanumeric characters and these special characters, excluding the parentheses, (`+_.-`). The local-part may not start or end with any special characters.
+  * This is followed by a '@' and then a domain name. The domain name is made up of domain labels separated by periods.
+     - The domain name must:
+       - end with a domain label at least 2 characters long
+       - have each domain label start and end with alphanumeric characters
+       - have each domain label consist of alphanumeric characters, separated only by hyphens, if any
+* `<address>` Addresses can take **any values**, and it should be **non-empty**.
+* Adding a person with the same **case-sensitive name** that already exists is **not allowed**.  
   </box>
 
 **Examples:**
@@ -211,7 +217,7 @@ Deselects the selected event and returns to the global participant list.
 
 ### Editing existing participant: `editp`
 
-**Format:** `editp <participant index> n/<participant name> p/<phone number> e/<email> a/<address> t/<tags>`
+**Format:** `editp <participant index> [n/<participant name>] [p/<phone number>] [e/<email>] [a/<address>] [t/<tags>]`
 
 **Description:**
 
@@ -227,9 +233,16 @@ Updates the contact information of a participant in the app.
 * `<participant index>` should be **non-empty**, a **positive integer** no larger than 
   the number of participants in the global participant list.
 * `<participant name>` should be **alphabetic**, **non-empty** and **not longer than 64 characters**.
-* `<phone number>` should be **numeric**, **non-empty** and **not longer than 15 digits**.
-* `<email>` should be **alphanumeric**, **non-empty** and **not longer than 64 characters**.
-* `<address>` should be **non-empty** and **not longer than 64 characters**.
+* `<phone number>` should only contain **numbers**, and it should be **at least 3 digits long**.
+* `<email>` should be of the format `local-part@domain` and adhere to the following constraints:
+  * The local-part should only contain alphanumeric characters and these special characters, excluding the parentheses, (`+_.-`). The local-part may not start or end with any special characters.
+  * This is followed by a '@' and then a domain name. The domain name is made up of domain labels separated by periods.
+     - The domain name must:
+       - end with a domain label at least 2 characters long
+       - have each domain label start and end with alphanumeric characters
+       - have each domain label consist of alphanumeric characters, separated only by hyphens, if any
+* `<address>` Addresses can take **any values**, and it should be **non-empty**.
+* Adding a person with the same **case-sensitive name** that already exists is **not allowed**.  
   </box>
   
 **Examples:**
@@ -385,7 +398,7 @@ Format: `exit`
 
 | Action                                      | Format, Examples                                                                                                      |
 |---------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
-| **Add Event**                               | `addev ev/<event name> d/<date>` <br> e.g., `addev ev/Orientation camp d/04-07-2024`                                  |
+| **Add Event**                               | `addev ev/<event name> d/<date>` <br> e.g., `addev ev/Hall dining d/07-08-2024`                                  |
 | **Edit Event**                              | `editev INDEX ev/<event name> d/<date>` <br> e.g., `editev 1 ev/Party`                                                |
 | **Delete Event**                            | `delev <index>` <br> e.g., `delev 1`                                                                                  |
 | **Add Participant**                         | `addp n<participant name> p/<phone number> e/<email> a/<address> t/<tags>` <br> e.g., `addp n/David p/98987676 e/david@example.com a/NUS t/friends` |
