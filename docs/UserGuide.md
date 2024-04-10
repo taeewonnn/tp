@@ -81,7 +81,7 @@ for storing, managing, planning and retrieving all contact-related information.
 <box type="info" seamless>
 
 **Notes about the command format:**
-* Words in `UPPER_CASE` are the parameters to be supplied by the user.
+* Words in `<UPPER_CASE>` are the parameters to be supplied by the user.
   e.g. in addp `n/<NAME>`, `<NAME>` is a parameter which can be used as `addp n/John Doe`.
 * Items in square brackets are optional.
   e.g `n/<NAME> [t/<TAG>]` can be used as `n/John Doe t/friend` or as `n/John Doe`.
