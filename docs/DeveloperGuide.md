@@ -273,53 +273,83 @@ The primary rationale for using an `index` as the specifier is its simplicity an
 
 ### Select Event Feature
 
-The Select Event mechanism is a pivotal part of Eventy's functionality. It's importance can be summarised in 2 main
-purposes:
-1. Selecting an event (or an event not being selected) affects the functionality of several commands. For example, the
-   `Delete a Person` command if an event is not selected, it will delete the person from Eventy as a whole, else if an
-   event is selected, it will delete the person only from that selected event
-2. The UI will display the person list of the selected event when an event is selected, if no event is selected,
-   it will display a message to `Select an event`
+The Select Event mechanism is a pivotal part of Eventy's functionality, serving two main purposes:
 
-The Select Event mechanism is facilitated by `EventBook`. It implements `ReadOnlyEventBook`, and can be thought of
-the counterpart to `AddressBook`, in that while `AddressBook` handles People-related functionality, `EventBook` handles
-Event-related functionality.
+1. A number of commands within Eventy are designed to target the selected event, while some commands also have
+differing behaviours based on whether an event is selected or not:
+- An example of the former is the `Invite Person to Event`</a> command,
+which adds a person to the **selected event**. 
+- An example of the latter is the `Delete a Person` command. If **an event is not selected**, it will delete the person 
+from Eventy as a whole, else if **an event is selected**, it will delete the person only from the selected event.
+
+<box type="info" seamless>
+
+**Note:** For more details on how this functionality is implemented, you may refer to the developer guide documentation
+for these two examples: the <a href="#Invite Person to Event"> Invite Person to Event </a> and 
+<a href="#delete-participant"> DeletePerson </a> commands.
+
+</box>
+
+2. Users of Eventy can select an event and deselect the currently selected event, using the `Selecting an event` and 
+`Deselecting an event` commands respectively.
+
+#### Implementation Details
+
+The Select Event mechanism is facilitated by the `EventBook`, which implements `ReadOnlyEventBook`. `EventBook` serves as the 
+counterpart to the `AddressBook`, focusing on Event-related functionality, while `AddressBook` handles People-related 
+functionality.
 
 To implement the Select Event mechanism, `EventBook` stores internally:
-* `selectedEvent` &thinsp;—&thinsp; The event that is currently selected. If no event is selected, it is `null`
-* `selectedEventObservable` &thinsp;—&thinsp; A wrapper for `selectedEvent` to allow the UI to update with respect
-  to the 2nd main purpose, as explained above
-* `personsOfSelectedEvent` &thinsp;—&thinsp; Unique person list of the selected event. If no event is selected, it is an
-  empty list
+* `events` &thinsp;—&thinsp; The list that contains the unique events that are in Eventy.
+* `selectedEvent` &thinsp;—&thinsp; The event that is currently selected. If no event is selected, it is set to `null`.
+* `personsOfSelectedEvent` &thinsp;—&thinsp; The list that contains the unique people in the selected event. If no 
+event is selected, it is an empty list.
 
-Additionally, it implements the following operations:
-* `EventBook#isAnEventSelected()` &thinsp;—&thinsp; Returns `true` if an event is selected, else `false`
+Additionally, it implements the following operations (not exhaustive):
+* `EventBook#isAnEventSelected()` &thinsp;—&thinsp; Returns `true` if an event is selected, else returns `false`
 * `EventBook#selectEvent(Event event)` &thinsp;—&thinsp; Selects the given event
 * `EventBook#deselectEvent()` &thinsp;—&thinsp; Deselect the currently selected event, if any, so that no event is
   selected
-* `EventBook#isPersonInSelectedEvent(Person person)` &thinsp;—&thinsp; Returns `true` if the given person is in the
-  selected event, else `false`
-* `EventBook#getSelectedEvent()` &thinsp;—&thinsp; Returns `selectedEventObservable` as an
 
-`EventBook` also implements other operations that are specific to certain commands that will not be covered here, as
-to the 2nd main purpose, as explained above
-* `personsOfSelectedEvent` &thinsp;—&thinsp; Unique person list of the selected event. If no event is selected, it is an
-  empty list
+These operations are exposed to other components through `ModelManager`.
 
-These operations are exposed to other components through `ModelManager` with the same names.
+#### Sequence Diagram
 
-In order to select an event and deselect an event, we have the Select command and deselect command respectively.
-Both commands function similarly.
+In order to select an event and deselect an event, we have the `Selecting an event` command and `Deselecting an event` 
+command respectively. Both commands function similarly, and so we will only be explaining the `Selecting an event` command.
 
-The following sequence diagram shows how the Select command works through the `Logic` component:
+The following sequence diagram shows how the `Selecting an event` command works through the `Logic` component.
 
-<puml src="diagrams/SelectEventSequenceDiagram -- Model.puml" width="250" />
+![Sequence diagram](images/SelectEventSequenceDiagram-Logic.png)
 
-Similarly, how the Select command goes through the Model component is shown below:
+<box type="info" seamless>
 
-<puml src="diagrams/SelectEventSequenceDiagram -- Logic.puml" width="250" />
+**Note:** The lifeline for `SelectCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
 
-The deselect Command generally does the inverse. For `setPersons` however, it will set it to null instead.
+</box>
+
+How the `Selecting an event` command works in the `Logic` component:
+
+1. When `Logic` is called upon to execute a command, it is passed to an `AddressBookParser` object which in turn creates the `SelectCommandParser`, which is used to parse the command.
+1. This results in a `SelectCommand` object, which contains the parsed value - the index of the event to select. In this example, the index is of value `1`.
+1. The `SelectCommand` communicates with the `Model` when it is executed. </br>
+    It first uses `getFilteredEventList()`, to retrieve the list of events shown to the user (`shownEventList`).
+    Then, it gets the event to be selected from that list (based on the index provided by the user), then calls `selectEvent(eventToSelect)` to select that event.
+1. The result of the command execution is encapsulated as a `CommandResult` object which is returned back from `Logic`.
+The result of the command execution is encapsulated as a CommandResult object which is returned back from Logic.
+
+#### Design considerations:
+
+**Aspect: How an event is selected:**
+
+* **Alternative 1 (current choice):** Stores the event that is selected as a variable.
+    * Pros: Easy to implement.
+    * Cons: Limited Scalability, as it may be difficult to manage the selected event state solely through a variable as complexity increases.
+
+* **Alternative 2:** Every event includes a field indicating its selection status.
+    * Pros: Multiple Events can be selected at the same time, which may be useful for future expansion.
+    * Cons: May have more overhead.
+
 
 ### Delete Event Feature
 
