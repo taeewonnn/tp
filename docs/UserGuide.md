@@ -6,7 +6,7 @@ pageNav: 3
 
 # Eventy User Guide
 
-Eventy is a contact management application, tailored specifically for student event organizers, offers a new standard of streamlined and automated contact organization. It serves as your single source of truth for storing, managing, and retrieving all contact-related information.
+"Eventy", a contact management application tailored specifically for student event organizers, offers a new standard of streamlined and automated contact organization. It serves as your single source of truth for storing, managing, and retrieving all contact-related information.
 
 <!-- * Table of Contents -->
 <page-nav-print />
@@ -52,14 +52,12 @@ Adds a new event with the specified name and date for the Event List.
 <box type="warning" seamless>
 
 **Caution:**
-
 * `<event name>` should only contain **alphanumeric** characters and **spaces**, and be **non-empty**.
 * `<date>` should be in the **dd-MM-yyyy** format. E.g.`29-08-2024`
 * You **cannot** add an event with the same case-sensitive name and date as an event that already exists in Eventy. 
   </box>
 
 **Examples:**
-
 - `addev ev/Hall dining d/07-08-2024` adds a new event with the name `Hall Dining`, with the date August 7th, 2024.
   
 Before:
@@ -81,8 +79,8 @@ Edits an existing event based on index.
 <box type="warning" seamless>
 
 **Caution:**
-
 * At least one of the optional fields must be provided.
+* Editing data fields with the same input is **allowed**.
 * `<event index>` should be **non-empty**, a **positive integer** no larger than the number of events in the event list.
 * `<event name>` should only contain **alphanumeric** characters and **spaces**, and be **non-empty**.
 * `<date>` should be in **dd-MM-yyyy** format
@@ -91,7 +89,6 @@ Edits an existing event based on index.
    </box>
 
 **Examples:**
-
 - `editev 1 ev/Orientation camp` changes the event name of event indexed 1 to `Orientation camp`.
 - `editev 3 d/08-09-2024` changes the event date of event indexed 3 to September 8th, 2024.
 - `editev 7 ev/Party d/08-09-2024` changes the event name and date of event indexed 7 to Party and September 8th, 2024.
@@ -107,45 +104,13 @@ Deletes an event and all its relevant information with its index in the event li
 <box type="warning" seamless>
 
 **Caution:**
-
 * `<event index>` should be **non-empty**, a **positive integer** no larger than the number of events in the event list.
 * You cannot delete an event that is currently selected. 
   </box>
 
 **Examples:**
-
 - `delev 1` deletes the 1st event in the displayed list.
 
-### Adding person and their information to the global participant list: `addp`
-
-**Format:** `addp n/<participant name> p/<phone number> e/<email> a/<address> t/<tags>`
-
-**Description:**
-
-Adds a new person to the app, allowing them to be added to an event later.
-
-<box type="warning" seamless>
-
-**Caution:**
-
-* `<participant name>` should be **alphabetic**, **non-empty** and **not longer than 64 characters**.
-* `<phone number>` should only contain **numbers**, and it should be **at least 3 digits long**.
-* `<email>` should be of the format `local-part@domain` and adhere to the following constraints:
-  * The local-part should only contain alphanumeric characters and these special characters, excluding the parentheses, (`+_.-`). The local-part may not start or end with any special characters.
-  * This is followed by a '@' and then a domain name. The domain name is made up of domain labels separated by periods.
-     - The domain name must:
-       - end with a domain label at least 2 characters long
-       - have each domain label start and end with alphanumeric characters
-       - have each domain label consist of alphanumeric characters, separated only by hyphens, if any
-* `<address>` Addresses can take **any values**, and it should be **non-empty**.
-* Adding a person with the same **case-sensitive name** that already exists is **not allowed**.  
-  </box>
-
-**Examples:**
-
-- `addp n/David p/98987676 e/david@example.com a/NUS t/student` adds a participant named `David`
-  with the phone number `98987676` and email of `david@example.com` to the displayed contacts list.
-  
 ### Selecting an event: `sel`
 
 **Format:** `sel <event index>`
@@ -157,12 +122,10 @@ Selects an event from the event list by the event index.
 <box type="warning" seamless>
 
 **Caution:**
-
 * `<event index>` should be **non-empty**, a **positive integer** no larger than the number of events in the event list.
 </box>
 
 **Examples:**
-
 - `sel 3` selects the 3rd event.
 
 Before:
@@ -182,8 +145,62 @@ After:
 Deselects the selected event and returns to the global participant list.
 
 **Examples:**
-
 - After `select 3` which selects the event with index `3`, `desel` deselects the event indexed `3`.
+
+### Adding person and their information to the global participant list: `addp`
+
+**Format:** `addp n/<participant name> p/<phone number> e/<email> a/<address> t/<tags>`
+
+**Description:**
+
+Adds a new person to the app, allowing them to be added to an event later.
+
+<box type="warning" seamless>
+
+**Caution:**
+* `<participant name>` should be **alphabetic**, **non-empty** and **not longer than 64 characters**.
+* `<phone number>` should only contain **numbers**, and it should be **at least 3 digits long**.
+* `<email>` should be of the format `local-part@domain` and adhere to the following constraints:
+  * The local-part should only contain alphanumeric characters and these special characters, excluding the parentheses, (`+_.-`). The local-part may not start or end with any special characters.
+  * This is followed by a '@' and then a domain name. The domain name is made up of domain labels separated by periods.
+     - The domain name must:
+       - end with a domain label at least 2 characters long
+       - have each domain label start and end with alphanumeric characters
+       - have each domain label consist of alphanumeric characters, separated only by hyphens, if any
+* `<address>` Addresses can take **any values**, and it should be **non-empty**.
+* Adding a person with the same **case-sensitive name** that already exists is **not allowed**.  
+  </box>
+
+**Examples:**
+- `addp n/David p/98987676 e/david@example.com a/NUS t/student` adds a participant named `David`
+  with the phone number `98987676` and email of `david@example.com` to the displayed contacts list.
+
+### Inviting person to selected event: `inv`
+
+**Format:** `inv <participant index>`
+
+**Description:**
+
+Invite participants from the global participant list to the selected event.
+
+<box type="warning" seamless>
+
+**Caution:**
+* `<participant index>` should be **non-empty**, a **positive integer** no larger
+  than the number of persons in the global participant list.
+* Duplicate participants is **not allowed.**
+  </box>
+
+**Examples:**
+- `inv 5` Adds participant indexed 5 to selected event.
+
+Before:
+
+![before inviting participant](images/beforeinvite.png)
+
+After:
+
+![after inviting participant](images/afterinvite.png)
 
 ### Deleting a participant from the global participant list or an event participant list: `delp`
 
@@ -198,7 +215,6 @@ Deselects the selected event and returns to the global participant list.
 <box type="warning" seamless>
 
 **Caution:**
-
 * `<participant index>` should be **non-empty** and a **positive integer**.
 * A participant's `<participant index>` in an event participant list can be **different** from that in the global
   participant list.
@@ -211,7 +227,6 @@ Deselects the selected event and returns to the global participant list.
 </box>
 
 **Examples:**
-
 - When no event is selected, `delp 9` deletes the 9th participant from the global participant list only.
 - `delp 9` after `sel 3` removes the 9th participant from the 3rd event's participant list.
 
@@ -246,37 +261,7 @@ Updates the contact information of a participant in the app.
   </box>
   
 **Examples:**
-
 - `editp 5 n/Max p/00000000 e/test@gmail.com` Edits contact details of participant indexed 5.
-  
-### Inviting person to selected event: `inv`
-
-**Format:** `inv <participant index>`
-
-**Description:**
-
-Invite participants from the global participant list to the selected event.
-
-<box type="warning" seamless>
-
-**Caution:**
-
-* `<participant index>` should be **non-empty**, a **positive integer** no larger 
-  than the number of persons in the global participant list.
-* Duplicate participants is **not allowed.**
-  </box>
-
-**Examples:**
-
-- `inv 5` Adds participant indexed 5 to selected event.
-
-Before:
-
-![before inviting participant](images/beforeinvite.png)
-
-After:
-
-![after inviting participant](images/afterinvite.png)
 
 ### Exporting the chosen details of all the filtered persons to a CSV file.
 
@@ -289,7 +274,6 @@ Exports only the chosen details of all filtered persons to a CSV file.
 <box type="warning" seamless>
 
 **Caution:**
-
 * At least one of the optional fields must be provided.
 * `n/ p/ e/ a/` provided should be in **prefix**.
 * `Prefix` only recognize the four prefixes written above. Do not input any other unknown prefixes.
@@ -310,7 +294,6 @@ Exports only the chosen details of all filtered persons to a CSV file.
 Clears all entries from the address book.
 
 **Caution:**
-
 * This deletes all entries!! Be careful!!
   </box>
 
@@ -340,7 +323,6 @@ Clears all entries from the address book.
 <box type="warning" seamless>
 
 **Caution:**
-
 * `<KEYWORD>` name should be **alphabetic**, **non-empty** and **not longer than 64 characters**.
 * `<KEYWORD>` tag should be **alphabetic**, **non-empty** and **not longer than 64 characters**.
   </box>
