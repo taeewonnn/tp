@@ -40,16 +40,16 @@ public class SelectCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        List<Event> lastShownList = model.getFilteredEventList();
 
+        List<Event> lastShownList = model.getFilteredEventList();
         if (targetIndex.getZeroBased() >= lastShownList.size()) {
             throw new CommandException(Messages.MESSAGE_INVALID_EVENT_DISPLAYED_INDEX);
         }
 
-        Event selectedEvent = lastShownList.get(targetIndex.getZeroBased());
-        model.selectEvent(selectedEvent);
+        Event eventToSelect = lastShownList.get(targetIndex.getZeroBased());
+        model.selectEvent(eventToSelect);
 
-        return new CommandResult(String.format(MESSAGE_SELECT_EVENT_SUCCESS, Messages.format(selectedEvent)));
+        return new CommandResult(String.format(MESSAGE_SELECT_EVENT_SUCCESS, Messages.format(eventToSelect)));
     }
 
     @Override

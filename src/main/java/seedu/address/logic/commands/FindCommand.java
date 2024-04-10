@@ -19,7 +19,7 @@ public class FindCommand extends Command {
             + "the specified keywords (case-insensitive) and/or their tags match any of the specified tags, \n"
             + "and displays them as a list with index numbers.\n"
             + "Parameters: n/NAME_KEYWORD [MORE_NAME_KEYWORDS]... t/TAG_KEYWORD [MORE_TAG_KEYWORDS]...\n"
-            + "Example: " + COMMAND_WORD + " n/alice bob t/friends family";
+            + "Example: " + COMMAND_WORD + " n/alice bob t/friends t/family";
 
     private final NameAndTagCombinedPredicate predicate;
 
@@ -34,7 +34,7 @@ public class FindCommand extends Command {
         if (model.isAnEventSelected()) {
             return findInPersonListOfSelectedEvent(model);
         } else {
-            return findInGlobalList(model);
+            return findInGlobalPersonList(model);
         }
     }
 
@@ -47,6 +47,7 @@ public class FindCommand extends Command {
      */
     public CommandResult findInPersonListOfSelectedEvent(Model model) {
         model.updateFilteredPersonListOfSelectedEvent(predicate);
+
         return new CommandResult(
                 String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW,
                         model.getFilteredPersonListOfSelectedEvent().size()));
@@ -59,8 +60,9 @@ public class FindCommand extends Command {
      * @param model The model containing the global filtered person list.
      * @return The result of finding persons in the global filtered person list.
      */
-    public CommandResult findInGlobalList(Model model) {
+    public CommandResult findInGlobalPersonList(Model model) {
         model.updateFilteredPersonList(predicate);
+
         return new CommandResult(
                 String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, model.getFilteredPersonList().size()));
     }
