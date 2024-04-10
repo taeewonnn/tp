@@ -23,8 +23,8 @@ public interface ReadOnlyEventBook {
 
     /**
      * Returns an unmodifiable view of the persons list of the selected event.
-     * This list will not contain any duplicate events.
-     * This list is empty is no event is currently selected.
+     * This list will not contain any duplicate persons.
+     * This list is empty when no event is currently selected.
      */
     ObservableList<Person> getPersonsOfSelectedEventList();
 }

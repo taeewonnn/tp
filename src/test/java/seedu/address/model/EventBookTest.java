@@ -55,8 +55,11 @@ public class EventBookTest {
     }
 
     @Test
-    public void hasEvent_nullEvent_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> eventBook.hasEvent(null));
+    public void hasEvent_nullEvent_throwsAssertionError() {
+        assertThrows(AssertionError.class, () -> {
+            EventBook eventBook = new EventBook();
+            eventBook.hasEvent(null);
+        });
     }
 
     @Test

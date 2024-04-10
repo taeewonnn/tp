@@ -30,9 +30,11 @@ public class AddEventCommandParser implements Parser<AddEventCommand> {
             || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddEventCommand.MESSAGE_USAGE));
         }
-        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_EVENT_NAME);
+
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_EVENT_NAME, PREFIX_DATE);
         EventName eventName = ParserUtil.parseEventName(argMultimap.getValue(PREFIX_EVENT_NAME).get());
         EventDate eventDate = ParserUtil.parseEventDate(argMultimap.getValue(PREFIX_DATE).get());
+
         Event event = new Event(eventName, eventDate);
 
         return new AddEventCommand(event);

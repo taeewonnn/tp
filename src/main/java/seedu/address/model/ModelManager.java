@@ -136,7 +136,7 @@ public class ModelManager implements Model {
         requireAllNonNull(target, editedPerson);
 
         addressBook.setPerson(target, editedPerson);
-        eventBook.setPerson(target, editedPerson);
+        eventBook.editPersonInAllEvents(target, editedPerson);
     }
 
     //=========== Filtered Person List Accessors =============================================================
@@ -195,11 +195,13 @@ public class ModelManager implements Model {
 
     @Override
     public void deleteEvent(Event target) {
+        requireNonNull(target);
         eventBook.removeEvent(target);
     }
 
     @Override
     public void addEvent(Event event) {
+        requireNonNull(event);
         eventBook.addEvent(event);
     }
 
@@ -222,6 +224,7 @@ public class ModelManager implements Model {
 
     @Override
     public void selectEvent(Event event) {
+        requireNonNull(event);
         eventBook.selectEvent(event);
         updateFilteredPersonListOfSelectedEvent(PREDICATE_SHOW_ALL_PERSONS);
     }

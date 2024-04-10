@@ -119,6 +119,7 @@ public class UniqueEventListTest {
     public void remove_existingEvent_removesEvent() {
         uniqueEventList.add(getBingoEvent());
         uniqueEventList.remove(getBingoEvent());
+
         UniqueEventList expectedUniqueEventList = new UniqueEventList();
         assertEquals(expectedUniqueEventList, uniqueEventList);
     }
@@ -133,6 +134,7 @@ public class UniqueEventListTest {
         uniqueEventList.add(getBingoEvent());
         UniqueEventList expectedUniqueEventList = new UniqueEventList();
         expectedUniqueEventList.add(getHikingEvent());
+
         uniqueEventList.setEvents(expectedUniqueEventList);
         assertEquals(expectedUniqueEventList, uniqueEventList);
     }
@@ -147,6 +149,7 @@ public class UniqueEventListTest {
         uniqueEventList.add(getBingoEvent());
         List<Event> eventList = Collections.singletonList(getHikingEvent());
         uniqueEventList.setEvents(eventList);
+
         UniqueEventList expectedUniqueEventList = new UniqueEventList();
         expectedUniqueEventList.add(getHikingEvent());
         assertEquals(expectedUniqueEventList, uniqueEventList);
