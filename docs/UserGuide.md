@@ -93,7 +93,8 @@ for storing, managing, planning and retrieving all contact-related information.
   e.g. if the command specifies `help 123`, it will be interpreted as `help`.
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines
   as space characters surrounding line-breaks may be omitted when copied over to the application.
-  </box>
+  
+</box>
 
 ### 3.1 Event Management
 
@@ -111,7 +112,8 @@ Adds a new event with the specified name and date for the Event List.
 * `<EVENT NAME>` should only contain **alphanumeric** characters and **spaces**, and be **non-empty**.
 * `<DATE>` should be in the **dd-MM-yyyy** format. E.g.`29-08-2024`
 * You **cannot** add an event with the same case-sensitive name and date as an event that already exists in Eventy. 
-  </box>
+  
+</box>
 
 **Examples:**
 - `addev ev/Hall dining d/07-08-2024` adds a new event with the name `Hall Dining`, with the date August 7th, 2024.
@@ -142,7 +144,8 @@ Edits an existing event based on index.
 * `<DATE>` should be in **dd-MM-yyyy** format
 * Events are **not** to be edited to have an `<EVENT NAME>` and `<DATE>` that matches another event with the
   same case-sensitive `<EVENT NAME>` and `<DATE>` to avoid duplicate events.
-   </box>
+
+</box>
 
 **Examples:**
 - `editev 1 ev/Orientation camp` changes the event name of event indexed 1 to `Orientation camp`.
@@ -162,7 +165,8 @@ Deletes an event and all its relevant information with its index in the event li
 **Caution:**
 * `<EVENT INDEX>` should be **non-empty**, a **positive integer** no larger than the number of events in the event list.
 * You cannot delete an event that is currently selected. 
-  </box>
+
+</box>
 
 **Examples:**
 - `delev 1` deletes the 1st event in the displayed list.
@@ -179,6 +183,7 @@ Selects an event from the event list by the event index.
 
 **Caution:**
 * `<EVENT INDEX>` should be **non-empty**, a **positive integer** no larger than the number of events in the event list.
+
 </box>
 
 **Examples:**
@@ -228,7 +233,8 @@ Adds a new person to the app, allowing them to be added to an event later.
 * `<ADDRESS>` Addresses can take **any values**, and it should be **non-empty**.
 * `<TAGS>` should be **alphanumeric**.
 * Adding a person with the same **case-sensitive name** that already exists is **not allowed**.  
-  </box>
+
+</box>
 
 **Examples:**
 - `addp n/David p/98987676 e/david@example.com a/NUS t/student` adds a participant named `David`
@@ -248,7 +254,8 @@ Invite participants from the global participant list to the selected event.
 * `<PARTICIPANT INDEX>` should be **non-empty**, a **positive integer** no larger
   than the number of persons in the global participant list.
 * Duplicate participants is **not allowed.**
-  </box>
+
+</box>
 
 **Examples:**
 - `inv 5` Adds participant indexed 5 to selected event.
@@ -267,7 +274,8 @@ After(event list and event participant list box):
 
 **Description:**
 
-- If **no event is selected**, this deletes the person from both the **global participant list**.
+- If **no event is selected**, this deletes the person from only the **global participant list**, but the person will
+  remain in all the events he/she will be taking or has taken part in.
 - If **an event is selected**, this only removes the participant from the event by **his/her index in the
   event participant list**.
 
@@ -283,6 +291,7 @@ After(event list and event participant list box):
   is selected.
 * Deleting a participant in the global participants list will not delete the same participant in 
   all event participant list
+
 </box>
 
 **Examples:**
@@ -319,7 +328,8 @@ Updates the contact information of a participant in the app.
 * `<TAGS>` should be **alphanumeric**.
     * You can remove all the person's tags by typing `t/` without any tags after it.
 * Adding a person with the same **case-sensitive name** that already exists is **not allowed**.  
-  </box>
+
+</box>
   
 **Examples:**
 - `editp 5 n/Max p/00000000 e/test@gmail.com` Edits contact details of participant indexed 5.
@@ -332,15 +342,25 @@ Updates the contact information of a participant in the app.
 
 **Description:**
 
-Exports only the chosen details of all filtered persons to a CSV file.
+Exports only the chosen details of all filtered persons to a CSV file. Currently, the command only supports the export
+of name, phone, email and address. The command will not support the export of tags due to privacy concerns and rare
+usage. The exported information will be in the file `exported_participant_data.csv`.
 
 <box type="warning" seamless>
 
 **Caution:**
 * At least one of the optional fields must be provided.
 * `n/ p/ e/ a/` provided should be in **prefix**.
-* `Prefix` only recognize the four prefixes written above. Do not input any other unknown prefixes.
-  </box>
+* `Prefix` only recognizes the four prefixes written above. Any other unknown prefixes will be disregarded.
+* Make sure the `.csv` file is opened using the Notepad app or the equivalent. Using Microsoft Excel to open the `.csv`
+  file will cause unexpected behaviors due to Excel interpreting certain fields as numbers. For example, Excel will
+  recognize the phone number `00000000` as `0`.
+* Another `export` will overwrite the file created by the previous `export`, so make sure to save the old
+  `exported_participant_data.csv` somewhere else before doing another `export`.
+* Do not have the `exported_participant_data.csv` file opened while exporting, as this will cause Eventy to be unable to
+  overwrite the file.
+
+</box>
   
 **Examples:**
 * `export n/` exports only the names of all the filtered persons.
@@ -358,9 +378,12 @@ Exports only the chosen details of all filtered persons to a CSV file.
 
 Clears all entries from the address book.
 
+<box type="warning" seamless>
+
 **Caution:**
 * This deletes all entries!! Be careful!!
-  </box>
+
+</box>
 
 #### 3.4.2 Locating persons by name: `find`
 
@@ -390,7 +413,8 @@ Clears all entries from the address book.
 **Caution:**
 * `<KEYWORD>` name should be **alphabetic**, **non-empty** and **not longer than 64 characters**.
 * `<KEYWORD>` tag should be **alphabetic**, **non-empty** and **not longer than 64 characters**.
-  </box>
+
+</box>
 
 **Examples:**
 * `find n/John` returns `john` and `John Doe`
