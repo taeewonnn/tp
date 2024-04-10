@@ -124,6 +124,7 @@ public class EditPersonCommandTest {
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()),
                 new UserPrefs(), new EventBook(), new PersonDataExporter());
+
         Event bingo = getBingoEvent();
         expectedModel.addEvent(bingo);
         expectedModel.selectEvent(bingo);

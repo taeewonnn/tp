@@ -186,8 +186,10 @@ public class ModelManagerTest {
     @Test
     public void setEvent_validTargetAndEditedEvent_success() {
         ModelManager modelManager = new ModelManager();
+
         Event targetEvent = new EventBuilder().build();
         Event editedEvent = new EventBuilder().withEventName("Edited Event").build();
+
         modelManager.addEvent(targetEvent);
         modelManager.setEvent(targetEvent, editedEvent);
         assertTrue(modelManager.getFilteredEventList().contains(editedEvent));

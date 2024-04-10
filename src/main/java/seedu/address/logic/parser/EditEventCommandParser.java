@@ -2,11 +2,8 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DATE;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EVENT_NAME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.EditEventCommand;
@@ -36,15 +33,13 @@ public class EditEventCommandParser implements Parser<EditEventCommand> {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditEventCommand.MESSAGE_USAGE), pe);
         }
 
-        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_EVENT_NAME, PREFIX_DATE, PREFIX_PHONE,
-                PREFIX_EMAIL, PREFIX_ADDRESS);
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_EVENT_NAME);
 
         EditEventDescriptor editEventDescriptor = new EditEventDescriptor();
 
         if (argMultimap.getValue(PREFIX_EVENT_NAME).isPresent()) {
             editEventDescriptor.withName(ParserUtil.parseEventName(argMultimap.getValue(PREFIX_EVENT_NAME).get()));
         }
-
         if (argMultimap.getValue(PREFIX_DATE).isPresent()) {
             editEventDescriptor.withDate(ParserUtil.parseEventDate(argMultimap.getValue(PREFIX_DATE).get()));
         }

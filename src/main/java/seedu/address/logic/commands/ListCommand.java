@@ -21,9 +21,11 @@ public class ListCommand extends Command {
 
         if (model.isAnEventSelected()) {
             model.updateFilteredPersonListOfSelectedEvent(PREDICATE_SHOW_ALL_PERSONS);
+
             return new CommandResult(MESSAGE_SUCCESS_EVENT);
         } else {
             model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+
             return new CommandResult(MESSAGE_SUCCESS_GLOBAL);
         }
     }

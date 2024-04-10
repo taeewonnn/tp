@@ -27,7 +27,7 @@ public class EditEventCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits the name of the event identified "
             + "by the index number used in the displayed event list. "
-            + "Existing name will be overwritten by the input value.\n"
+            + "Existing values will be overwritten by the input values.\n"
             + "Parameters: INDEX (must be a positive integer) "
             + "New_Event_Date (must be in dd-MM-yyyy format) "
             + "[" + PREFIX_EVENT_NAME + "EVENT NAME]\n"
