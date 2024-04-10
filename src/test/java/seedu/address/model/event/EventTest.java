@@ -75,6 +75,7 @@ public class EventTest {
     public void setPerson_editedPersonHasDifferentIdentity_success() {
         Event event = new EventBuilder().withPerson(ALICE).build();
         event.setPerson(ALICE, BENSON);
+
         assertFalse(event.getPersonList().contains(ALICE));
         assertTrue(event.getPersonList().contains(BENSON));
     }
