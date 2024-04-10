@@ -18,8 +18,35 @@ However, with the versatility and flexibility of the application, anyone can use
 **Bid farewell to troublesome event management** as Eventy will serve as your single source of truth 
 for storing, managing, planning and retrieving all contact-related information.
 
-* Table of Contents
-  {:toc}
+## Table of Contents
+* [Introduction](#introduction)
+* [Table of Contents](#table-of-contents)
+* [1. Quick start](#1-quick-start)
+* [2. UI Layout Description](#2-ui-layout-description)
+* [3. Features](#3-features)
+    * [3.1 Event Management](#31-event-management)
+        * [3.1.1 Creating an event](#311-creating-an-event-addev)
+        * [3.1.2 Editing an event](#312-editing-an-event-editev)
+        * [3.1.3 Deleting an event](#313-deleting-an-event-delev)
+        * [3.1.4 Selecting an event](#314-selecting-an-event-sel)
+        * [3.1.5 Deselecting an event](#315-deselecting-an-event-desel)
+    * [3.2 Contact Management](#32-contact-management)
+        * [3.2.1 Adding person and their information to the global participant list](#321-adding-person-and-their-information-to-the-global-participant-list-addp)
+        * [3.2.2 Inviting person to selected event](#322-inviting-person-to-selected-event-inv)
+        * [3.2.3 Deleting a participant from the global participant list or an event participant list](#323-deleting-a-participant-from-the-global-participant-list-or-an-event-participant-list-delp)
+        * [3.2.4 Editing existing participant](#324-editing-existing-participant-editp)
+    * [3.3 Export function](#33-export-function)
+        * [3.3.1 Exporting the chosen details of all the filtered persons to a CSV file](#331-exporting-the-chosen-details-of-all-the-filtered-persons-to-a-csv-file-export)
+    * [3.4 Other commands](#34-other-commands)
+        * [3.4.1 Clearing all entries](#341-clearing-all-entries-clear)
+        * [3.4.2 Locating persons by name](#342-locating-persons-by-name-find)
+        * [3.4.3 Viewing help](#343-viewing-help-help)
+        * [3.4.4 Listing all persons](#344-listing-all-persons-list)
+        * [3.4.5 Exiting the program](#345-exiting-the-program-exit)
+* [4. FAQ](#4-faq)
+* [5. Known issues](#5-known-issues)
+* [6. Command summary](#6-command-summary)
+* [7. Prefix translation table](#7-prefix-translation-table)
 
 --------------------------------------------------------------------------------------------------------------------
 
