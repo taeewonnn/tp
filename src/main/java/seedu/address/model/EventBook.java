@@ -6,15 +6,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.event.Event;
 import seedu.address.model.event.UniqueEventList;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.UniquePersonList;
-
 
 /**
  * Wraps all data at the event-book level.
@@ -24,8 +23,9 @@ public class EventBook implements ReadOnlyEventBook {
 
     private final UniqueEventList events;
     private final UniquePersonList personsOfSelectedEvent;
+    private Event selectedEvent; // null when no event is selected
     private final SimpleObjectProperty<Event> selectedEventObservable;
-    private Event selectedEvent;
+
 
     // Non-static initialization block
     {
@@ -51,11 +51,11 @@ public class EventBook implements ReadOnlyEventBook {
     /**
      * Returns true if the selected event with the same identity as {@code event} exists in the event book.
      *
-     * @param event
-     * @return
+     * @param event The event to check.
+     * @return {@code true} if the selected event exists; {@code false} otherwise.
      */
     public boolean isSameSelectedEvent(Event event) {
-        requireNonNull(event);
+        assert event != null;
         return event.equals(selectedEvent);
     }
 
@@ -64,6 +64,8 @@ public class EventBook implements ReadOnlyEventBook {
     /**
      * Replaces the contents of the event list with {@code events}.
      * {@code events} must not contain duplicate events.
+     *
+     * @param events The new list of events.
      */
     public void setEvents(List<Event> events) {
         this.events.setEvents(events);
@@ -71,6 +73,8 @@ public class EventBook implements ReadOnlyEventBook {
 
     /**
      * Resets the existing data of this {@code EventBook} with {@code newData}.
+     *
+     * @param newData The new data to be set.
      */
     public void resetData(ReadOnlyEventBook newData) {
         requireNonNull(newData);
@@ -81,36 +85,45 @@ public class EventBook implements ReadOnlyEventBook {
 
     /**
      * Returns true if an event with the same identity as {@code event} exists in the event book.
+     *
+     * @param event The event to check.
+     * @return {@code true} if the event exists; {@code false} otherwise.
      */
     public boolean hasEvent(Event event) {
-        requireNonNull(event);
+        assert event != null;
         return events.contains(event);
     }
 
     /**
      * Adds an event to the event book.
-     * The event must not already exist in the event book.
+     *
+     * @param event The event to be added.
      */
     public void addEvent(Event event) {
+        assert event != null;
         events.add(event);
     }
 
     /**
      * Replaces the given event {@code target} in the list with {@code editedEvent}.
-     * {@code target} must exist in the event book.
-     * The event identity of {@code editedEvent} must not be the same as another existing event in the event book.
+     *
+     * @param target      The event to be replaced.
+     * @param editedEvent The replacement event.
      */
     public void setEvent(Event target, Event editedEvent) {
-        requireNonNull(editedEvent);
+        assert target != null;
+        assert editedEvent != null;
         events.setEvent(target, editedEvent);
     }
 
     /**
-     * Removes {@code key} from this {@code EventBook}.
-     * {@code key} must exist in the event book.
+     * Removes an event from the event book.
+     *
+     * @param event The event to be removed.
      */
-    public void removeEvent(Event key) {
-        events.remove(key);
+    public void removeEvent(Event event) {
+        assert event != null;;
+        events.remove(event);
     }
 
     // Select Event Methods
@@ -118,17 +131,19 @@ public class EventBook implements ReadOnlyEventBook {
     /**
      * Checks if an event is currently selected.
      *
-     * @return true if an event is selected, false otherwise
+     * @return {@code true} if an event is selected; {@code false} otherwise.
      */
     public boolean isAnEventSelected() {
         return selectedEvent != null;
     }
 
     /**
-     * Selects the given event {@code event} from this {@code EventBook}
-     * @param event must exist in the event book
+     * Selects an event from the event book.
+     *
+     * @param event The event to be selected.
      */
     public void selectEvent(Event event) {
+        assert event != null;
         selectedEvent = event;
         selectedEventObservable.set(event);
 
@@ -136,7 +151,7 @@ public class EventBook implements ReadOnlyEventBook {
     }
 
     /**
-     * Deselects event.
+     * Deselects the currently selected event.
      */
     public void deselectEvent() {
         selectedEvent = null;
@@ -149,7 +164,7 @@ public class EventBook implements ReadOnlyEventBook {
      * Checks if a person is part of the selected event.
      *
      * @param person The person to check.
-     * @return {@code true} if the person is part of the selected event, {@code false} otherwise.
+     * @return {@code true} if the person is part of the selected event; {@code false} otherwise.
      */
     public boolean isPersonInSelectedEvent(Person person) {
         if (!isAnEventSelected()) {
@@ -160,24 +175,27 @@ public class EventBook implements ReadOnlyEventBook {
 
     /**
      * Adds a person to the selected event if an event is currently selected.
-     * If no event is selected, the person will not be added.
      *
-     * @param person The person to be added to the selected event.
+     * @param person The person to be added.
      */
     public void addPersonToSelectedEvent(Person person) {
+        assert(isAnEventSelected());
+
         if (isAnEventSelected()) {
             selectedEvent.addPerson(person);
             updatePersonListOfSelectedEvent();
         }
+
     }
 
     /**
      * Deletes a person from the selected event if an event is currently selected.
-     * If no event is selected, the person will not be deleted.
      *
-     * @param person The person to be added to the selected event.
+     * @param person The person to be deleted.
      */
     public void deletePersonFromSelectedEvent(Person person) {
+        assert(isAnEventSelected());
+
         if (isAnEventSelected()) {
             selectedEvent.deletePerson(person);
             updatePersonListOfSelectedEvent();
@@ -185,14 +203,13 @@ public class EventBook implements ReadOnlyEventBook {
     }
 
     /**
-     * Replaces an existing person in all events.
-     * If a person matching 'target' is found in an event, they are replaced with 'editedPerson'.
+     * Replaces an existing person in all events with a new person.
      *
-     * @param target The person to be replaced.
+     * @param target      The person to be replaced.
      * @param editedPerson The replacement person.
      */
-    public void setPerson(Person target, Person editedPerson) {
-        for (Iterator<Event> it = events.iterator(); it.hasNext(); ) {
+    public void editPersonInAllEvents(Person target, Person editedPerson) {
+        for (Iterator<Event> it = events.iterator(); it.hasNext();) {
             Event event = it.next();
             if (event.hasPerson(target)) {
                 event.setPerson(target, editedPerson);
@@ -219,7 +236,7 @@ public class EventBook implements ReadOnlyEventBook {
     }
 
     @Override
-    public ObservableValue<Event> getSelectedEvent() {
+    public ReadOnlyObjectProperty<Event> getSelectedEvent() {
         return selectedEventObservable;
     }
 
@@ -252,3 +269,4 @@ public class EventBook implements ReadOnlyEventBook {
         return events.hashCode();
     }
 }
+

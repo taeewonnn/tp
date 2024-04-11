@@ -1,6 +1,7 @@
 package seedu.address.model.event;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.commons.util.AppUtil.checkArgument;
 
 /**
  * Represents an Event's name.
@@ -26,6 +27,7 @@ public class EventName {
      */
     public EventName(String eventName) {
         requireNonNull(eventName);
+        checkArgument(isValidEventName(eventName), MESSAGE_CONSTRAINTS);
         this.eventName = eventName;
     }
 

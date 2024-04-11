@@ -2,6 +2,7 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 
+import java.time.format.DateTimeParseException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -142,9 +143,13 @@ public class ParserUtil {
     public static EventDate parseEventDate(String eventDate) throws ParseException {
         requireNonNull(eventDate);
         String trimmedEventDate = eventDate.stripTrailing();
-        if (!EventDate.isValidDate(trimmedEventDate)) {
+        try {
+            if (!EventDate.isValidDate(trimmedEventDate)) {
+                throw new ParseException(EventDate.MESSAGE_CONSTRAINTS);
+            }
+            return new EventDate(trimmedEventDate);
+        } catch (DateTimeParseException e) {
             throw new ParseException(EventDate.MESSAGE_CONSTRAINTS);
         }
-        return new EventDate(trimmedEventDate);
     }
 }

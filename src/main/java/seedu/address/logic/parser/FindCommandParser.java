@@ -39,10 +39,12 @@ public class FindCommandParser implements Parser<FindCommand> {
         List<String> nameKeywordsList = null;
         if (argMultimap.getValue(PREFIX_NAME).isPresent()) {
             String trimmedNameArgs = argMultimap.getValue(PREFIX_NAME).get().trim();
+
             if (trimmedNameArgs.isEmpty()) {
                 throw new ParseException(
                         String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
             }
+
             nameKeywordsList = Arrays.asList(trimmedNameArgs.split("\\s+"));
         }
 
