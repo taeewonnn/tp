@@ -177,25 +177,26 @@ Deletes an event and all its relevant information with its index in the event li
 
 **Description:**
 
-Selects an event from the event list by the event index.
+Selects an event from the event list by the event index. This displays the persons involved with that event, and allows you to manage that event using other commands.
 
 <box type="warning" seamless>
 
 **Caution:**
-* `<EVENT INDEX>` should be **non-empty**, a **positive integer** no larger than the number of events in the event list.
-
+  
+* `<EVENT INDEX>` should be **non-empty** and a **positive integer** no larger than the number of events in the event list.
+  
 </box>
 
 **Examples:**
-- `sel 3` selects the 3rd event.
+- `sel 1` selects the 1st event.
 
-Before(event list box):
+Before (event list and event participant list box):
 
-![before selecting event](images/beforesel.png)
+![before selecting event](images/beforeSel.png)
 
-After(event list box):
+After (event list and event participant list box):
 
-![after selecting event](images/aftersel.png)
+![after selecting event](images/afterSel.png)
 
 #### 3.1.5 Deselecting an event: `desel`
 
@@ -387,43 +388,48 @@ Clears all entries from the address book.
 
 #### 3.4.2 Locating persons by name: `find`
 
-**Format:**
-1. `find n/KEYWORD [MORE_KEYWORDS]`
-2. `find t/KEYWORD t/[MORE_KEYWORDS]`
-3. `find n/KEYWORD [MORE_KEYWORDS] t/KEYWORD t/[MORE_KEYWORDS]`
+**Format:**: `find [n/<NAME> <MORE_NAMES>] [t/<TAG>] [t/<MORE_TAGS>]`
 
 **Description:**
-- If **no event is selected**, this finds the person by their names or/and tags from the **global participant list**.
-- If **an event is selected**, this finds the person by their names or/and tags from the **event participant list**.
+- If **no event is selected**, only persons from the **global participant list** will be included in the search.
+- If **an event is selected**, only persons from the **event participant list** will be included in the search.
 
-* The search by name is case-insensitive. e.g. `hans` will match `Hans`
-* The search by tag is case-sensitive. e.g. `friends` will not match `Friends`
-* The order of the name/tag does not matter. e.g. `Hans Bo` will match `Bo Hans`
-* Only full names/tags will be matched e.g. `Han` will not match `Hans`
-* **Format 1:** Persons matching at least one name will be returned (i.e. `OR` search).
-  e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
-  
-* **Format 2:** 
-  1. For find with one tag given, all persons with the tags will be returned (i.e. `OR` search).
-  2. For find with multiple tags given, person matching all tags will be returned (i.e. `AND` search).
-* **Format 3:** Person matching the name and tags will be returned.
+* When searching only using names:
+  - Persons who have at least one of the specified names will be returned (i.e. OR search) e.g. `find n/Hans Bo` will return `Hans Gruber`, `Bo Yang`.
+* When searching only using tags:
+  * Persons must have all the specified tags to be returned (AND search) e.g. `find t/friend t/family` will return a person with tags of `friend`, `family`, and `neighbour`, but not a person with only the tag of `friend`.
+* If you search by both names and tags:
+  * Persons must match both the name and tag criteria to be returned. `find n/Hans t/friend` will return a person with name `Hans Gruber` with a tag of `friend`, but it will not return a person with name `Hans Bo`, without a tag of `friend` or a person with name `Bo Yang`, with a tag of `friend`.
+
 
 <box type="warning" seamless>
 
 **Caution:**
-* `<KEYWORD>` name should be **alphabetic**, **non-empty** and **not longer than 64 characters**.
-* `<KEYWORD>` tag should be **alphabetic**, **non-empty** and **not longer than 64 characters**.
 
-</box>
+* At least one optional field should be provided.
+* `<NAME>`should be **non-empty**, if provided e.g. `find n/` is not allowed.
+* `<TAG>` should be **alphanumeric** and **non-empty**, if provided e.g. `find t/friend!$` and `find t/` are not allowed.
+* The search by `<NAME>` is case-insensitive. e.g. `hans` will match `Hans`.
+* The search by `<TAG>` is case-sensitive. e.g. `friend` will not match `Friend`.
+* The order of the name/tag does not matter. e.g. `Hans Bo` is equivalent to `Bo Hans`.
+* Only full words will be matched for both names and tags e.g. `han` will not match `hans`.
+  </box>
 
 **Examples:**
-* `find n/John` returns `john` and `John Doe`
-* `find n/alex david` returns `Alex Yeoh`, `David Li`
-* `find t/friends` returns `john` and `David`, who contain `friends` tag.
-* `find t/friends t/collegues`  returns `john`, who contains `friends` and `colleagues` tags.
-* `find n/Alex t/friends t/teacher`  returns `Alex`, who contains `friends` and `teacher` tags.<br>
-  
-![result for 'find alex david'](images/findAlexDavidResult.png)
+* `find n/John` returns `john` and `John Doe`.
+* `find n/alex li` returns `Alex Yeoh`, `David Li`.
+* `find t/friend` returns `john` and `David`, who both have the `friend` tag.
+* `find t/friend t/collegues`  returns `john`, who has the `friend` and `colleagues` tags.
+* `find t/friend t/collegues`  returns `tom`, who has the `friend`, `coworker` and `colleagues` tags.
+* `find n/Alex t/friend t/teacher`  returns `Alex Yeoh`, who has the `friend` and `teacher` tags, but not `Alex Lee` who only has the `friend` tag.<br>
+
+Before `find n/Alex t/friend t/teacher`:
+
+![before find n/Alex t/friend t/teacher](images/beforeFindAlexResult.png)
+
+After `find n/Alex t/friend t/teacher`:
+
+![after find n/Alex t/friend t/teacher](images/afterFindAlexResult.png)
 
 #### 3.4.3 Viewing help: `help`
 
@@ -437,18 +443,20 @@ Shows a message explaining how to access the help page.
 
 #### 3.4.4 Listing all persons: `list`
 
+**Format:** `list`
+
 **Description:**
 
 - If **no event is selected**, this shows a list of all persons in the **global participant list**.
 - If **an event is selected**, this shows a list of all persons in the **event participant list**.
 
-Format: `list`
 
 #### 3.4.5 Exiting the program: `exit`
 
+**Format:** `exit`
+
 Exits the program.
 
-Format: `exit`
 
 --------------------------------------------------------------------------------------------------------------------
 
