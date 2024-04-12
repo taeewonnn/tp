@@ -159,7 +159,7 @@ Classes used by multiple components are in the `seedu.addressbook.commons` packa
 
 This section describes some noteworthy details on how certain features are implemented.
 
-### Add person to Global Participant List
+### Add Person to Global Participant List Feature
 
 The `AddPersonCommand` allows users to add a person to the global participant list
 
@@ -192,7 +192,7 @@ The `AddCommand` will then call `excecute()`, which checks whether there is a du
 
 <puml src="diagrams/AddPersonSequenceDiagram.puml" />
 
-### Invite Person to Event
+### Invite Person to Event Feature
 
 The `InvitePersonCommand` allows users to invite a person to the selected event from the global address book.
 
@@ -242,7 +242,7 @@ The primary rationale for selecting an event first is it lets the user have a cl
 
 This will prevent future errors where the user confuses `invite` and `add` commands.
 
-### Delete Participant
+### Delete Person Feature
 
 The `DeletePersonCommand` allows users to delete a person either from the global address book or from a specific event, depending on whether an event is selected.
 
@@ -477,7 +477,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 --------------------------------------------------------
 
-### Creating an Event
+### Create an event
 
 **Use Case: UC01 - Create an event**
 
@@ -499,7 +499,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 - 1b1. Eventy displays an error message to alert the User. </br>
   *Use case ends*
 
-### Deleting an event
+### Delete an event
 
 **Use case: UC02 - Delete an event**
 
@@ -528,14 +528,14 @@ A successful deletion deletes an event from the event list.
 - 2a1. Eventy displays an error message to alert the User. </br>
   *Use case resumes at step 2.*
 
-### Adding participants contact to the global list
+### Add a person
 
-**Use case: UC03 - Add participants contact**
+**Use case: UC03 - Add a person to the global participant list**
 
 **Actor:** User
 
 **Guarantees:**
-A successful addition adds a participant to the global list.
+A successful addition adds a person to the global participant list.
 
 **MSS**
 
@@ -550,17 +550,17 @@ A successful addition adds a participant to the global list.
 - 1a1. Eventy displays an error message to alert the User. </br>
   *Use case ends*
 
-### Deleting participant
+### Delete a person from the global participant list
 
-**Use Case: UC04 - Delete a participant from the global participant list**
+**Use Case: UC04 - Delete a person from the global participant list**
 
 **Actor:** User
 
 **Preconditions:**
-User has added one or more participant to the global participant list.
+User has added one or more person to the global participant list.
 
 **Guarantees:**
-A successful deletion deletes the participant from both the global list and all the events he participates in.
+A successful deletion deletes the person from both the global participant list and all the events he participates in.
 
 **MSS:**
 
@@ -574,7 +574,7 @@ A successful deletion deletes the participant from both the global list and all 
 - 1a1. Eventy displays an error message to alert the User. </br>
   *Use case resumes at step 2.*
 
-### Removing participants from a specific event
+### Remove a participant from a specific event
 
 **Use case: UC05 - Remove a participant from the specified event**
 
@@ -597,7 +597,7 @@ A successful deletion deletes the participant from both the global list and all 
 - 1a1. Eventy displays an error message to alert the User. </br>
   *Use case ends*
 
-### Selecting an event
+### Select an event
 
 **Use Case: UC06 - Select an event from the event list**
 
@@ -622,15 +622,15 @@ A successful selection displays the event details.
 
 ### Add a participant to an event
 
-**Use Case: UC07 - Add a participant to an event**
+**Use Case: UC07 - Add a participant to a selected event**
 
 **Actor:** User
 
 **Preconditions:**
-User has added one or more contacts to the global contact list.
+User has added one or more contacts to the global participant list.
 
 **Guarantees:**
-A successful addition adds a participant from the global list to the selected event.
+A successful addition adds a participant from the global participant list to the selected event.
 
 **MSS:**
 1. User inputs the index of participant to be added.
@@ -639,7 +639,7 @@ A successful addition adds a participant from the global list to the selected ev
 
 **Extensions:**
 
-1a. Index provided by user is invalid/out of range of global contact list.
+1a. Index provided by user is invalid/out of range of global participant list.
 - 1a1. Eventy displays an error message to alert the User. </br>
   *Use case ends*
 
