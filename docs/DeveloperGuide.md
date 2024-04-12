@@ -161,11 +161,11 @@ This section describes some noteworthy details on how certain features are imple
 
 ### Add Person to Global Participant List Feature
 
-The `AddPersonCommand` allows users to add a person to the global participant list
+The `AddCommand` allows users to add a person to the global participant list
 
 #### Implementation Details
 
-The `AddPersonCommand` is implemented by extending the base `Command` class. It uses prefixes such as `/n`, `/p`, `/a`, `/e`, `/t`, specifying 
+The `AddCommand` is implemented by extending the base `Command` class. It uses prefixes such as `/n`, `/p`, `/a`, `/e`, `/t`, specifying 
 required data fields `participant name`, `phone number`, `address`, `email`, `tags` respectively. Once the data fields are filled, 
 a new person is added. It implements the following operations:
 
@@ -303,6 +303,67 @@ The choice to unify the deletion process under a single `DeletePersonCommand` st
 **Rationale:**
 The primary rationale for using an `index` as the specifier is its simplicity and direct mapping to the user interface. Users can easily locate and specify a contact for deletion based on their position in a list, making the command straightforward to implement and understand. This approach is particularly effective in scenarios where users work with relatively short lists where the viewport limitations are minimal. In the scenario where the participant list gets longer, the user can always use the `find` command to filter out the contact they want to delete before making the actual deletion.
 
+### Find Person Feature
+
+The `FindCommand` allows users to find persons with specific name, tag or both from global or event participant list.
+
+#### Implementation Details 
+
+The `FindCommand` is implemented by extending the base `Command` class. It uses `name`, `tags` or both to identify the person in the global or event participant list. It implements the following operations:
+
+* `execute(Model)` — Checks the current address book state by calling `isAnEventSelected()`, and call `findInPersonListOfSelectedEvent` or `findInGlobalPersonList` accordingly.
+* `findInPersonListOfSelectedEvent(Model)` — Finds the person in the global participant list. This operation is exposed in the `Model` interface as `Model#updateFilteredPersonListOfSelectedEvent(Predicate)`.
+* `findInGlobalPersonList(Model)` — Deletes the participant in the filtered selected event participant list. This operation is exposed in the `Model` interface as `updateFilteredPersonList(Predicate)`.
+
+The deletion is initiated by firstly testing the predicate given by the user and returning the names/tags that match, after which `Model#findInGlobalPersonList(Predicate)` /  `Model#findInPersonListOfSelectedEvent(Predicate)` is called to complete the actual find.
+
+Given below is an example usage scenario of how the deletion mechanism behaves when the user tries to delete a participant from the global participant list.
+
+Step 1. The user launches the application, with some events and participants added to the address book already. The `AddressBook` will be initialized with the previously saved address book state, and the `selectedEvent` in the `EventBook` will initially be `null`.
+
+Step 2. The user executes `find n/David t/friends` command to find any matching person with the name `David` and the tag `friends` in the address book. The `FindCommand` will then call `excecute()`, which checks that no event is being selected before calling `findInGlobalPersonList(Predicate)`.
+
+#### Sequence Diagram
+
+<puml src="diagrams/FindPersonSequenceDiagram.puml" />
+
+#### Design Considerations
+
+**Aspect 1: How to structure the 2 Find Person Commands:**
+
+* **Alternative 1 (current choice):** Same command for global and event-specific find
+    * Pros: Shorter code. The unified `FindCommand` is easier to learn.
+    * Cons: Implementing the predicate for both name and tag can be confusing.
+
+* **Alternative 2:** Separate commands for global and event-specific find
+    * Pros: Simplifies the implementation of each command.
+    * Pros: Shorter code. The unified `FindCommand` is easier to learn.
+    * Cons: Slightly harder to implement.
+
+**Rationale:**
+The choice to unify the find process under a single `FindCommand` stems from a desire to streamline the user experience 
+and reduce the learning curve associated with the application. By minimizing the number of commands a user needs to 
+learn, the application becomes more intuitive, especially for new or infrequent users. The unified command approach 
+emphasizes simplicity from the user's perspective, even if it introduces additional complexity behind the scenes.
+
+**Aspect 2: How to specify the person to be deleted:**
+
+* **Alternative 1 (current choice):** Use the `n/`, `t/` prefixes
+    * Pros: Easier to implement.  Immediate visual reference.
+    * Cons: Cumbersome to type all prefixes with some visual confusion. The user might find it cumbersome to type in 
+      each individual tag prefixes and too many prefixes may confuse the user visually. 
+
+* **Alternative 2:** Find without prefixes 
+    * Pros: Direct and intuitive, and can avoid indexing issues.
+    * Cons: Requires more complex input parsing, and makes it more error prone.
+
+**Rationale:**
+The primary rationale for using prefixes as the specifier is its simplicity and direct reference to each person. 
+Users can easily locate a contact based on the user inputs, making the command straightforward to implement and 
+understand. This approach is particularly effective in scenarios where users work with relatively short lists where the 
+viewport limitations are minimal. In the scenario where the participant list gets longer, the user can always 
+use OR search in terms of name/tags to filter out the contacts.
+
 ### Select Event Feature
 
 The Select Event mechanism is a pivotal part of Eventy's functionality, serving two main purposes:
@@ -381,7 +442,6 @@ The result of the command execution is encapsulated as a CommandResult object wh
 * **Alternative 2:** Every event includes a field indicating its selection status.
     * Pros: Multiple Events can be selected at the same time, which may be useful for future expansion.
     * Cons: May have more overhead.
-
 
 ### Delete Event Feature
 
