@@ -89,8 +89,10 @@ for storing, managing, planning and retrieving all contact-related information.
   e.g. `[t/<TAG>]…​` can be used as ` ` (i.e. 0 times), `t/friend`, `t/friend t/family` etc.
 * Parameters can be in any order.
   e.g. if the command specifies `n/<NAME> p/<PHONE_NUMBER>`, `p/<PHONE_NUMBER> n/<NAME>` is also acceptable.
-* Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.
-  e.g. if the command specifies `help 123`, it will be interpreted as `help`.
+* Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will 
+  be ignored. e.g. if the command specifies `help 123`, it will be interpreted as `help`.
+* It is recommended to keep **all inputs** below **64 characters** in length. Otherwise, the content may not be fully visible 
+  in the application window.  
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines
   as space characters surrounding line-breaks may be omitted when copied over to the application.
   
@@ -413,7 +415,8 @@ Clears all entries from the address book.
 * The search by `<TAG>` is case-sensitive. e.g. `friend` will not match `Friend`.
 * The order of the name/tag does not matter. e.g. `Hans Bo` is equivalent to `Bo Hans`.
 * Only full words will be matched for both names and tags e.g. `han` will not match `hans`.
-  </box>
+  
+</box>
 
 **Examples:**
 * `find n/John` returns `john` and `John Doe`.
