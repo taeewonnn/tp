@@ -113,6 +113,8 @@ Adds a new event with the specified name and date for the Event List.
 **Caution:**
 * `<EVENT NAME>` should only contain **alphanumeric** characters and **spaces**, and be **non-empty**.
 * `<DATE>` should be in the **dd-MM-yyyy** format. E.g.`29-08-2024`
+* It is recommended to keep **all inputs** below **64 characters** in length. Otherwise, the content may not be fully visible
+  in the application window.
 * You **cannot** add an event with the same case-sensitive name and date as an event that already exists in Eventy. 
   
 </box>
@@ -144,6 +146,8 @@ Edits an existing event based on index.
 * `<EVENT INDEX>` should be **non-empty**, a **positive integer** no larger than the number of events in the event list.
 * `<EVENT NAME>` should only contain **alphanumeric** characters and **spaces**, and be **non-empty**.
 * `<DATE>` should be in **dd-MM-yyyy** format
+* It is recommended to keep **all inputs** below **64 characters** in length. Otherwise, the content may not be fully visible
+  in the application window.
 * Events are **not** to be edited to have an `<EVENT NAME>` and `<DATE>` that matches another event with the
   same case-sensitive `<EVENT NAME>` and `<DATE>` to avoid duplicate events.
 
@@ -224,7 +228,7 @@ Adds a new person to the app, allowing them to be added to an event later.
 <box type="warning" seamless>
 
 **Caution:**
-* `<PARTICIPANT NAME>` should be **alphabetic**, **non-empty** and **not longer than 64 characters**.
+* `<PARTICIPANT NAME>` should be **alphabetic** and **non-empty**.
 * `<PHONE NUMBER>` should only contain **numbers**, and it should be **at least 3 digits long**.
 * `<EMAIL>` should be of the format `local-part@domain` and adhere to the following constraints:
   * The local-part should only contain alphanumeric characters and these special characters, excluding the parentheses, (`+_.-`). The local-part may not start or end with any special characters.
@@ -235,6 +239,8 @@ Adds a new person to the app, allowing them to be added to an event later.
        - have each domain label consist of alphanumeric characters, separated only by hyphens, if any
 * `<ADDRESS>` Addresses can take **any values**, and it should be **non-empty**.
 * `<TAGS>` should be **alphanumeric**.
+* It is recommended to keep **all inputs** below **64 characters** in length. Otherwise, the content may not be fully visible
+  in the application window.
 * Adding a person with the same **case-sensitive name** that already exists is **not allowed**.  
 
 </box>
@@ -318,7 +324,7 @@ Updates the contact information of a participant in the app.
 * You can remove all the person’s tags by typing t/ without specifying any tags after it.
 * `<PARTICIPANT INDEX>` should be **non-empty**, a **positive integer** no larger than 
   the number of participants in the global participant list.
-* `<PARTICIPANT NAME>` should be **alphabetic**, **non-empty** and **not longer than 64 characters**.
+* `<PARTICIPANT NAME>` should be **alphabetic** and **non-empty**.
 * `<PHONE NUMBER>` should only contain **numbers**, and it should be **at least 3 digits long**.
 * `<EMAIL>` should be of the format `local-part@domain` and adhere to the following constraints:
   * The local-part should only contain alphanumeric characters and these special characters, excluding the parentheses, (`+_.-`). The local-part may not start or end with any special characters.
@@ -330,6 +336,8 @@ Updates the contact information of a participant in the app.
 * `<ADDRESS>` Addresses can take **any values**, and it should be **non-empty**.
 * `<TAGS>` should be **alphanumeric**.
     * You can remove all the person's tags by typing `t/` without any tags after it.
+* It is recommended to keep **all inputs** below **64 characters** in length. Otherwise, the content may not be fully visible
+  in the application window.
 * Adding a person with the same **case-sensitive name** that already exists is **not allowed**.  
 
 </box>
