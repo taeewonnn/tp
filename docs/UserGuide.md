@@ -6,7 +6,7 @@ pageNav: 3
 
 # Eventy User Guide
 
-## Introduction 
+## Introduction
 
 **Eventy** is a contact management application which offers a new standard of streamlined and automated contact organization.
 Eventy is a combination of Command Line Interface(CLI) and Graphical User Interface(GUI), which entails both fast typing
@@ -15,7 +15,7 @@ and visual representation.
 The application is **tailored specifically for student event organizers**, providing great benefits to event planning.
 However, with the versatility and flexibility of the application, anyone can use it with ease.
 
-**Bid farewell to troublesome event management** as Eventy will serve as your single source of truth 
+**Bid farewell to troublesome event management** as Eventy will serve as your single source of truth
 for storing, managing, planning and retrieving all contact-related information.
 
 ## Table of Contents
@@ -89,13 +89,13 @@ for storing, managing, planning and retrieving all contact-related information.
   e.g. `[t/<TAG>]…​` can be used as ` ` (i.e. 0 times), `t/friend`, `t/friend t/family` etc.
 * Parameters can be in any order.
   e.g. if the command specifies `n/<NAME> p/<PHONE_NUMBER>`, `p/<PHONE_NUMBER> n/<NAME>` is also acceptable.
-* Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will 
+* Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will
   be ignored. e.g. if the command specifies `help 123`, it will be interpreted as `help`.
-* It is recommended to keep **all inputs** below **64 characters** in length. Otherwise, the content may not be fully visible 
-  in the application window.  
+* It is recommended to keep **all inputs** below **64 characters** in length. Otherwise, the content may not be fully visible
+  in the application window.
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines
   as space characters surrounding line-breaks may be omitted when copied over to the application.
-  
+
 </box>
 
 ### 3.1 Event Management
@@ -115,8 +115,8 @@ Adds a new event with the specified name and date for the Event List.
 * `<DATE>` should be in the **dd-MM-yyyy** format. E.g.`29-08-2024`
 * It is recommended to keep **all inputs** below **64 characters** in length. Otherwise, the content may not be fully visible
   in the application window.
-* You **cannot** add an event with the same case-sensitive name and date as an event that already exists in Eventy. 
-  
+* You **cannot** add an event with the same case-sensitive name and date as an event that already exists in Eventy.
+
 </box>
 
 **Examples:**
@@ -170,7 +170,7 @@ Deletes an event and all its relevant information with its index in the event li
 
 **Caution:**
 * `<EVENT INDEX>` should be **non-empty**, a **positive integer** no larger than the number of events in the event list.
-* You cannot delete an event that is currently selected. 
+* You cannot delete an event that is currently selected.
 
 </box>
 
@@ -188,9 +188,9 @@ Selects an event from the event list by the event index. This displays the perso
 <box type="warning" seamless>
 
 **Caution:**
-  
+
 * `<EVENT INDEX>` should be **non-empty** and a **positive integer** no larger than the number of events in the event list.
-  
+
 </box>
 
 **Examples:**
@@ -241,7 +241,7 @@ Adds a new person to the app, allowing them to be added to an event later.
 * `<TAGS>` should be **alphanumeric**.
 * It is recommended to keep **all inputs** below **64 characters** in length. Otherwise, the content may not be fully visible
   in the application window.
-* Adding a person with the same **case-sensitive name** that already exists is **not allowed**.  
+* Adding a person with the same **case-sensitive name** that already exists is **not allowed**.
 
 </box>
 
@@ -298,7 +298,7 @@ After(event list and event participant list box):
   is selected.
 * `<PARTICIPANT INDEX>` should be no larger than the number of participants in the event participant list if an event
   is selected.
-* Deleting a participant in the global participants list will not delete the same participant in 
+* Deleting a participant in the global participants list will not delete the same participant in
   all event participant list
 
 </box>
@@ -322,7 +322,7 @@ Updates the contact information of a participant in the app.
 * At least one of the optional fields must be provided.
 * When editing tags, the existing tags of the person will be removed i.e adding of tags is not cumulative
 * You can remove all the person’s tags by typing t/ without specifying any tags after it.
-* `<PARTICIPANT INDEX>` should be **non-empty**, a **positive integer** no larger than 
+* `<PARTICIPANT INDEX>` should be **non-empty**, a **positive integer** no larger than
   the number of participants in the global participant list.
 * `<PARTICIPANT NAME>` should be **alphabetic** and **non-empty**.
 * `<PHONE NUMBER>` should only contain **numbers**, and it should be **at least 3 digits long**.
@@ -338,10 +338,10 @@ Updates the contact information of a participant in the app.
     * You can remove all the person's tags by typing `t/` without any tags after it.
 * It is recommended to keep **all inputs** below **64 characters** in length. Otherwise, the content may not be fully visible
   in the application window.
-* Adding a person with the same **case-sensitive name** that already exists is **not allowed**.  
+* Adding a person with the same **case-sensitive name** that already exists is **not allowed**.
 
 </box>
-  
+
 **Examples:**
 - `editp 5 n/Max p/00000000 e/test@gmail.com` Edits contact details of participant indexed 5.
 
@@ -372,7 +372,7 @@ usage. The exported information will be in the file `exported_participant_data.c
   overwrite the file.
 
 </box>
-  
+
 **Examples:**
 * `export n/` exports only the names of all the filtered persons.
 * `export n/ p/` exports only the names and phone numbers of all the filtered persons.
@@ -423,7 +423,7 @@ Clears all entries from the address book.
 * The search by `<TAG>` is case-sensitive. e.g. `friend` will not match `Friend`.
 * The order of the name/tag does not matter. e.g. `Hans Bo` is equivalent to `Bo Hans`.
 * Only full words will be matched for both names and tags e.g. `han` will not match `hans`.
-  
+
 </box>
 
 **Examples:**

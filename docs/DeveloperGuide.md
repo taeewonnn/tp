@@ -394,14 +394,14 @@ for these two examples: the <a href="#Invite Person to Event"> Invite Person to 
 
 #### Implementation Details
 
-The Select Event mechanism is facilitated by the `EventBook`, which implements `ReadOnlyEventBook`. `EventBook` serves as the 
-counterpart to the `AddressBook`, focusing on Event-related functionality, while `AddressBook` handles People-related 
+The Select Event mechanism is facilitated by the `EventBook`, which implements `ReadOnlyEventBook`. `EventBook` serves as the
+counterpart to the `AddressBook`, focusing on Event-related functionality, while `AddressBook` handles People-related
 functionality.
 
 To implement the Select Event mechanism, `EventBook` stores internally:
 * `events` &thinsp;—&thinsp; The list that contains the unique events that are in Eventy.
 * `selectedEvent` &thinsp;—&thinsp; The event that is currently selected. If no event is selected, it is set to `null`.
-* `personsOfSelectedEvent` &thinsp;—&thinsp; The list that contains the unique people in the selected event. If no 
+* `personsOfSelectedEvent` &thinsp;—&thinsp; The list that contains the unique people in the selected event. If no
 event is selected, it is an empty list.
 
 Additionally, it implements the following operations (not exhaustive):
@@ -414,7 +414,7 @@ These operations are exposed to other components through `ModelManager`.
 
 #### Sequence Diagram
 
-In order to select an event and deselect an event, we have the `Selecting an event` command and `Deselecting an event` 
+In order to select an event and deselect an event, we have the `Selecting an event` command and `Deselecting an event`
 command respectively. Both commands function similarly, and so we will only be explaining the `Selecting an event` command.
 
 The following sequence diagram shows how the `Selecting an event` command works through the `Logic` component.
@@ -495,19 +495,19 @@ the event book.
 
 ### Export Participant Data Feature
 
-The `ExportCommand` enables users to export the selected details of all filtered participants to a CSV file, 
-with the flexibility to specify which details (including Name, Phone, Email, Address) to include via command flags. 
+The `ExportCommand` enables users to export the selected details of all filtered participants to a CSV file,
+with the flexibility to specify which details (including Name, Phone, Email, Address) to include via command flags.
 This functionality enhances data portability and allows for easy sharing and analysis of participant information outside the application.
 
 #### Implementation Details
 
-The `ExportCommand` extends the base `Command` class and incorporates `boolean` flags for each detail field (Name, Phone, Email, Address) that can be exported. 
-It uses these flags to indicate the specified details to be exported for each participant in the filtered list. 
-The actual export is done by a `PersonDataExporter` in the `Model` object. 
+The `ExportCommand` extends the base `Command` class and incorporates `boolean` flags for each detail field (Name, Phone, Email, Address) that can be exported.
+It uses these flags to indicate the specified details to be exported for each participant in the filtered list.
+The actual export is done by a `PersonDataExporter` in the `Model` object.
 The command implements the following main operations:
 
-- `execute(Model)` — Executes the export command using the provided `model`. It checks if an event is selected and 
-  accordingly calls either `model.exportEventPersonData(...)` or `model.exportGlobalPersonData(...)` based on the `boolean` flags provided. 
+- `execute(Model)` — Executes the export command using the provided `model`. It checks if an event is selected and
+  accordingly calls either `model.exportEventPersonData(...)` or `model.exportGlobalPersonData(...)` based on the `boolean` flags provided.
   It handles any `IOExceptions` that occur during the export process by throwing a `CommandException` with a failure message.
 - `equals(Object)` — Overrides the `equals` method to allow comparison of `ExportCommand` objects, facilitating testing and debugging.
 
@@ -535,30 +535,30 @@ A sequence diagram to illustrate the `ExportCommand` execution can be conceptual
 
 * **Alternative 1 (current choice):** Export based on the selection state (event-specific or global)
     * Pros: Provides flexibility, allowing users to export data in the context they are currently working in (either globally or for a specific event).
-    * Cons: Users must be aware of the current context and may inadvertently export the wrong set of data if not careful. 
+    * Cons: Users must be aware of the current context and may inadvertently export the wrong set of data if not careful.
 
-* **Alternative 2:** Require explicit specification of the export scope within the command 
+* **Alternative 2:** Require explicit specification of the export scope within the command
     * Pros: Reduces the chance of user error by requiring explicit instruction on what to export.
     * Cons: Increases command complexity and length, potentially confusing users or leading to longer input times.
 
 **Rationale:**
-The chosen design leverages the application's context (whether an event is selected) to determine the scope of the export. 
-This approach simplifies the command syntax and aligns with the user's current focus within the application, 
+The chosen design leverages the application's context (whether an event is selected) to determine the scope of the export.
+This approach simplifies the command syntax and aligns with the user's current focus within the application,
 providing an intuitive and streamlined experience.
 
 **Aspect 2: Selection of participant details for export**
 
 * **Alternative 1 (current choice):** Use command flags to specify details to export
-    * Pros: Offers customization for the export process, allowing users to export only the information they need. 
+    * Pros: Offers customization for the export process, allowing users to export only the information they need.
     * Cons: Increases the complexity of the command, requiring users to remember and use specific flags.
 
-* **Alternative 2:** Export all details by default 
-    * Pros: Simplifies the command, making it easier for users to export data without worrying about flags. 
+* **Alternative 2:** Export all details by default
+    * Pros: Simplifies the command, making it easier for users to export data without worrying about flags.
     * Cons: Lacks flexibility, as users may end up exporting more information than needed, leading to potential privacy concerns or unwieldy CSV files.
 
 **Rationale:**
-The flexibility offered by allowing users to specify which details to export caters to various needs and scenarios, 
-such as when only specific types of information (e.g., contact details) are required for a particular task or analysis. 
+The flexibility offered by allowing users to specify which details to export caters to various needs and scenarios,
+such as when only specific types of information (e.g., contact details) are required for a particular task or analysis.
 This design decision places control in the hands of the user, ensuring the export functionality remains versatile and adaptable to different use cases.
 
 --------------------------------------------------------------------------------------------------------------------
