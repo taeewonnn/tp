@@ -165,13 +165,13 @@ Classes used by multiple components are in the `seedu.addressbook.commons` packa
 
 This section describes some noteworthy details on how certain features are implemented.
 
-### Add person to Global Participant List
+### Add Person to Global Participant List Feature
 
-The `AddPersonCommand` allows users to add a person to the global participant list
+The `AddCommand` allows users to add a person to the global participant list
 
 #### Implementation Details
 
-The `AddPersonCommand` is implemented by extending the base `Command` class. It uses prefixes such as `/n`, `/p`, `/a`, `/e`, `/t`, specifying 
+The `AddCommand` is implemented by extending the base `Command` class. It uses prefixes such as `/n`, `/p`, `/a`, `/e`, `/t`, specifying 
 required data fields `participant name`, `phone number`, `address`, `email`, `tags` respectively. Once the data fields are filled, 
 a new person is added. It implements the following operations:
 
@@ -198,7 +198,7 @@ The `AddCommand` will then call `excecute()`, which checks whether there is a du
 
 <puml src="diagrams/AddPersonSequenceDiagram.puml" />
 
-### Invite Person to Event
+### Invite Person to Event Feature
 
 The `InvitePersonCommand` allows users to invite a person to the selected event from the global address book.
 
@@ -248,7 +248,7 @@ The primary rationale for selecting an event first is it lets the user have a cl
 
 This will prevent future errors where the user confuses `invite` and `add` commands.
 
-### Delete Participant
+### Delete Person Feature
 
 The `DeletePersonCommand` allows users to delete a person either from the global address book or from a specific event, depending on whether an event is selected.
 
@@ -308,6 +308,67 @@ The choice to unify the deletion process under a single `DeletePersonCommand` st
 
 **Rationale:**
 The primary rationale for using an `index` as the specifier is its simplicity and direct mapping to the user interface. Users can easily locate and specify a contact for deletion based on their position in a list, making the command straightforward to implement and understand. This approach is particularly effective in scenarios where users work with relatively short lists where the viewport limitations are minimal. In the scenario where the participant list gets longer, the user can always use the `find` command to filter out the contact they want to delete before making the actual deletion.
+
+### Find Person Feature
+
+The `FindCommand` allows users to find persons with specific name, tag or both from global or event participant list.
+
+#### Implementation Details 
+
+The `FindCommand` is implemented by extending the base `Command` class. It uses `name`, `tags` or both to identify the person in the global or event participant list. It implements the following operations:
+
+* `execute(Model)` — Checks the current address book state by calling `isAnEventSelected()`, and call `findInPersonListOfSelectedEvent` or `findInGlobalPersonList` accordingly.
+* `findInPersonListOfSelectedEvent(Model)` — Finds the person in the global participant list. This operation is exposed in the `Model` interface as `Model#updateFilteredPersonListOfSelectedEvent(Predicate)`.
+* `findInGlobalPersonList(Model)` — Deletes the participant in the filtered selected event participant list. This operation is exposed in the `Model` interface as `updateFilteredPersonList(Predicate)`.
+
+The deletion is initiated by firstly testing the predicate given by the user and returning the names/tags that match, after which `Model#findInGlobalPersonList(Predicate)` /  `Model#findInPersonListOfSelectedEvent(Predicate)` is called to complete the actual find.
+
+Given below is an example usage scenario of how the deletion mechanism behaves when the user tries to delete a participant from the global participant list.
+
+Step 1. The user launches the application, with some events and participants added to the address book already. The `AddressBook` will be initialized with the previously saved address book state, and the `selectedEvent` in the `EventBook` will initially be `null`.
+
+Step 2. The user executes `find n/David t/friends` command to find any matching person with the name `David` and the tag `friends` in the address book. The `FindCommand` will then call `excecute()`, which checks that no event is being selected before calling `findInGlobalPersonList(Predicate)`.
+
+#### Sequence Diagram
+
+<puml src="diagrams/FindPersonSequenceDiagram.puml" />
+
+#### Design Considerations
+
+**Aspect 1: How to structure the 2 Find Person Commands:**
+
+* **Alternative 1 (current choice):** Same command for global and event-specific find
+    * Pros: Shorter code. The unified `FindCommand` is easier to learn.
+    * Cons: Implementing the predicate for both name and tag can be confusing.
+
+* **Alternative 2:** Separate commands for global and event-specific find
+    * Pros: Simplifies the implementation of each command.
+    * Pros: Shorter code. The unified `FindCommand` is easier to learn.
+    * Cons: Slightly harder to implement.
+
+**Rationale:**
+The choice to unify the find process under a single `FindCommand` stems from a desire to streamline the user experience 
+and reduce the learning curve associated with the application. By minimizing the number of commands a user needs to 
+learn, the application becomes more intuitive, especially for new or infrequent users. The unified command approach 
+emphasizes simplicity from the user's perspective, even if it introduces additional complexity behind the scenes.
+
+**Aspect 2: How to specify the person to be deleted:**
+
+* **Alternative 1 (current choice):** Use the `n/`, `t/` prefixes
+    * Pros: Easier to implement.  Immediate visual reference.
+    * Cons: Cumbersome to type all prefixes with some visual confusion. The user might find it cumbersome to type in 
+      each individual tag prefixes and too many prefixes may confuse the user visually. 
+
+* **Alternative 2:** Find without prefixes 
+    * Pros: Direct and intuitive, and can avoid indexing issues.
+    * Cons: Requires more complex input parsing, and makes it more error prone.
+
+**Rationale:**
+The primary rationale for using prefixes as the specifier is its simplicity and direct reference to each person. 
+Users can easily locate a contact based on the user inputs, making the command straightforward to implement and 
+understand. This approach is particularly effective in scenarios where users work with relatively short lists where the 
+viewport limitations are minimal. In the scenario where the participant list gets longer, the user can always 
+use OR search in terms of name/tags to filter out the contacts.
 
 ### Select Event Feature
 
@@ -387,7 +448,6 @@ The result of the command execution is encapsulated as a CommandResult object wh
 * **Alternative 2:** Every event includes a field indicating its selection status.
     * Pros: Multiple Events can be selected at the same time, which may be useful for future expansion.
     * Cons: May have more overhead.
-
 
 ### Delete Event Feature
 
@@ -483,7 +543,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 --------------------------------------------------------
 
-### Creating an Event
+### Create an event
 
 **Use Case: UC01 - Create an event**
 
@@ -505,7 +565,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 - 1b1. Eventy displays an error message to alert the User. </br>
   *Use case ends*
 
-### Deleting an event
+### Delete an event
 
 **Use case: UC02 - Delete an event**
 
@@ -534,14 +594,14 @@ A successful deletion deletes an event from the event list.
 - 2a1. Eventy displays an error message to alert the User. </br>
   *Use case resumes at step 2.*
 
-### Adding participants contact to the global list
+### Add a person
 
-**Use case: UC03 - Add participants contact**
+**Use case: UC03 - Add a person to the global participant list**
 
 **Actor:** User
 
 **Guarantees:**
-A successful addition adds a participant to the global list.
+A successful addition adds a person to the global participant list.
 
 **MSS**
 
@@ -556,17 +616,17 @@ A successful addition adds a participant to the global list.
 - 1a1. Eventy displays an error message to alert the User. </br>
   *Use case ends*
 
-### Deleting participant
+### Delete a person from the global participant list
 
-**Use Case: UC04 - Delete a participant from the global participant list**
+**Use Case: UC04 - Delete a person from the global participant list**
 
 **Actor:** User
 
 **Preconditions:**
-User has added one or more participant to the global participant list.
+User has added one or more person to the global participant list.
 
 **Guarantees:**
-A successful deletion deletes the participant from both the global list and all the events he participates in.
+A successful deletion deletes the person from both the global participant list and all the events he participates in.
 
 **MSS:**
 
@@ -580,7 +640,7 @@ A successful deletion deletes the participant from both the global list and all 
 - 1a1. Eventy displays an error message to alert the User. </br>
   *Use case resumes at step 2.*
 
-### Removing participants from a specific event
+### Remove a participant from a specific event
 
 **Use case: UC05 - Remove a participant from the specified event**
 
@@ -603,7 +663,7 @@ A successful deletion deletes the participant from both the global list and all 
 - 1a1. Eventy displays an error message to alert the User. </br>
   *Use case ends*
 
-### Selecting an event
+### Select an event
 
 **Use Case: UC06 - Select an event from the event list**
 
@@ -628,15 +688,15 @@ A successful selection displays the event details.
 
 ### Add a participant to an event
 
-**Use Case: UC07 - Add a participant to an event**
+**Use Case: UC07 - Add a participant to a selected event**
 
 **Actor:** User
 
 **Preconditions:**
-User has added one or more contacts to the global contact list.
+User has added one or more contacts to the global participant list.
 
 **Guarantees:**
-A successful addition adds a participant from the global list to the selected event.
+A successful addition adds a participant from the global participant list to the selected event.
 
 **MSS:**
 1. User inputs the index of participant to be added.
@@ -645,7 +705,7 @@ A successful addition adds a participant from the global list to the selected ev
 
 **Extensions:**
 
-1a. Index provided by user is invalid/out of range of global contact list.
+1a. Index provided by user is invalid/out of range of global participant list.
 - 1a1. Eventy displays an error message to alert the User. </br>
   *Use case ends*
 
