@@ -100,7 +100,7 @@ for storing, managing, planning and retrieving all contact-related information.
 
 ### 3.1 Event Management
 
-#### 3.1.1 Creating an event: `addev`
+#### 3.1.1 Adding an event: `addev`
 
 **Format:** `addev ev/<EVENT NAME> d/<DATE>`
 
@@ -396,7 +396,7 @@ Clears all entries from the address book.
 
 </box>
 
-#### 3.4.2 Locating persons by name: `find`
+#### 3.4.2 Locating persons by name and/or tags: `find`
 
 **Format:**: `find [n/<NAME> <MORE_NAMES>] [t/<TAG>] [t/<MORE_TAGS>]`
 
@@ -419,9 +419,9 @@ Clears all entries from the address book.
 * At least one optional field should be provided.
 * `<NAME>`should be **non-empty**, if provided e.g. `find n/` is not allowed.
 * `<TAG>` should be **alphanumeric** and **non-empty**, if provided e.g. `find t/friend!$` and `find t/` are not allowed.
-* The search by `<NAME>` is case-insensitive. e.g. `hans` will match `Hans`.
-* The search by `<TAG>` is case-sensitive. e.g. `friend` will not match `Friend`.
-* The order of the name/tag does not matter. e.g. `Hans Bo` is equivalent to `Bo Hans`.
+* The search by `<NAME>` is case-insensitive e.g. `hans` will match `Hans`.
+* The search by `<TAG>` is case-sensitive e.g. `friend` will not match `Friend`.
+* The order of the name/tag does not matter e.g. `Hans Bo` is equivalent to `Bo Hans`.
 * Only full words will be matched for both names and tags e.g. `han` will not match `hans`.
   
 </box>
