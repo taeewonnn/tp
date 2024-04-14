@@ -25,7 +25,7 @@ for storing, managing, planning and retrieving all contact-related information.
 * [2. UI Layout Description](#2-ui-layout-description)
 * [3. Features](#3-features)
     * [3.1 Event Management](#3-1-event-management)
-        * [3.1.1 Creating an event](#3-1-1-creating-an-event-addev)
+        * [3.1.1 Adding an event](#3-1-1-adding-an-event-addev)
         * [3.1.2 Editing an event](#3-1-2-editing-an-event-editev)
         * [3.1.3 Deleting an event](#3-1-3-deleting-an-event-delev)
         * [3.1.4 Selecting an event](#3-1-4-selecting-an-event-sel)
@@ -39,7 +39,7 @@ for storing, managing, planning and retrieving all contact-related information.
         * [3.3.1 Exporting the chosen details of all the filtered persons to a CSV file](#3-3-1-exporting-the-chosen-details-of-all-the-filtered-persons-to-a-csv-file-export)
     * [3.4 Other commands](#3-4-other-commands)
         * [3.4.1 Clearing all entries](#3-4-1-clearing-all-entries-clear)
-        * [3.4.2 Locating persons by name](#3-4-2-locating-persons-by-name-find)
+        * [3.4.2 Locating persons by name and/or tags](#3-4-2-locating-persons-by-name-and-or-tags-find)
         * [3.4.3 Viewing help](#3-4-3-viewing-help-help)
         * [3.4.4 Listing all persons](#3-4-4-listing-all-persons-list)
         * [3.4.5 Exiting the program](#3-4-5-exiting-the-program-exit)
@@ -100,7 +100,7 @@ for storing, managing, planning and retrieving all contact-related information.
 
 ### 3.1 Event Management
 
-#### 3.1.1 Creating an event: `addev`
+#### 3.1.1 Adding an event: `addev`
 
 **Format:** `addev ev/<EVENT NAME> d/<DATE>`
 
@@ -396,19 +396,22 @@ Clears all entries from the address book.
 
 </box>
 
-#### 3.4.2 Locating persons by name: `find`
+#### 3.4.2 Locating persons by name and/or tags: `find`
 
 **Format:**: `find [n/<NAME> <MORE_NAMES>] [t/<TAG>] [t/<MORE_TAGS>]`
 
 **Description:**
-- If **no event is selected**, only persons from the **global participant list** will be included in the search.
-- If **an event is selected**, only persons from the **event participant list** will be included in the search.
 
-* When searching only using names:
+Locates persons by their names and/or tags, where
+- If **no event is selected**, the search only includes persons from the **global participant list**.
+- If **an event is selected**, the search only includes persons from the **event participant list**.
+
+
+* When searching only using **names**:
   - Persons who have at least one of the specified names will be returned (i.e. OR search) e.g. `find n/Hans Bo` will return `Hans Gruber`, `Bo Yang`.
-* When searching only using tags:
+* When searching only using **tags**:
   * Persons must have all the specified tags to be returned (AND search) e.g. `find t/friend t/family` will return a person with tags of `friend`, `family`, and `neighbour`, but not a person with only the tag of `friend`.
-* If you search by both names and tags:
+* When searching using both **names and tags**:
   * Persons must match both the name and tag criteria to be returned. `find n/Hans t/friend` will return a person with name `Hans Gruber` with a tag of `friend`, but it will not return a person with name `Hans Bo`, without a tag of `friend` or a person with name `Bo Yang`, with a tag of `friend`.
 
 
@@ -419,9 +422,9 @@ Clears all entries from the address book.
 * At least one optional field should be provided.
 * `<NAME>`should be **non-empty**, if provided e.g. `find n/` is not allowed.
 * `<TAG>` should be **alphanumeric** and **non-empty**, if provided e.g. `find t/friend!$` and `find t/` are not allowed.
-* The search by `<NAME>` is case-insensitive. e.g. `hans` will match `Hans`.
-* The search by `<TAG>` is case-sensitive. e.g. `friend` will not match `Friend`.
-* The order of the name/tag does not matter. e.g. `Hans Bo` is equivalent to `Bo Hans`.
+* The search by `<NAME>` is case-insensitive e.g. `hans` will match `Hans`.
+* The search by `<TAG>` is case-sensitive e.g. `friend` will not match `Friend`.
+* The order of the name/tag does not matter e.g. `Hans Bo` is equivalent to `Bo Hans`.
 * Only full words will be matched for both names and tags e.g. `han` will not match `hans`.
 
 </box>
