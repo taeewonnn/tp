@@ -53,7 +53,9 @@ activate SelectCommand
 SelectCommand -> Model : getFilteredEventList()
 activate Model
 Model --> SelectCommand : lastShownEventList
+deactivate Model
 SelectCommand -> Model : selectEvent(eventToSelect)
+activate Model
 Model --> SelectCommand
 deactivate Model
 
