@@ -528,26 +528,27 @@ managing, and retrieving all contact-related information.
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​                                    | I want to …​                 | So that I can…​                                                        |
-|----------|--------------------------------------------|------------------------------|------------------------------------------------------------------------|
-| `* * *`  | user                                       | create a new event            | plan and manage all the events in one place                            |
-| `* *`    | user                                       | delete an event               | remove past or irrelevant events                                       |
-| `* * *`  | user                                       | add a new person              | manage all my contacts in one place                                    |
-| `* * *`  | user                                       | invite participant to an event| manage and plan all the participants for a specific event              |
-| `* * *`  | user                                       | delete a person               | remove contacts that I no longer need                                  |
-| `* * *`  | user                                       | remove specific participant   | remove a specific participant from a specific event                    |
-| `* * *`  | diligent user                              | edit contact number           | update contact number                                                  |
-| `* *`    | user                                       | select a specific event       | Perform actions on the desired event                                   |
-| `* *`    | organized user                             | filter contacts by tags       | view the list of contacts or invitees in a specific category           |
-| `* *`    | organized user                             | export filtered contacts      | quickly view consolidated information in CSV file format              |
-| `* *`    | user                                       | edit an event                 | update event information like the event name or event date             |
-| `* *`    | user                                       | deselect an event             | perform app-wide events                                                |
-| `* *`    | busy user                                  | clear all entries             | replace them with more relevant contacts without cluttering the app    |
-| `* *`    | user                                       | exit the program              | exit the program in a safe manner                                      |
-| `* *`    | user                                       | list invitees or contacts     | have a consolidated view of the invitees/contacts in the app           |
-| `* *`    | diligent user                              | update contact email          | keep track of the contact’s latest email                               |
-| `* *`    | diligent user                              | update contact address        | keep track of the contact’s latest address                             |
-| `* *`    | diligent user                              | update contact tags           | update the user’s tag labels when he/she is placed in a new category   
+| Priority | As a …​                                    | I want to …​                                   | So that I can…​                                                        |
+|----------|--------------------------------------------|------------------------------------------------|------------------------------------------------------------------------|
+| `* * *`  | user                                       | create a new event                             | plan and manage all the events in one place                            |
+| `* *`    | user                                       | delete an event                                | remove past or irrelevant events                                       |
+| `* * *`  | user                                       | add a new person with specific tags/categories | manage all my contacts in one place                                    |
+| `* * *`  | user                                       | invite participant to an event                 | manage and plan all the participants for a specific event              |
+| `* * *`  | user                                       | delete a person                                | remove contacts that I no longer need                                  |
+| `* * *`  | user                                       | remove specific participant                    | remove a specific participant from a specific event                    |
+| `* * *`  | diligent user                              | edit contact number                            | update contact number                                                  |
+| `* *`    | user                                       | select a specific event                        | Perform actions on the desired event                                   |
+| `* *`    | organized user                             | filter contacts by tags                        | view the list of contacts or invitees in a specific category           |
+| `* *`    | organized user                             | export filtered contacts                       | quickly view consolidated information in CSV file format              |
+| `* *`    | user                                       | edit an event                                  | update event information like the event name or event date             |
+| `* *`    | user                                       | deselect an event                              | perform app-wide events                                                |
+| `* *`    | busy user                                  | clear all entries                              | replace them with more relevant contacts without cluttering the app    |
+| `* *`    | user                                       | exit the program                               | exit the program in a safe manner                                      |
+| `* *`    | user                                       | list invitees or contacts                      | have a consolidated view of the invitees/contacts in the app           |
+| `* *`    | diligent user                              | update contact email                           | keep track of the contact’s latest email                               |
+| `* *`    | diligent user                              | update contact address                         | keep track of the contact’s latest address                             |
+| `* *`    | diligent user                              | update contact tags                            | update the user’s tag labels when he/she is placed in a new category   |
+| `* *`    | organized user                             | find contacts by name                            | get contact info of a contact by searching his name           
 
 ### Use cases
 
@@ -781,7 +782,7 @@ A successful export exports target contacts or invitees to a csv file.
 
 **MSS:**
 1. User enters tags of the contacts or invitees he wants to export.
-2. Eventy exports the contacts or invitees along with the specified tags to a csv file </br>
+2. Eventy exports the specified details of the contacts or invitees to a csv file </br>
    *Use case ends*
 
 **Extensions:**
@@ -938,6 +939,30 @@ A successful edit updates the person's tags in both the global contact list and 
 **Extensions:**
 
 1a. The participant index provided by the User is invalid.
+- 1a1. Eventy displays an error message to alert the User. </br>
+  *Use case ends*
+
+### Find contacts by name
+
+**Use Case: UC19 - Find user with matching name**
+
+**Actor:** User
+
+**Preconditions:** User has added one or more contacts to the global contact list or invited one or more contacts to the selected event.
+
+**Guarantees:**
+Eventy displays the contact with the corresponding name.
+
+**MSS:**
+
+1. User selects an event or remains in global contact list.
+2. User specific name he is looking for.
+3. Eventy displays the matching contact. </br>
+   *Use case ends*
+
+**Extensions:**
+
+1a. Name provided by User is empty or invalid (Ex. it is empty or non-alphanumeric).
 - 1a1. Eventy displays an error message to alert the User. </br>
   *Use case ends*
 
