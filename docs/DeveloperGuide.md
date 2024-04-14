@@ -198,6 +198,85 @@ The `AddCommand` will then call `excecute()`, which checks whether there is a du
 
 <puml src="diagrams/AddPersonSequenceDiagram.puml" />
 
+### Select Event Feature
+
+The Select Event mechanism is a pivotal part of Eventy's functionality, serving two main purposes:
+
+1. A number of commands within Eventy are designed to target the selected event, while some commands also have
+   differing behaviours based on whether an event is selected or not:
+- An example of the former is the `Invite Person to Event`</a> command,
+  which adds a person to the **selected event**.
+- An example of the latter is the `Delete a Person` command. If **an event is not selected**, it will delete the person
+  from Eventy as a whole, else if **an event is selected**, it will delete the person only from the selected event.
+
+<box type="info" seamless>
+
+**Note:** For more details on how this functionality is implemented, you may refer to the developer guide documentation
+for these two examples: the <a href="#Invite Person to Event"> Invite Person to Event </a> and
+<a href="#delete-participant"> DeletePerson </a> commands.
+
+</box>
+
+2. Users of Eventy can select an event and deselect the currently selected event, using the `Selecting an event` and
+   `Deselecting an event` commands respectively.
+
+#### Implementation Details
+
+The Select Event mechanism is facilitated by the `EventBook`, which implements `ReadOnlyEventBook`. `EventBook` serves as the
+counterpart to the `AddressBook`, focusing on Event-related functionality, while `AddressBook` handles People-related
+functionality.
+
+To implement the Select Event mechanism, `EventBook` stores internally:
+* `events` &thinsp;—&thinsp; The list that contains the unique events that are in Eventy.
+* `selectedEvent` &thinsp;—&thinsp; The event that is currently selected. If no event is selected, it is set to `null`.
+* `personsOfSelectedEvent` &thinsp;—&thinsp; The list that contains the unique people in the selected event. If no
+  event is selected, it is an empty list.
+
+Additionally, it implements the following operations (not exhaustive):
+* `EventBook#isAnEventSelected()` &thinsp;—&thinsp; Returns `true` if an event is selected, else returns `false`
+* `EventBook#selectEvent(Event event)` &thinsp;—&thinsp; Selects the given event
+* `EventBook#deselectEvent()` &thinsp;—&thinsp; Deselect the currently selected event, if any, so that no event is
+  selected
+
+These operations are exposed to other components through `ModelManager`.
+
+#### Sequence Diagram
+
+In order to select an event and deselect an event, we have the `Selecting an event` command and `Deselecting an event`
+command respectively. Both commands function similarly, and so we will only be explaining the `Selecting an event` command.
+
+The following sequence diagram shows how the `Selecting an event` command works through the `Logic` component.
+
+![Sequence diagram](images/SelectEventSequenceDiagram-Logic.png)
+
+<box type="info" seamless>
+
+**Note:** The lifeline for `SelectCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
+
+</box>
+
+How the `Selecting an event` command works in the `Logic` component:
+
+1. When `Logic` is called upon to execute a command, it is passed to an `AddressBookParser` object which in turn creates the `SelectCommandParser`, which is used to parse the command.
+1. This results in a `SelectCommand` object, which contains the parsed value - the index of the event to select. In this example, the index is of value `1`.
+1. The `SelectCommand` communicates with the `Model` when it is executed. </br>
+   It first uses `getFilteredEventList()`, to retrieve the list of events shown to the user (`shownEventList`).
+   Then, it gets the event to be selected from that list (based on the index provided by the user), then calls `selectEvent(eventToSelect)` to select that event.
+1. The result of the command execution is encapsulated as a `CommandResult` object which is returned back from `Logic`.
+   The result of the command execution is encapsulated as a CommandResult object which is returned back from Logic.
+
+#### Design considerations:
+
+**Aspect: How an event is selected:**
+
+* **Alternative 1 (current choice):** Stores the event that is selected as a variable.
+  * Pros: Easy to implement.
+  * Cons: Limited Scalability, as it may be difficult to manage the selected event state solely through a variable as complexity increases.
+
+* **Alternative 2:** Every event includes a field indicating its selection status.
+  * Pros: Multiple Events can be selected at the same time, which may be useful for future expansion.
+  * Cons: May have more overhead.
+
 ### Invite Person to Event Feature
 
 The `InvitePersonCommand` allows users to invite a person to the selected event from the global address book.
@@ -369,85 +448,6 @@ Users can easily locate a contact based on the user inputs, making the command s
 understand. This approach is particularly effective in scenarios where users work with relatively short lists where the
 viewport limitations are minimal. In the scenario where the participant list gets longer, the user can always
 use OR search in terms of name/tags to filter out the contacts.
-
-### Select Event Feature
-
-The Select Event mechanism is a pivotal part of Eventy's functionality, serving two main purposes:
-
-1. A number of commands within Eventy are designed to target the selected event, while some commands also have
-differing behaviours based on whether an event is selected or not:
-- An example of the former is the `Invite Person to Event`</a> command,
-which adds a person to the **selected event**.
-- An example of the latter is the `Delete a Person` command. If **an event is not selected**, it will delete the person
-from Eventy as a whole, else if **an event is selected**, it will delete the person only from the selected event.
-
-<box type="info" seamless>
-
-**Note:** For more details on how this functionality is implemented, you may refer to the developer guide documentation
-for these two examples: the <a href="#Invite Person to Event"> Invite Person to Event </a> and
-<a href="#delete-participant"> DeletePerson </a> commands.
-
-</box>
-
-2. Users of Eventy can select an event and deselect the currently selected event, using the `Selecting an event` and
-`Deselecting an event` commands respectively.
-
-#### Implementation Details
-
-The Select Event mechanism is facilitated by the `EventBook`, which implements `ReadOnlyEventBook`. `EventBook` serves as the
-counterpart to the `AddressBook`, focusing on Event-related functionality, while `AddressBook` handles People-related
-functionality.
-
-To implement the Select Event mechanism, `EventBook` stores internally:
-* `events` &thinsp;—&thinsp; The list that contains the unique events that are in Eventy.
-* `selectedEvent` &thinsp;—&thinsp; The event that is currently selected. If no event is selected, it is set to `null`.
-* `personsOfSelectedEvent` &thinsp;—&thinsp; The list that contains the unique people in the selected event. If no
-event is selected, it is an empty list.
-
-Additionally, it implements the following operations (not exhaustive):
-* `EventBook#isAnEventSelected()` &thinsp;—&thinsp; Returns `true` if an event is selected, else returns `false`
-* `EventBook#selectEvent(Event event)` &thinsp;—&thinsp; Selects the given event
-* `EventBook#deselectEvent()` &thinsp;—&thinsp; Deselect the currently selected event, if any, so that no event is
-  selected
-
-These operations are exposed to other components through `ModelManager`.
-
-#### Sequence Diagram
-
-In order to select an event and deselect an event, we have the `Selecting an event` command and `Deselecting an event`
-command respectively. Both commands function similarly, and so we will only be explaining the `Selecting an event` command.
-
-The following sequence diagram shows how the `Selecting an event` command works through the `Logic` component.
-
-![Sequence diagram](images/SelectEventSequenceDiagram-Logic.png)
-
-<box type="info" seamless>
-
-**Note:** The lifeline for `SelectCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
-
-</box>
-
-How the `Selecting an event` command works in the `Logic` component:
-
-1. When `Logic` is called upon to execute a command, it is passed to an `AddressBookParser` object which in turn creates the `SelectCommandParser`, which is used to parse the command.
-1. This results in a `SelectCommand` object, which contains the parsed value - the index of the event to select. In this example, the index is of value `1`.
-1. The `SelectCommand` communicates with the `Model` when it is executed. </br>
-    It first uses `getFilteredEventList()`, to retrieve the list of events shown to the user (`shownEventList`).
-    Then, it gets the event to be selected from that list (based on the index provided by the user), then calls `selectEvent(eventToSelect)` to select that event.
-1. The result of the command execution is encapsulated as a `CommandResult` object which is returned back from `Logic`.
-The result of the command execution is encapsulated as a CommandResult object which is returned back from Logic.
-
-#### Design considerations:
-
-**Aspect: How an event is selected:**
-
-* **Alternative 1 (current choice):** Stores the event that is selected as a variable.
-    * Pros: Easy to implement.
-    * Cons: Limited Scalability, as it may be difficult to manage the selected event state solely through a variable as complexity increases.
-
-* **Alternative 2:** Every event includes a field indicating its selection status.
-    * Pros: Multiple Events can be selected at the same time, which may be useful for future expansion.
-    * Cons: May have more overhead.
 
 ### Delete Event Feature
 
@@ -809,6 +809,132 @@ A successful addition adds a participant from the global participant list to the
 
 --------------------------------------------------------------------------------------------------------------------
 
+## **Appendix: Planned Enhancements**
+
+This section covers the enhancements we plan to implement in the future.
+
+### Enhancement 1: Clear command clears all data
+
+Feature flaw: <br>
+Currently, the `clear` command deletes off all contacts in the global participant list
+but not within the event participant list for each event.
+
+Proposed enhancement: <br>
+Modify the implementation such that `clear` command deletes off all contacts in both global 
+participant list and event participant list for each event.
+
+Justification: <br>
+The purpose of Eventy is to help users plan for events with ease. Thus, when the user wants to clear off all data,
+the user should be able to do so for both participant lists.
+
+Updated behaviours: <br>
+* `clear` command should delete off every contact details in both participant lists.
+
+### Enhancement 2: Adding a person with name containing special characters
+
+Feature flaw: <br>
+Currently, the `addp` command does not allow the addition of people with name containing special characters such as 
+"/".
+
+Proposed enhancement: <br>
+Modify the implementation such that `addp` command allows the addition of a person with name containing 
+special characters.
+
+Justification: <br>
+People have special characters within their names. People should be able to input their full name 
+without any restrictions.
+
+Updated behaviours: <br>
+* `addp n/..` command should allow the addition of names containing special characters.
+
+Examples: <br>
+* `addp n/David s/o Ibrahim...` adds a person named `David s/o Ibrahim` 
+
+### Enhancement 3: Adding a person with a duplicate name
+
+Feature flaw: <br>
+Currently, the `addp` command does not allow the addition of a person with duplicate name.
+
+Proposed enhancement: <br>
+Modify the implementation such that `addp` command allows for the addition of a person with duplicate name but 
+with different other personal details.
+
+Justification: <br>
+Many people contain duplicate names. This may cause much trouble when planning for an event in the future.
+
+Updated behaviours: <br>
+* `addp n/David..` command should allow the addition of a person with the name David, 
+  even though there is already a person named David in the global participant list.
+
+### Enhancement 4: Addition of a large group of people simultaneously
+
+Feature flaw: <br>
+Currently, the addition of people is only allowed individually. Manual addition and typing of each person is required.
+
+Proposed enhancement: <br>
+Modify the implementation such that a group of people can be added simultaneously in the form of csv file.
+
+Justification: <br>
+The purpose of Eventy is to help users plan for events with ease. Manual addition of each person can be very 
+troublesome. Hence, a group addition should be added for convenience.
+
+### Enhancement 5: Fields in the UI contained in the view panel
+
+Feature flaw: <br>
+Currently, the fields in the UI will go out of bounds when the information is too long. This may cause 
+visual confusion.
+
+Proposed enhancement: <br>
+Modify the UI implementation such that fields in UI are contained within the view panel box when the 
+input information is too long.
+
+Justification: <br>
+When the input fields are too long and not contained in the view panel, the full information is not visible, 
+which may cause confusions when trying to find/view the person's information.
+ 
+### Enhancement 6: Editing with the same input shows a check
+
+Feature flaw: <br>
+Currently, the `editp` command will not show any checks when the new edit information is not different from before.
+
+Proposed enhancement: <br>
+Modify the implementation such that `editp` command shows a check when the new edit information is the same as before.
+
+Justification: <br>
+This is to ensure that the user knows that there are no changes made and should check the input 
+information once more.
+
+Examples: <br>
+* `editp 1 n/...` same information should throw a check `The new input for edit contains no new change.`.
+
+### Enhancement 7: Deselecting an event with no event selected shows a correct error message
+
+Feature flaw: <br>
+Currently, the `desel` command will not show the correct error message when there is currently no selected event.
+
+Proposed enhancement: <br>
+Modify the implementation such that `desel` command shows the correct error message when no event is selected currently.
+
+Justification: <br>
+This is to prevent any visual confusion for the user.
+
+Examples: <br>
+* `desel` should throw a check `No event has been selected intially`.
+
+### Enhancement 8: Selecting the same selected event shows a correct error message
+
+Feature flaw: <br>
+Currently, the `sel` command will not show the correct error message when the selected event is selected again.
+
+Proposed enhancement: <br>
+Modify the implementation such that `sel` command shows the correct error message when the event is already selected.
+
+Justification: <br>
+This is to prevent any visual confusion for the user.
+
+Examples: <br>
+* `sel 1` should throw a check `This event is already selected`.
+
 ## **Appendix: Instructions for manual testing**
 
 Given below are instructions to test the app manually.
@@ -826,38 +952,117 @@ testers are expected to do more *exploratory* testing.
 
    1. Download the jar file and copy into an empty folder
 
-   1. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
+   2. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
 
 1. Saving window preferences
 
    1. Resize the window to an optimum size. Move the window to a different location. Close the window.
 
-   1. Re-launch the app by double-clicking the jar file.<br>
+   2. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
 
-1. _{ more test cases …​ }_
+### Adding a person to global participant list
 
-### Deleting a person
+1. Adding a person to global participant list when no event is selected
 
-1. Deleting a person while all persons are being shown
+   Prerequisites: No event is selected
 
-   1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+    1. Test case: `addp n/David p/12345678 e/opqr@gmail.com a/1A Kent Ridge Rd t/morning person`<br>
+       Expected: Person of name `David` with the above details is added
 
-   1. Test case: `delete 1`<br>
-      Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+    2. Test case: `addp n/Joshua`<br>
+       Expected: No person is added. Error message is thrown indicating that compulsory field p/, a/ and e/ are missing
 
-   1. Test case: `delete 0`<br>
-      Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
+    3. Test case: `addp n/David p/acaf e/abcdeg@gmail.com a/lll`
+       Expected: No person is added. Error message is thrown indicating that <phone number> format is incorrect
+       
+    4. Test case: `addp`
+       Expected: No person is added. Error message is thrown indicating format for add command is wrong
+       
+### Deleting a person from the global participant list
 
-   1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
-      Expected: Similar to previous.
+2. Deleting a person from the global participant list when no event is selected
 
-1. _{ more test cases …​ }_
+   Prerequisites: No selected event, and the provided index is no larger than the total number of people
 
-### Saving data
+    1. Test case: `delp 1`<br>
+       Expected: Person with index 1 in the global participant list is deleted
 
-1. Dealing with missing/corrupted data files
+    2. Test case: `delp`<br>
+       Expected: No person is deleted. Error message is thrown indicating format for delete command is wrong
 
-   1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+    3. Test case: `delp 555`<br>
+       Expected: No person is deleted. Error message is thrown indicating provided index is invalid
 
-1. _{ more test cases …​ }_
+### Selecting an event
+
+3. Selecting an event 
+
+   Prerequisites: The provided index is no larger than the total number of events in event list
+
+    1. Test case: `sel 1`<br>
+       Expected: Event with index 1 in the event list is selected
+
+    2. Test case: `sel`<br>
+       Expected: No event is selected. Error message is thrown indicating format for select command is wrong
+
+    3. Test case: `sel 555`<br>
+       Expected: No event is selected. Error message is thrown indicating provided index is invalid
+
+### Deleting an event
+
+4. Deleting an event from the event list 
+
+   Prerequisites: The provided index is no larger than the total number of people
+
+    1. Test case: `delev 1`<br>
+       Expected: Event with index 1 in the event list is deleted
+
+    2. Test case: `delev`<br>
+       Expected: No event is deleted. Error message is thrown indicating format for delete event command is wrong
+
+    3. Test case: `delev 555`<br>
+       Expected: No event is deleted. Error message is thrown indicating provided index is invalid
+
+### Inviting a person to an event
+
+5. Inviting a person from the global participant list to an event
+
+   Prerequisites: A selected event, and the provided index is no larger than the total number of people
+
+    1. Test case: `inv 1`<br>
+       Expected: Person with index 1 in the global participant list is invited to the selected event
+
+    2. Test case: `inv`<br>
+       Expected: No person is invited. Error message is thrown indicating format for invite command is wrong
+
+    3. Test case: `inv 555`<br>
+       Expected: No person is invited. Error message is thrown indicating provided index is invalid
+
+### Finding a person 
+
+6. Finding a person from the global/event participant list using names/tags or both
+
+   Prerequisites: Find from global participant list when no event is selected, while find from 
+                  event participant list when event is selected
+
+    1. Test case: `find n/David`<br>
+       Expected: All people with name `David` in the global/event participant list is found
+
+    2. Test case: `find n/David Josh`<br>
+       Expected: All people with names `David` and `Josh` in the global/event participant list is found
+
+    3. Test case: `find t/friends`<br>
+       Expected: All People with tag `friends` in the global/event participant list is found
+
+    4. Test case: `find t/friends t/teacher`<br>
+       Expected: All People with tags `friends` and `teacher` in the global/event participant list is found
+
+    5. Test case: `find n/David t/friends t/teacher`<br>
+       Expected: All People with name `David` and tags `friends` and `teacher` in the global/event participant list is found
+
+    6. Test case: `find`<br>
+       Expected: No person is found. Error message is thrown indicating format for invite command is wrong
+
+    7. Test case: `find n/ t/`<br>
+       Expected: No person is found. Error message is thrown indicating format for invite command is wrong

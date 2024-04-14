@@ -122,11 +122,11 @@ Adds a new event with the specified name and date for the Event List.
 **Examples:**
 - `addev ev/Hall dining d/07-08-2024` adds a new event with the name `Hall Dining`, with the date August 7th, 2024.
 
-Before(event list box):
+Before `addev ev/Hall dining d/07-08-2024`:
 
 ![before adding event](images/beforeaddev.png)
 
-After(event list box):
+After `addev ev/Hall dining d/07-08-2024`:
 
 ![after adding event](images/addev.png)
 
@@ -196,11 +196,11 @@ Selects an event from the event list by the event index. This displays the perso
 **Examples:**
 - `sel 1` selects the 1st event.
 
-Before (event list and event participant list box):
+Before `sel 1`:
 
 ![before selecting event](images/beforeSel.png)
 
-After (event list and event participant list box):
+After `sel 1`:
 
 ![after selecting event](images/afterSel.png)
 
@@ -269,11 +269,11 @@ Invite participants from the global participant list to the selected event.
 **Examples:**
 - `inv 5` Adds participant indexed 5 to selected event.
 
-Before(event list and event participant list box):
+Before `inv 5`:
 
 ![before inviting participant](images/beforeinvite.png)
 
-After(event list and event participant list box):
+After `inv 5`:
 
 ![after inviting participant](images/afterinvite.png)
 
@@ -439,11 +439,11 @@ Locates persons by their names and/or tags, where
 
 Before `find n/Alex t/friend t/teacher`:
 
-![before find n/Alex t/friend t/teacher](images/beforeFindAlexResult.png)
+![before find n/Alex t/friend t/teacher](images/beforeFind.png)
 
 After `find n/Alex t/friend t/teacher`:
 
-![after find n/Alex t/friend t/teacher](images/afterFindAlexResult.png)
+![after find n/Alex t/friend t/teacher](images/afterFind.png)
 
 #### 3.4.3 Viewing help: `help`
 
