@@ -425,11 +425,11 @@ Clears all entries from the address book.
 
 Before `find n/Alex t/friend t/teacher`:
 
-![before find n/Alex t/friend t/teacher](images/beforeFindAlexResult.png)
+![before find n/Alex t/friend t/teacher](images/beforeFind.png)
 
 After `find n/Alex t/friend t/teacher`:
 
-![after find n/Alex t/friend t/teacher](images/afterFindAlexResult.png)
+![after find n/Alex t/friend t/teacher](images/afterFind.png)
 
 #### 3.4.3 Viewing help: `help`
 
