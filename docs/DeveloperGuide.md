@@ -935,6 +935,38 @@ This is to prevent any visual confusion for the user.
 Examples: <br>
 * `sel 1` should throw a check `This event is already selected`.
 
+### Enhancement 9: Exporting with invalid flag/flags shows a correct error message
+
+Feature flaw: <br>
+Currently, the `export` command will not show the correct error message when there are invalid flags.
+
+Proposed enhancement: <br>
+Modify the implementation such that `export` command shows the correct error message when the flags that are not recognized
+are present.
+
+Justification: <br>
+This is to make it clear that the user has unintentional inputs.
+
+Examples: <br>
+* `export x/ y/` should throw a check `The provided flags are not supported`.
+
+### Enhancement 10: Exporting with file permission issues shows a correct error message
+
+Feature flaw: <br>
+Currently, the `export` command only shows the error message `Failed to export to CSV file` when encountering IO errors.
+
+Proposed enhancement: <br>
+Modify the implementation such that `export` command shows the correct error message accordingly, suggesting possible fixes.
+
+Justification: <br>
+This is to ensure that even a non-technical user can make a smooth export.
+
+Examples: <br>
+* When the `exported_participant_data.csv` file is kept open during the export,
+  `export` should throw a check `Please close the file 'exported_participant_data.csv'`.
+* When the `exported_participant_data.csv` file has no write permission,
+  `export` should throw a check `Please allow writing to the file 'exported_participant_data.csv' under 'permissions'`.
+
 ## **Appendix: Instructions for manual testing**
 
 Given below are instructions to test the app manually.
@@ -946,7 +978,7 @@ testers are expected to do more *exploratory* testing.
 
 </box>
 
-### Launch and shutdown
+### 1. Launch and shutdown
 
 1. Initial launch
 
@@ -954,115 +986,152 @@ testers are expected to do more *exploratory* testing.
 
    2. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
 
-1. Saving window preferences
+2. Saving window preferences
 
    1. Resize the window to an optimum size. Move the window to a different location. Close the window.
 
    2. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
 
-### Adding a person to global participant list
+### 2. Adding a person to global participant list
 
-1. Adding a person to global participant list when no event is selected
+Adding a person to global participant list when no event is selected
 
-   Prerequisites: No event is selected
+Prerequisites: No event is selected
 
-    1. Test case: `addp n/David p/12345678 e/opqr@gmail.com a/1A Kent Ridge Rd t/morning person`<br>
-       Expected: Person of name `David` with the above details is added
+  1. Test case: `addp n/David p/12345678 e/opqr@gmail.com a/1A Kent Ridge Rd t/morning person`<br>
+     Expected: Person of name `David` with the above details is added
 
-    2. Test case: `addp n/Joshua`<br>
-       Expected: No person is added. Error message is thrown indicating that compulsory field p/, a/ and e/ are missing
+  2. Test case: `addp n/Joshua`<br>
+     Expected: No person is added. Error message is thrown indicating that compulsory field p/, a/ and e/ are missing
 
-    3. Test case: `addp n/David p/acaf e/abcdeg@gmail.com a/lll`
-       Expected: No person is added. Error message is thrown indicating that <phone number> format is incorrect
+  3. Test case: `addp n/David p/acaf e/abcdeg@gmail.com a/lll`
+     Expected: No person is added. Error message is thrown indicating that <phone number> format is incorrect
+     
+  4. Test case: `addp`
+     Expected: No person is added. Error message is thrown indicating format for add command is wrong
        
-    4. Test case: `addp`
-       Expected: No person is added. Error message is thrown indicating format for add command is wrong
-       
-### Deleting a person from the global participant list
+### 3. Deleting a person from the global participant list
 
-2. Deleting a person from the global participant list when no event is selected
+Deleting a person from the global participant list when no event is selected
 
-   Prerequisites: No selected event, and the provided index is no larger than the total number of people
+Prerequisites: No selected event, and the provided index is no larger than the total number of people
 
-    1. Test case: `delp 1`<br>
-       Expected: Person with index 1 in the global participant list is deleted
+  1. Test case: `delp 1`<br>
+     Expected: Person with index 1 in the global participant list is deleted
 
-    2. Test case: `delp`<br>
-       Expected: No person is deleted. Error message is thrown indicating format for delete command is wrong
+  2. Test case: `delp`<br>
+     Expected: No person is deleted. Error message is thrown indicating format for delete command is wrong
 
-    3. Test case: `delp 555`<br>
-       Expected: No person is deleted. Error message is thrown indicating provided index is invalid
+  3. Test case: `delp 555`<br>
+     Expected: No person is deleted. Error message is thrown indicating provided index is invalid
 
-### Selecting an event
+### 4. Selecting an event
 
-3. Selecting an event 
+Selecting an event 
 
-   Prerequisites: The provided index is no larger than the total number of events in event list
+Prerequisites: The provided index is no larger than the total number of events in event list
 
-    1. Test case: `sel 1`<br>
+  1. Test case: `sel 1`<br>
        Expected: Event with index 1 in the event list is selected
 
-    2. Test case: `sel`<br>
+  2. Test case: `sel`<br>
        Expected: No event is selected. Error message is thrown indicating format for select command is wrong
 
-    3. Test case: `sel 555`<br>
+  3. Test case: `sel 555`<br>
        Expected: No event is selected. Error message is thrown indicating provided index is invalid
 
-### Deleting an event
+### 5. Deleting an event
 
-4. Deleting an event from the event list 
+Deleting an event from the event list 
 
-   Prerequisites: The provided index is no larger than the total number of people
+Prerequisites: The provided index is no larger than the total number of people
 
-    1. Test case: `delev 1`<br>
-       Expected: Event with index 1 in the event list is deleted
+  1. Test case: `delev 1`<br>
+     Expected: Event with index 1 in the event list is deleted
 
-    2. Test case: `delev`<br>
-       Expected: No event is deleted. Error message is thrown indicating format for delete event command is wrong
+  2. Test case: `delev`<br>
+     Expected: No event is deleted. Error message is thrown indicating format for delete event command is wrong
 
-    3. Test case: `delev 555`<br>
-       Expected: No event is deleted. Error message is thrown indicating provided index is invalid
+  3. Test case: `delev 555`<br>
+     Expected: No event is deleted. Error message is thrown indicating provided index is invalid
 
-### Inviting a person to an event
+### 6. Inviting a person to an event
 
-5. Inviting a person from the global participant list to an event
+Inviting a person from the global participant list to an event
 
-   Prerequisites: A selected event, and the provided index is no larger than the total number of people
+ Prerequisites: A selected event, and the provided index is no larger than the total number of people
 
-    1. Test case: `inv 1`<br>
-       Expected: Person with index 1 in the global participant list is invited to the selected event
+  1. Test case: `inv 1`<br>
+     Expected: Person with index 1 in the global participant list is invited to the selected event
 
-    2. Test case: `inv`<br>
-       Expected: No person is invited. Error message is thrown indicating format for invite command is wrong
+  2. Test case: `inv`<br>
+     Expected: No person is invited. Error message is thrown indicating format for invite command is wrong
 
-    3. Test case: `inv 555`<br>
-       Expected: No person is invited. Error message is thrown indicating provided index is invalid
+  3. Test case: `inv 555`<br>
+     Expected: No person is invited. Error message is thrown indicating provided index is invalid
 
-### Finding a person 
+### 7. Finding a person 
 
-6. Finding a person from the global/event participant list using names/tags or both
+Finding a person from the global/event participant list using names/tags or both
 
-   Prerequisites: Find from global participant list when no event is selected, while find from 
-                  event participant list when event is selected
+Prerequisites: Find from global participant list when no event is selected, while find from 
+               event participant list when event is selected
 
-    1. Test case: `find n/David`<br>
-       Expected: All people with name `David` in the global/event participant list is found
+  1. Test case: `find n/David`<br>
+     Expected: All people with name `David` in the global/event participant list is found
 
-    2. Test case: `find n/David Josh`<br>
-       Expected: All people with names `David` and `Josh` in the global/event participant list is found
+  2. Test case: `find n/David Josh`<br>
+     Expected: All people with names `David` and `Josh` in the global/event participant list is found
 
-    3. Test case: `find t/friends`<br>
-       Expected: All People with tag `friends` in the global/event participant list is found
+  3. Test case: `find t/friends`<br>
+     Expected: All People with tag `friends` in the global/event participant list is found
 
-    4. Test case: `find t/friends t/teacher`<br>
-       Expected: All People with tags `friends` and `teacher` in the global/event participant list is found
+  4. Test case: `find t/friends t/teacher`<br>
+     Expected: All People with tags `friends` and `teacher` in the global/event participant list is found
 
-    5. Test case: `find n/David t/friends t/teacher`<br>
-       Expected: All People with name `David` and tags `friends` and `teacher` in the global/event participant list is found
+  5. Test case: `find n/David t/friends t/teacher`<br>
+     Expected: All People with name `David` and tags `friends` and `teacher` in the global/event participant list is found
 
-    6. Test case: `find`<br>
-       Expected: No person is found. Error message is thrown indicating format for invite command is wrong
+  6. Test case: `find`<br>
+     Expected: No person is found. Error message is thrown indicating format for invite command is wrong
 
-    7. Test case: `find n/ t/`<br>
-       Expected: No person is found. Error message is thrown indicating format for invite command is wrong
+  7. Test case: `find n/ t/`<br>
+     Expected: No person is found. Error message is thrown indicating format for invite command is wrong
+
+### 8. Exporting Participant Data to a CSV File
+
+Exporting participant data based on specified details (name, phone, email, address) to a CSV file.
+
+Pre-requisites: There should be a list of participants loaded in the application which can be filtered and exported.
+                Ensure the application has permission to write files in its running directory or the specified export path.
+
+  1. Test case: `export n/ p/`<br>
+     Expected: A CSV file is created that includes only the names and phone numbers of the filtered participants.
+     The file should be named `exported_participant_data.csv`. Check the CSV file to ensure it contains the correct headers and data format.
+
+  2. Test case: `export a/`<br>
+     Expected: A CSV file is created containing only the addresses of the filtered participants.
+     Verify the CSV file for correct data under the "Address" column without any other participant details.
+
+  3. Test case: `export`<br>
+     Expected: No new file is exported. An error message is displayed indicating that at least one flag must be specified.
+
+  4. Test case: `export n/ p/ e/ a/`<br>
+     Expected: A CSV file is created containing the names, phone numbers, email addresses, and addresses of all filtered participants.
+     Ensure all columns are populated correctly according to the filtered data.
+
+  5. Test case: `export x/`<br>
+     Expected: No new file is exported. The app disregards the flag and an error message is displayed indicating that at least one flag must be specified.
+
+  6. Test case: Use the application in a state where no participants are loaded or all participants are filtered out (no matches to the filter criteria).<br>
+     Expected: A CSV file is still created, but it contains only the header row, with no participant data rows.
+     This tests the application's handling of empty datasets.
+
+<box type="warning" seamless>
+
+**Additional Notes:**
+After exporting files, manually open the CSV files using notepad in Windows or its equivalent. Using Microsoft Excel may
+cause certain issues in some fields. For example, phone number `00000000` may be falsely displayed as `0` in Excel.
+
+</box>
