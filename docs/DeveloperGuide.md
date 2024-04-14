@@ -530,14 +530,24 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 | Priority | As a …​                                    | I want to …​                 | So that I can…​                                                        |
 |----------|--------------------------------------------|------------------------------|------------------------------------------------------------------------|
-| `* * *`  | user                                       | create a new event           | plan and manage all the events that in one place                       |
-| `* * *`  | user                                       | add a new person             | manage all my contacts in one place                                    |
-| `* * *`  | user                                       | add participant to an event  | manage and plan all the participant for a specific event               |
-| `* * *`  | user                                       | delete a person              | remove contacts that I no longer need                                  |
-| `* * *`  | user                                       | remove specific participant  | remove a specific participant from a specific event                    |
-| `* *`    | diligent user                              | edit contact information     | update contact information whenever necessary                          |
-| `* *`    | user                                       | select a specific event      | search events by name without having to manually search
-
+| `* * *`  | user                                       | create a new event            | plan and manage all the events in one place                            |
+| `* *`    | user                                       | delete an event               | remove past or irrelevant events                                       |
+| `* * *`  | user                                       | add a new person              | manage all my contacts in one place                                    |
+| `* * *`  | user                                       | invite participant to an event| manage and plan all the participants for a specific event              |
+| `* * *`  | user                                       | delete a person               | remove contacts that I no longer need                                  |
+| `* * *`  | user                                       | remove specific participant   | remove a specific participant from a specific event                    |
+| `* * *`  | diligent user                              | edit contact number           | update contact number                                                  |
+| `* *`    | user                                       | select a specific event       | Perform actions on the desired event                                   |
+| `* *`    | organized user                             | filter contacts by tags       | view the list of contacts or invitees in a specific category           |
+| `* *`    | organized user                             | export filtered contacts      | quickly view consolidated information in CSV file format              |
+| `* *`    | user                                       | edit an event                 | update event information like the event name or event date             |
+| `* *`    | user                                       | deselect an event             | perform app-wide events                                                |
+| `* *`    | busy user                                  | clear all entries             | replace them with more relevant contacts without cluttering the app    |
+| `* *`    | user                                       | exit the program              | exit the program in a safe manner                                      |
+| `* *`    | user                                       | list invitees or contacts     | have a consolidated view of the invitees/contacts in the app           |
+| `* *`    | diligent user                              | update contact email          | keep track of the contact’s latest email                               |
+| `* *`    | diligent user                              | update contact address        | keep track of the contact’s latest address                             |
+| `* *`    | diligent user                              | update contact tags           | update the user’s tag labels when he/she is placed in a new category   
 
 ### Use cases
 
@@ -596,12 +606,12 @@ A successful deletion deletes an event from the event list.
 
 ### Add a person
 
-**Use case: UC03 - Add a person to the global participant list**
+**Use case: UC03 - Add a person to the global contact list**
 
 **Actor:** User
 
 **Guarantees:**
-A successful addition adds a person to the global participant list.
+A successful addition adds a person to the global contact list.
 
 **MSS**
 
@@ -616,63 +626,111 @@ A successful addition adds a person to the global participant list.
 - 1a1. Eventy displays an error message to alert the User. </br>
   *Use case ends*
 
-### Delete a person from the global participant list
+### Invite a person
 
-**Use Case: UC04 - Delete a person from the global participant list**
+**Use case: UC04 - Invite contact to an event**
+
+**Actor:** User
+
+**Guarantees:**
+A successful addition adds a person to the global contact list.
+
+**MSS**
+
+1.  Eventy displays the global contact list and event list.
+2.  User selects event to modify.
+3.  User invites contact from global contact list to selected event.
+4.  Eventy displays the invitee on the person list for the selected event
+    *Use case ends*
+
+**Extensions:**
+
+1a.  Index provided by User is incomplete or invalid
+- 1a1. Eventy displays an error message to alert the User. </br>
+  *Use case ends*
+  1b.  No event is selected
+- 1b1. Eventy displays an error message to alert the User. </br>
+  *Use case ends*
+
+### Delete a person from the global contact list
+
+**Use Case: UC05 - Delete a person from the global contact list**
 
 **Actor:** User
 
 **Preconditions:**
-User has added one or more person to the global participant list.
+User has added one or more person to the global contact list.
 
 **Guarantees:**
-A successful deletion deletes the person from both the global participant list and all the events he participates in.
+A successful deletion deletes the person from both the global contact list and all the events he participates in.
 
 **MSS:**
 
 1. User deletes a participant.
-2. Eventy displays the updated global participant list. </br>
+2. Eventy displays the updated global contact list. </br>
+   *Use case ends*
+
+**Extensions:**
+
+1a. Contact index provided by the User is invalid.
+- 1a1. Eventy displays an error message to alert the User. </br>
+  *Use case resumes at step 2.*
+
+### Remove a participant from a specific event
+
+**Use case: UC06 - Remove a participant from the specified event**
+
+**Actor:** User
+
+**Preconditions:** User has added one or more participant to the specified event.
+
+**Guarantees:**
+A successful removal removes the person from the selected event.
+
+**MSS:**
+1. User has an event selected.
+2. User requests to remove a participant from a certain event.
+3. Eventy remove the participant from the event. </br>
    *Use case ends*
 
 **Extensions:**
 
 1a. Participant index provided by the User is invalid.
 - 1a1. Eventy displays an error message to alert the User. </br>
-  *Use case resumes at step 2.*
+  *Use case resumes at step 1*
 
-### Remove a participant from a specific event
+### Edit contact number
 
-**Use case: UC05 - Remove a participant from the specified event**
+**Use case: UC07 - Edit phone number of contact**
 
 **Actor:** User
 
-**Preconditions:** User has added one or more participant to the specified event.
+**Preconditions:** User has added one or more participant to the global contact list.
+
+**Guarantees:**
+A successful edit updates the person's phone number in both the global contact list and all the events he participates in.
 
 **MSS:**
-1. User requests to remove a participant from a certain event.
-2. Eventy remove the participant from the event. </br>
+1. User enters index of contact he wants to edit, along with the new phone number.
+2. Eventy update the phone number of the contact. </br>
    *Use case ends*
 
 **Extensions:**
 
-1a. The event index provided by the User is invalid.
-- 1a1. Eventy displays an error message to alert the User. </br>
-  *Use case ends*
-
-1b. Participant index provided by the User is invalid.
+1a. The participant index provided by the User is invalid.
 - 1a1. Eventy displays an error message to alert the User. </br>
   *Use case ends*
 
 ### Select an event
 
-**Use Case: UC06 - Select an event from the event list**
+**Use Case: UC08 - Select an event from the event list**
 
 **Actor:** User
 
 **Preconditions:** User has added one or more events to the event list.
 
 **Guarantees:**
-A successful selection displays the event details.
+A successful selection selects the targeted event. The user can then make event-specific modifications.
 
 **MSS:**
 
@@ -686,35 +744,201 @@ A successful selection displays the event details.
 - 1a1. Eventy displays an error message to alert the User. </br>
   *Use case ends*
 
-### Add a participant to an event
+### Filter contacts by tags
 
-**Use Case: UC07 - Add a participant to a selected event**
+**Use Case: UC09 - View list of contacts or event invitees that have target tags**
 
 **Actor:** User
 
-**Preconditions:**
-User has added one or more contacts to the global participant list.
+**Preconditions:** User has added one or more contacts to the global contact list or invited one or more contacts to the selected event.
 
 **Guarantees:**
-A successful addition adds a participant from the global participant list to the selected event.
+Eventy displays the contacts with target tags.
 
 **MSS:**
-1. User inputs the index of participant to be added.
-2. Eventy displays the added participant in the panel showing list of participants in selected event. </br>
+
+1. User selects an event or remains in global contact list.
+2. User specific the tags he wants to filter by.
+3. Eventy displays the matching global contacts or event invitees, depending on whether an event was selected. </br>
    *Use case ends*
 
 **Extensions:**
 
-1a. Index provided by user is invalid/out of range of global participant list.
+1a. Tag index provided by User is invalid (Ex. it is empty or non-alphanumeric).
 - 1a1. Eventy displays an error message to alert the User. </br>
   *Use case ends*
 
-1b. Contact to be added already exists in selected event.
+### Export target contacts
+
+**Use case: UC10 - Export target contacts**
+
+**Actor:** User
+
+**Preconditions:** User has added one or more contacts to the global contact list or invited one or more contacts to the selected event.
+
+**Guarantees:**
+A successful export exports target contacts or invitees to a csv file.
+
+**MSS:**
+1. User enters tags of the contacts or invitees he wants to export.
+2. Eventy exports the contacts or invitees along with the specified tags to a csv file </br>
+   *Use case ends*
+
+**Extensions:**
+
+1a. The chosen tags to be exported are empty or invalid.
+- 1a1. Eventy displays an error message to alert the User. </br>
+  *Use case ends*
+
+### Edit event
+
+**Use case: UC11 - Edit event details**
+
+**Actor:** User
+
+**Preconditions:** User has added one or more events.
+
+**Guarantees:**
+A successful edit updates the event details.
+
+**MSS:**
+1. User enters index of event he wants to edit, along with the new event name and/or event date.
+2. Eventy updates the event name and/or event date of the specified event. </br>
+   *Use case ends*
+
+**Extensions:**
+
+1a. The event index provided by the User is invalid.
+- 1a1. Eventy displays an error message to alert the User. </br>
+  *Use case ends*
+  1b. There is no change in the event name or event date compared to the original event name/date.
 - 1b1. Eventy displays an error message to alert the User. </br>
   *Use case ends*
 
-1b. User does not provide an index.
-- 1b1. Eventy displays an error message to alert the User. </br>
+### Deselect event
+
+**Use Case: UC12 - Deselect event**
+
+**Actor:** User
+
+**Preconditions:** User has selected an event.
+
+**Guarantees:**
+A successful deselection deselects the selected event.
+
+**MSS:**
+
+1. User requests deselection of event.
+2. Eventy deselects the event. User can no longer perform operations like `invite` </br>
+   *Use case ends*
+
+### Clear all entries
+
+**Use case: UC13 - Clear all entries from Eventy**
+
+**Actor:** User
+
+**Preconditions:** User has added one or more contacts to the global contact list or one or more events.
+
+**Guarantees:**
+A successful clear empties all entries in the app.
+
+**MSS:**
+1. User requests to clear all entries, meaning all contacts and events.
+2. Eventy clears all entries in app. </br>
+   *Use case ends*
+
+### Exit the program
+
+**Use case: UC14 - Exits the program**
+
+**Actor:** User
+
+**MSS:**
+1. User requests to exit program.
+2. Eventy terminates. </br>
+   *Use case ends*
+
+### List all contacts or invitees
+
+**Use case: UC15 - List invitees or contacts**
+
+**Actor:** User
+
+**Preconditions:** User has added one or more contacts to the global contact list or invited one or more contacts to the selected event.
+
+**Guarantees:**
+A successful list command lists the contacts of invitees in the app.
+
+**MSS:**
+1. User requests a list of all persons.
+2. Eventy either displays list of global contacts or invitees of an event, depending on whether an event is selected. </br>
+   *Use case ends*
+
+### Edit contact email
+
+**Use case: UC16 - Edit email of contact**
+
+**Actor:** User
+
+**Preconditions:** User has added one or more participant to the global contact list.
+
+**Guarantees:**
+A successful edit updates the person's email in both the global contact list and all the events he participates in.
+
+**MSS:**
+1. User enters index of contact he wants to edit, along with the new email.
+2. Eventy updates the email of the contact. </br>
+   *Use case ends*
+
+**Extensions:**
+
+1a. The participant index provided by the User is invalid.
+- 1a1. Eventy displays an error message to alert the User. </br>
+  *Use case ends*
+
+### Edit contact address
+
+**Use case: UC17 - Edit address of contact**
+
+**Actor:** User
+
+**Preconditions:** User has added one or more participant to the global contact list.
+
+**Guarantees:**
+A successful edit updates the person's address in both the global contact list and all the events he participates in.
+
+**MSS:**
+1. User enters index of contact he wants to edit, along with the new address.
+2. Eventy updates the address of the contact. </br>
+   *Use case ends*
+
+**Extensions:**
+
+1a. The participant index provided by the User is invalid.
+- 1a1. Eventy displays an error message to alert the User. </br>
+  *Use case ends*
+
+### Edit contact tags
+
+**Use case: UC18 - Edit tags of contact**
+
+**Actor:** User
+
+**Preconditions:** User has added one or more participant to the global contact list.
+
+**Guarantees:**
+A successful edit updates the person's tags in both the global contact list and all the events he participates in.
+
+**MSS:**
+1. User enters index of contact he wants to edit, along with the new tags.
+2. Eventy updates the tags of the contact. </br>
+   *Use case ends*
+
+**Extensions:**
+
+1a. The participant index provided by the User is invalid.
+- 1a1. Eventy displays an error message to alert the User. </br>
   *Use case ends*
 
 
