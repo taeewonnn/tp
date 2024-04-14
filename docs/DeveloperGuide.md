@@ -171,8 +171,8 @@ The `AddCommand` allows users to add a person to the global participant list
 
 #### Implementation Details
 
-The `AddCommand` is implemented by extending the base `Command` class. It uses prefixes such as `/n`, `/p`, `/a`, `/e`, `/t`, specifying 
-required data fields `participant name`, `phone number`, `address`, `email`, `tags` respectively. Once the data fields are filled, 
+The `AddCommand` is implemented by extending the base `Command` class. It uses prefixes such as `/n`, `/p`, `/a`, `/e`, `/t`, specifying
+required data fields `participant name`, `phone number`, `address`, `email`, `tags` respectively. Once the data fields are filled,
 a new person is added. It implements the following operations:
 
 * `execute(Model)` — Checks the current address book state by calling `hasPerson(toAdd)`, and throws a `CommandException` if a duplicate person is found.
@@ -182,7 +182,7 @@ The add command is initiated by firstly checking the filtered person list to ens
 
 Given below is an example usage scenario of how the addition mechanism behaves when the user tries to add a person to the global participant list.
 
-Step 1. The user launches the application, with some events and participants added to the address book already. 
+Step 1. The user launches the application, with some events and participants added to the address book already.
 The `AddressBook` will be initialized with the previously saved address book state.
 
 Step 2. The user executes `addp` command with the specific data at each prefix to specify the person to be added.
@@ -392,7 +392,7 @@ The primary rationale for using an `index` as the specifier is its simplicity an
 
 The `FindCommand` allows users to find persons with specific name, tag or both from global or event participant list.
 
-#### Implementation Details 
+#### Implementation Details
 
 The `FindCommand` is implemented by extending the base `Command` class. It uses `name`, `tags` or both to identify the person in the global or event participant list. It implements the following operations:
 
@@ -426,27 +426,27 @@ Step 2. The user executes `find n/David t/friends` command to find any matching 
     * Cons: Slightly harder to implement.
 
 **Rationale:**
-The choice to unify the find process under a single `FindCommand` stems from a desire to streamline the user experience 
-and reduce the learning curve associated with the application. By minimizing the number of commands a user needs to 
-learn, the application becomes more intuitive, especially for new or infrequent users. The unified command approach 
+The choice to unify the find process under a single `FindCommand` stems from a desire to streamline the user experience
+and reduce the learning curve associated with the application. By minimizing the number of commands a user needs to
+learn, the application becomes more intuitive, especially for new or infrequent users. The unified command approach
 emphasizes simplicity from the user's perspective, even if it introduces additional complexity behind the scenes.
 
 **Aspect 2: How to specify the person to be deleted:**
 
 * **Alternative 1 (current choice):** Use the `n/`, `t/` prefixes
     * Pros: Easier to implement.  Immediate visual reference.
-    * Cons: Cumbersome to type all prefixes with some visual confusion. The user might find it cumbersome to type in 
-      each individual tag prefixes and too many prefixes may confuse the user visually. 
+    * Cons: Cumbersome to type all prefixes with some visual confusion. The user might find it cumbersome to type in
+      each individual tag prefixes and too many prefixes may confuse the user visually.
 
-* **Alternative 2:** Find without prefixes 
+* **Alternative 2:** Find without prefixes
     * Pros: Direct and intuitive, and can avoid indexing issues.
     * Cons: Requires more complex input parsing, and makes it more error prone.
 
 **Rationale:**
-The primary rationale for using prefixes as the specifier is its simplicity and direct reference to each person. 
-Users can easily locate a contact based on the user inputs, making the command straightforward to implement and 
-understand. This approach is particularly effective in scenarios where users work with relatively short lists where the 
-viewport limitations are minimal. In the scenario where the participant list gets longer, the user can always 
+The primary rationale for using prefixes as the specifier is its simplicity and direct reference to each person.
+Users can easily locate a contact based on the user inputs, making the command straightforward to implement and
+understand. This approach is particularly effective in scenarios where users work with relatively short lists where the
+viewport limitations are minimal. In the scenario where the participant list gets longer, the user can always
 use OR search in terms of name/tags to filter out the contacts.
 
 ### Delete Event Feature
@@ -492,6 +492,74 @@ the event book.
 * **Alternative 1 (current choice):** Compares event and selected event with equals.
     * Pros: Easy to implement.
     * Cons: May not be very specific.
+
+### Export Participant Data Feature
+
+The `ExportCommand` enables users to export the selected details of all filtered participants to a CSV file,
+with the flexibility to specify which details (including Name, Phone, Email, Address) to include via command flags.
+This functionality enhances data portability and allows for easy sharing and analysis of participant information outside the application.
+
+#### Implementation Details
+
+The `ExportCommand` extends the base `Command` class and incorporates `boolean` flags for each detail field (Name, Phone, Email, Address) that can be exported.
+It uses these flags to indicate the specified details to be exported for each participant in the filtered list.
+The actual export is done by a `PersonDataExporter` in the `Model` object.
+The command implements the following main operations:
+
+- `execute(Model)` — Executes the export command using the provided `model`. It checks if an event is selected and
+  accordingly calls either `model.exportEventPersonData(...)` or `model.exportGlobalPersonData(...)` based on the `boolean` flags provided.
+  It handles any `IOExceptions` that occur during the export process by throwing a `CommandException` with a failure message.
+- `equals(Object)` — Overrides the `equals` method to allow comparison of `ExportCommand` objects, facilitating testing and debugging.
+
+Given below is an example usage scenario of how the export mechanism behaves when the user tries to export the selected participant information.
+
+Step 1. The user launches the application, with some events and participants added to the address book already. The `AddressBook` will be initialized with the previously saved address book state, and the `selectedEvent` in the `EventBook` will initially be `null`.
+
+Step 2. The user executes `export n/ p/` command to export the name and phone number of all participants in the `AddressBook`. The `ExportCommand` will then call `excecute()`, which checks that no event is being selected before calling `model.exportGlobalPersonData(...)`.
+
+#### Sequence Diagram
+
+A sequence diagram to illustrate the `ExportCommand` execution can be conceptualized as follows:
+
+![Sequence diagram](images/ExportSequenceDiagram.png)
+
+<box type="info" seamless>
+
+**Note:** The lifeline for `ExportCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of the diagram.
+
+</box>
+
+#### Design Considerations
+
+**Aspect 1: Data export scope selection**
+
+* **Alternative 1 (current choice):** Export based on the selection state (event-specific or global)
+    * Pros: Provides flexibility, allowing users to export data in the context they are currently working in (either globally or for a specific event).
+    * Cons: Users must be aware of the current context and may inadvertently export the wrong set of data if not careful.
+
+* **Alternative 2:** Require explicit specification of the export scope within the command
+    * Pros: Reduces the chance of user error by requiring explicit instruction on what to export.
+    * Cons: Increases command complexity and length, potentially confusing users or leading to longer input times.
+
+**Rationale:**
+The chosen design leverages the application's context (whether an event is selected) to determine the scope of the export.
+This approach simplifies the command syntax and aligns with the user's current focus within the application,
+providing an intuitive and streamlined experience.
+
+**Aspect 2: Selection of participant details for export**
+
+* **Alternative 1 (current choice):** Use command flags to specify details to export
+    * Pros: Offers customization for the export process, allowing users to export only the information they need.
+    * Cons: Increases the complexity of the command, requiring users to remember and use specific flags.
+
+* **Alternative 2:** Export all details by default
+    * Pros: Simplifies the command, making it easier for users to export data without worrying about flags.
+    * Cons: Lacks flexibility, as users may end up exporting more information than needed, leading to potential privacy concerns or unwieldy CSV files.
+
+**Rationale:**
+The flexibility offered by allowing users to specify which details to export caters to various needs and scenarios,
+such as when only specific types of information (e.g., contact details) are required for a particular task or analysis.
+This design decision places control in the hands of the user, ensuring the export functionality remains versatile and adaptable to different use cases.
 
 --------------------------------------------------------------------------------------------------------------------
 
