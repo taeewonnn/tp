@@ -542,13 +542,13 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* *`    | organized user                             | export filtered contacts                       | quickly view consolidated information in CSV file format              |
 | `* *`    | user                                       | edit an event                                  | update event information like the event name or event date             |
 | `* *`    | user                                       | deselect an event                              | perform app-wide events                                                |
-| `* *`    | busy user                                  | clear all entries                              | replace them with more relevant contacts without cluttering the app    |
+| `* *`    | busy user                                  | clear all contacts                             | replace them with more relevant contacts without cluttering the app    |
 | `* *`    | user                                       | exit the program                               | exit the program in a safe manner                                      |
 | `* *`    | user                                       | list invitees or contacts                      | have a consolidated view of the invitees/contacts in the app           |
 | `* *`    | diligent user                              | update contact email                           | keep track of the contact’s latest email                               |
 | `* *`    | diligent user                              | update contact address                         | keep track of the contact’s latest address                             |
 | `* *`    | diligent user                              | update contact tags                            | update the user’s tag labels when he/she is placed in a new category   |
-| `* *`    | organized user                             | find contacts by name                            | get contact info of a contact by searching his name           
+| `* *`    | organized user                             | find contacts by name                          | get contact info of a contact by searching his name           
 
 ### Use cases
 
@@ -835,18 +835,18 @@ A successful deselection deselects the selected event.
 
 ### Clear all entries
 
-**Use case: UC13 - Clear all entries from Eventy**
+**Use case: UC13 - Clear all entries from global contact list**
 
 **Actor:** User
 
-**Preconditions:** User has added one or more contacts to the global contact list or one or more events.
+**Preconditions:** User has added one or more contacts to the global contact list.
 
 **Guarantees:**
 A successful clear empties all entries in the app.
 
 **MSS:**
-1. User requests to clear all entries, meaning all contacts and events.
-2. Eventy clears all entries in app. </br>
+1. User requests to clear all contacts in global contact list.
+2. Eventy clears all contacts in global contact list. </br>
    *Use case ends*
 
 ### Exit the program
