@@ -1184,20 +1184,16 @@ This is to prevent any visual confusion for the user.
 Examples: <br>
 * `sel 1` should throw a check `This event is already selected`.
 
-### Enhancement 9: Exporting with invalid flag/flags shows a correct error message
+### Enhancement 9: Adding an event command's error message does not have the proper line breaks
 
 Feature flaw: <br>
-Currently, the `export` command will not show the correct error message when there are invalid flags.
+Currently, the `Adding an event` command's error message for invalid formatting does not have the proper line breaks.
 
 Proposed enhancement: <br>
-Modify the implementation such that `export` command shows the correct error message when the flags that are not recognized
-are present.
+Modify the `Adding an event` command's error message so that it has the proper line breaks, similar to the error messages of the other commands.
 
 Justification: <br>
-This is to make it clear that the user has unintentional inputs.
-
-Examples: <br>
-* `export x/ y/` should throw a check `The provided flags are not supported`.
+This is to make the error message more readable to the user.
 
 ### Enhancement 10: Exporting with file permission issues shows a correct error message
 
