@@ -102,11 +102,9 @@ for storing, managing, planning and retrieving all contact-related information.
 
 #### 3.1.1 Adding an event: `addev`
 
-**Format:** `addev ev/<EVENT NAME> d/<DATE>`
-
-**Description:**
-
 Adds a new event with the specified name and date for the Event List.
+
+**Format:** `addev ev/<EVENT NAME> d/<DATE>`
 
 <box type="warning" seamless>
 
@@ -132,11 +130,9 @@ After `addev ev/Hall dining d/07-08-2024`:
 
 #### 3.1.2 Editing an event: `editev`
 
-**Format:** `editev <EVENT INDEX> [ev/<EVENT NAME>] [d/<DATE>]`
-
-**Description:**
-
 Edits an existing event based on index.
+
+**Format:** `editev <EVENT INDEX> [ev/<EVENT NAME>] [d/<DATE>]`
 
 <box type="warning" seamless>
 
@@ -160,11 +156,9 @@ Edits an existing event based on index.
 
 #### 3.1.3 Deleting an event: `delev`
 
-**Format:** `delev <EVENT INDEX>`
-
-**Description:**
-
 Deletes an event and all its relevant information with its index in the event list.
+
+**Format:** `delev <EVENT INDEX>`
 
 <box type="warning" seamless>
 
@@ -179,11 +173,9 @@ Deletes an event and all its relevant information with its index in the event li
 
 #### 3.1.4 Selecting an event: `sel`
 
-**Format:** `sel <EVENT INDEX>`
-
-**Description:**
-
 Selects an event from the event list by the event index. This displays the persons involved with that event, and allows you to manage that event using other commands.
+
+**Format:** `sel <EVENT INDEX>`
 
 <box type="warning" seamless>
 
@@ -206,11 +198,9 @@ After `sel 1`:
 
 #### 3.1.5 Deselecting an event: `desel`
 
-**Format:** `desel`
-
-**Description:**
-
 Deselects the selected event and returns to the global participant list.
+
+**Format:** `desel`
 
 **Examples:**
 - After `select 3` which selects the event with index `3`, `desel` deselects the event indexed `3`.
@@ -219,11 +209,9 @@ Deselects the selected event and returns to the global participant list.
 
 #### 3.2.1 Adding person and their information to the global participant list: `addp`
 
-**Format:** `addp n/<PARTICIPANT NAME> p/<PHONE NUMBER> e/<EMAIL> a/<ADDRESS> [t/<TAGS>]...`
-
-**Description:**
-
 Adds a new person to the app, allowing them to be added to an event later.
+
+**Format:** `addp n/<PARTICIPANT NAME> p/<PHONE NUMBER> e/<EMAIL> a/<ADDRESS> [t/<TAGS>]...`
 
 <box type="warning" seamless>
 
@@ -251,11 +239,9 @@ Adds a new person to the app, allowing them to be added to an event later.
 
 #### 3.2.2 Inviting person to selected event: `inv`
 
-**Format:** `inv <PARTICIPANT INDEX>`
-
-**Description:**
-
 Invite participants from the global participant list to the selected event.
+
+**Format:** `inv <PARTICIPANT INDEX>`
 
 <box type="warning" seamless>
 
@@ -278,15 +264,13 @@ After `inv 5`:
 ![after inviting participant](images/afterinvite.png)
 
 #### 3.2.3 Deleting a participant from the global participant list or an event participant list: `delp`
-
-**Format:** `delp <PARTICIPANT INDEX>`
-
-**Description:**
-
+- 
 - If **no event is selected**, this deletes the person from only the **global participant list**, but the person will
   remain in all the events he/she will be taking or has taken part in.
 - If **an event is selected**, this only removes the participant from the event by **his/her index in the
   event participant list**.
+
+**Format:** `delp <PARTICIPANT INDEX>`
 
 <box type="warning" seamless>
 
@@ -309,11 +293,9 @@ After `inv 5`:
 
 #### 3.2.4 Editing existing participant: `editp`
 
-**Format:** `editp <PARTICIPANT INDEX> [n/<PARTICIPANT NAME>] [p/<PHONE NUMBER>] [e/<EMAIL>] [a/<ADDRESS>] [t/<TAGS>]...`
-
-**Description:**
-
 Updates the contact information of a participant in the app.
+
+**Format:** `editp <PARTICIPANT INDEX> [n/<PARTICIPANT NAME>] [p/<PHONE NUMBER>] [e/<EMAIL>] [a/<ADDRESS>] [t/<TAGS>]...`
 
 <box type="warning" seamless>
 
@@ -349,13 +331,12 @@ Updates the contact information of a participant in the app.
 
 #### 3.3.1 Exporting the chosen details of all the filtered persons to a CSV file: `export`
 
-**Format:** `export [n/] [p/] [e/] [a/]`
-
-**Description:**
 
 Exports only the chosen details of all filtered persons to a CSV file. Currently, the command only supports the export
 of name, phone, email and address. The command will not support the export of tags due to privacy concerns and rare
 usage. The exported information will be in the file `exported_participant_data.csv`.
+
+**Format:** `export [n/] [p/] [e/] [a/]`
 
 <box type="warning" seamless>
 
@@ -385,11 +366,9 @@ usage. The exported information will be in the file `exported_participant_data.c
 
 #### 3.4.1 Clearing all entries: `clear`
 
-**Format:** `clear`
-
-**Description:**
-
 Clears all entries from the address book.
+
+**Format:** `clear`
 
 <box type="warning" seamless>
 
@@ -400,22 +379,19 @@ Clears all entries from the address book.
 
 #### 3.4.2 Locating persons by name and/or tags: `find`
 
-**Format:**: `find [n/<NAME> <MORE_NAMES>] [t/<TAG>] [t/<MORE_TAGS>]`
-
-**Description:**
-
 Locates persons by their names and/or tags, where
 - If **no event is selected**, the search only includes persons from the **global participant list**.
 - If **an event is selected**, the search only includes persons from the **event participant list**.
 
 
 * When searching only using **names**:
-  - Persons who have at least one of the specified names will be returned (i.e. OR search) e.g. `find n/Hans Bo` will return `Hans Gruber`, `Bo Yang`.
+    - Persons who have at least one of the specified names will be returned (i.e. OR search) e.g. `find n/Hans Bo` will return `Hans Gruber`, `Bo Yang`.
 * When searching only using **tags**:
-  * Persons must have all the specified tags to be returned (AND search) e.g. `find t/friend t/family` will return a person with tags of `friend`, `family`, and `neighbour`, but not a person with only the tag of `friend`.
+    * Persons must have all the specified tags to be returned (AND search) e.g. `find t/friend t/family` will return a person with tags of `friend`, `family`, and `neighbour`, but not a person with only the tag of `friend`.
 * When searching using both **names and tags**:
-  * Persons must match both the name and tag criteria to be returned. `find n/Hans t/friend` will return a person with name `Hans Gruber` with a tag of `friend`, but it will not return a person with name `Hans Bo`, without a tag of `friend` or a person with name `Bo Yang`, with a tag of `friend`.
+    * Persons must match both the name and tag criteria to be returned. `find n/Hans t/friend` will return a person with name `Hans Gruber` with a tag of `friend`, but it will not return a person with name `Hans Bo`, without a tag of `friend` or a person with name `Bo Yang`, with a tag of `friend`.
 
+**Format:**: `find [n/<NAME> <MORE_NAMES>] [t/<TAG>] [t/<MORE_TAGS>]`
 
 <box type="warning" seamless>
 
@@ -449,29 +425,24 @@ After `find n/Alex t/friend t/teacher`:
 
 #### 3.4.3 Viewing help: `help`
 
-**Format:** `help`
-
-**Description:**
-
 Shows a message explaining how to access the help page.
+
+**Format:** `help`
 
 ![help message](images/helpMessage.png)
 
 #### 3.4.4 Listing all persons: `list`
 
-**Format:** `list`
-
-**Description:**
-
 - If **no event is selected**, this shows a list of all persons in the **global participant list**.
 - If **an event is selected**, this shows a list of all persons in the **event participant list**.
 
+**Format:** `list`
 
 #### 3.4.5 Exiting the program: `exit`
 
-**Format:** `exit`
-
 Exits the program.
+
+**Format:** `exit`
 
 
 --------------------------------------------------------------------------------------------------------------------
