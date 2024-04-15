@@ -759,7 +759,7 @@ Eventy displays the contacts with target tags.
 **MSS:**
 
 1. User selects an event or remains in global contact list.
-2. User specific the tags he wants to filter by.
+2. User specifies the tags he wants to filter by.
 3. Eventy displays the matching global contacts or event invitees, depending on whether an event was selected. </br>
    *Use case ends*
 
