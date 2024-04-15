@@ -196,7 +196,7 @@ The `AddCommand` will then call `excecute()`, which checks whether there is a du
 
 #### Sequence Diagram
 
-<puml src="diagrams/AddPersonSequenceDiagram.puml" />
+![Sequence diagram](images/AddPersonSequenceDiagram.png)
 
 ### Select Event Feature
 
@@ -410,7 +410,7 @@ Step 2. The user executes `find n/David t/friends` command to find any matching 
 
 #### Sequence Diagram
 
-<puml src="diagrams/FindPersonSequenceDiagram.puml" />
+![Sequence diagram](images/FindPersonSequenceDiagram.png)
 
 #### Design Considerations
 
@@ -483,7 +483,7 @@ the event book.
 
 #### Sequence Diagram
 
-<puml src="diagrams/DeleteEventSequenceDiagram.puml" />
+![Sequence diagram](images/DeleteEventSequenceDiagram.png)
 
 #### Design considerations:
 

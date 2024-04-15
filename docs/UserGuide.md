@@ -496,18 +496,18 @@ Exits the program.
 | **Add Event**                               | `addev ev/<event name> d/<date>` <br> e.g., `addev ev/Hall dining d/07-08-2024`                                  |
 | **Edit Event**                              | `editev INDEX ev/<event name> d/<date>` <br> e.g., `editev 1 ev/Party`                                                |
 | **Delete Event**                            | `delev <index>` <br> e.g., `delev 1`                                                                                  |
-| **Add Participant**                         | `addp n<participant name> p/<phone number> e/<email> a/<address> t/<tags>` <br> e.g., `addp n/David p/98987676 e/david@example.com a/NUS t/friends` |
+| **Add Participant**                         | `addp n/<participant name> p/<phone number> e/<email> a/<address> t/<tags>` <br> e.g., `addp n/David p/98987676 e/david@example.com a/NUS t/friends` |
 | **Selecting Event**                         | `sel <event index>` <br> e.g., `sel                                                                                   |
-| **Deselecting Event**                       | `desel` deselect the current selected event                                                                           |
-| **Deleting a participant from global list** | `delp 3` delete the 3rd participant from the global participant list                                                  |
-| **Deleting a participant from an event**    | `delp 3` delete the 3rd participant from event list of selected event                                                 |
-| **Edit existing participant**               | `editp 5 n/Max p/00000000 e/test@gmail.com a/NUS t/friends` Edits contact details of participant indexed 5            |
-| **Invite person to a selected event**       | `inv 5` Adds participant indexed 5 to selected event                                                                  |
-| **Locating persons by name/tag**            | `find n/John t/friends` returns `john`                                                                                |
-| **Clear all entries**                       | `clear` clear all entries from eventy                                                                                 |
-| **Viewing help**                            | `help` Shows a message explaining how to access the help page                                                         |
-| **Listing all persons**                     | `list` Shows a list of all persons in the address book.                                                               |
-| **Exiting the program**                     | `exit` Exits the program                                                                                              |
+| **Deselecting Event**                       | `desel` deselects the current selected event                                                                           |
+| **Deleting a participant from global list** | `delp <index>` deletes the participant of the provided index from the global participant list                                                  |
+| **Deleting a participant from an event**    | `delp <index>` deletes the participant of the provided index from the event participant list                                                 |
+| **Edit existing participant**               | `editp <index> n/<participant name> p/<phone number> e/<email> a/<address> t/<tags>` edits contact details of a participant at the provided index          |
+| **Invite person to a selected event**       | `inv <index>` adds participant at the provided index to selected event                                                                  |
+| **Locating persons by name/tag**            | `find n/<participant name> t/<tags>` returns the person matching the name and tag                                                                                |
+| **Clear all entries**                       | `clear` clears all entries from eventy                                                                                 |
+| **Viewing help**                            | `help` shows a message explaining how to access the help page                                                         |
+| **Listing all persons**                     | `list` shows a list of all persons in the address book.                                                               |
+| **Exiting the program**                     | `exit` exits the program                                                                                              |
 
 ## 7. Prefix translation table
 
