@@ -363,6 +363,8 @@ usage. The exported information will be in the file `exported_participant_data.c
 * At least one of the optional fields must be provided.
 * `n/ p/ e/ a/` provided should be in **prefix**.
 * `Prefix` only recognizes the four prefixes written above. Any other unknown prefixes will be disregarded.
+* If the list to be exported is empty, the `exported_participant_data.csv` file will only contain headers to show that
+  an empty export has been performed successfully.
 * Make sure the `.csv` file is opened using the Notepad app or the equivalent. Using Microsoft Excel to open the `.csv`
   file will cause unexpected behaviors due to Excel interpreting certain fields as numbers. For example, Excel will
   recognize the phone number `00000000` as `0`.
